@@ -79,6 +79,40 @@ This ensures the container user can always write to these critical directories.
 
 ### Method 1: Set User ID (Recommended)
 
+#### For Windows (Git Bash)
+
+```bash
+# Navigate to your PrestaShop directory
+cd C:/Users/YourName/Documents/PrestaShop
+
+# Set environment variables
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+
+# Rebuild and restart
+docker compose down
+docker compose build
+docker compose up -d
+```
+
+#### For Windows (PowerShell)
+
+```powershell
+# Navigate to your PrestaShop directory
+cd C:\Users\YourName\Documents\PrestaShop
+
+# Set environment variables
+$env:USER_ID=1000
+$env:GROUP_ID=1000
+
+# Rebuild and restart
+docker compose down
+docker compose build
+docker compose up -d
+```
+
+#### For macOS/Linux
+
 ```bash
 # Navigate to your PrestaShop directory
 cd /path/to/PrestaShop
@@ -97,10 +131,31 @@ docker compose up -d
 
 Create or edit `.env` file in your PrestaShop directory:
 
+#### For Windows (Git Bash)
+
 ```bash
 # Add these lines
-USER_ID=1000
-GROUP_ID=1000
+echo "USER_ID=1000" >> .env
+echo "GROUP_ID=1000" >> .env
+```
+
+#### For Windows (Notepad)
+
+1. Open Notepad
+2. Create/edit: `C:\Users\YourName\Documents\PrestaShop\.env`
+3. Add:
+   ```
+   USER_ID=1000
+   GROUP_ID=1000
+   ```
+4. Save file
+
+#### For macOS/Linux
+
+```bash
+# Add these lines
+echo "USER_ID=$(id -u)" >> .env
+echo "GROUP_ID=$(id -g)" >> .env
 
 # Replace 1000 with your actual IDs from: id -u && id -g
 ```
@@ -143,6 +198,24 @@ PrestaShop/
 ```
 
 ## 🎓 Getting Started
+
+### For Windows Users 🪟
+
+1. **Start Here**: [`Noob guide/INSTALLATION_GUIDE_WINDOWS.md`](Noob%20guide/INSTALLATION_GUIDE_WINDOWS.md) ⭐
+   - Complete Windows-specific installation instructions
+   - WSL 2 setup and configuration
+   - Windows-specific tips and tricks
+
+2. **Having Problems?**: [`Noob guide/TROUBLESHOOTING_WINDOWS.md`](Noob%20guide/TROUBLESHOOTING_WINDOWS.md) ⭐
+   - Windows-specific solutions
+   - WSL 2 troubleshooting
+   - PowerShell and Git Bash commands
+
+3. **Quick Reference**: [`DOCKER_SETUP_WINDOWS.md`](DOCKER_SETUP_WINDOWS.md)
+   - Fast permission fix for Windows
+   - Windows-specific quick commands
+
+### For macOS/Linux Users 🍎🐧
 
 1. **Start Here**: [`Noob guide/INSTALLATION_GUIDE.md`](Noob%20guide/INSTALLATION_GUIDE.md)
    - Complete step-by-step installation instructions
