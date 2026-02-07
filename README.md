@@ -42,15 +42,30 @@ You can find more information on our [System requirements][system-requirements] 
 Installation
 --------
 
+### 🆕 New to PrestaShop? Start Here!
+
+If you're a beginner or new to Docker, we have a comprehensive **[Noob Guide](./Noob%20guide/)** with step-by-step instructions:
+
+- 📖 **[Installation Guide](./Noob%20guide/INSTALLATION_GUIDE.md)** - Complete beginner-friendly setup guide
+- 🔧 **[Troubleshooting Guide](./Noob%20guide/TROUBLESHOOTING.md)** - Solutions for common Docker issues
+
+### For Experienced Developers
+
 If you downloaded the source code from GitHub, read our guide on [installing PrestaShop for development][install-guide-dev]. If you intend to install a production shop, make sure to download the latest version from [our releases page][download], then read the [install guide for users][install-guide].
 
 ## 🐳 Docker Development Environment
 
 PrestaShop provides a complete Docker-based development environment.
 
+> **👋 First time using Docker?** Check out our **[Noob Guide](./Noob%20guide/)** for detailed instructions!
+
 ### Quick Start
 
 ```bash
+# IMPORTANT: Set user permissions to avoid permission errors
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+
 # Start the development environment
 make docker-start
 
@@ -59,6 +74,8 @@ make docker-start
 # Backend: http://localhost:8001/admin-dev
 # Email testing: http://localhost:1080
 ```
+
+⚠️ **Troubleshooting**: If you encounter permission errors or other issues, see our **[Troubleshooting Guide](./Noob%20guide/TROUBLESHOOTING.md)**.
 
 **Default Admin Credentials:**
 - Email: `demo@prestashop.com`
