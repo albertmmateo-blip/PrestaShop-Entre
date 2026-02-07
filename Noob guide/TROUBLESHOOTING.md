@@ -230,6 +230,70 @@ docker network inspect prestashop-network
 docker compose exec prestashop-git ping -c 3 mysql
 ```
 
+### Problem: "Table doesn't exist" Error
+
+**Symptoms**:
+- Error: `Table 'prestashop.ps_hook' doesn't exist`
+- Container exits with code 3
+- Occurs when configuring emails or running console commands
+- Database is empty but PrestaShop thinks it's installed
+
+**Example Error from logs**:
+```
+* Configuring emails to use maildev ...
+PrestaShopDatabaseException in /var/www/html/classes/db/Db.php line 777
+[ERROR] Failed setting value: Table 'prestashop.ps_hook' doesn't exist
+```
+
+### Solution: This Has Been Fixed! ✅
+
+This issue has been resolved in the latest version. The startup script now automatically checks if the database is initialized before running configuration commands.
+
+**What was fixed**:
+- The Docker startup script now checks if database tables exist before running console commands
+- If tables don't exist, it skips maildev configuration and provides helpful instructions
+- You'll see a message: "Skipping maildev configuration (database not initialized yet)"
+
+**If you still see this error**:
+
+1. **Pull the latest changes**:
+   ```bash
+   git pull origin develop
+   ```
+
+2. **Clean restart**:
+   ```bash
+   # Stop containers and remove volumes
+   docker compose down -v
+   
+   # Remove parameters file if it exists from old install
+   rm -f app/config/parameters.php
+   
+   # Rebuild and restart
+   docker compose build
+   docker compose up -d
+   ```
+
+3. **If database exists but is empty**:
+   ```bash
+   # Set PS_ERASE_DB to force fresh installation
+   export PS_ERASE_DB=1
+   
+   # Or add to .env file:
+   echo "PS_ERASE_DB=1" >> .env
+   
+   # Then restart
+   docker compose down
+   docker compose up -d
+   ```
+
+4. **Configure maildev manually after installation** (if needed):
+   ```bash
+   docker compose exec prestashop-git php bin/console prestashop:config set PS_MAIL_METHOD --value 2
+   docker compose exec prestashop-git php bin/console prestashop:config set PS_MAIL_SERVER --value maildev
+   docker compose exec prestashop-git php bin/console prestashop:config set PS_MAIL_SMTP_PORT --value 1025
+   ```
+
 ---
 
 ## 🔌 Port Conflicts

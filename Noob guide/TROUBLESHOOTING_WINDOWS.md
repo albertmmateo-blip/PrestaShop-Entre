@@ -205,6 +205,70 @@ docker network ls | findstr prestashop
 docker compose exec prestashop-git ping -c 3 mysql
 ```
 
+### Problem: "Table doesn't exist" Error
+
+**Symptoms**:
+- Error: `Table 'prestashop.ps_hook' doesn't exist`
+- Container exits with code 3
+- Occurs during email configuration
+- Database is empty but config file exists
+
+**Example Error**:
+```
+* Configuring emails to use maildev ...
+PrestaShopDatabaseException: Table 'prestashop.ps_hook' doesn't exist
+prestashop-git-1 exited with code 3
+```
+
+### Solution: This Has Been Fixed! ✅
+
+The latest version automatically checks if database tables exist before running commands.
+
+**If you still see this error**:
+
+1. **Pull latest changes**:
+   ```bash
+   # In Git Bash or PowerShell
+   git pull origin develop
+   ```
+
+2. **Clean restart**:
+   ```bash
+   # Stop everything
+   docker compose down -v
+   
+   # Remove old config
+   rm app/config/parameters.php
+   
+   # Rebuild
+   docker compose build
+   docker compose up -d
+   ```
+
+3. **Force fresh installation** (PowerShell):
+   ```powershell
+   # Set environment variable
+   $env:PS_ERASE_DB=1
+   
+   # Restart
+   docker compose down
+   docker compose up -d
+   ```
+
+   Or in Git Bash:
+   ```bash
+   export PS_ERASE_DB=1
+   docker compose down
+   docker compose up -d
+   ```
+
+4. **Manual maildev configuration** (after install):
+   ```bash
+   docker compose exec prestashop-git php bin/console prestashop:config set PS_MAIL_METHOD --value 2
+   docker compose exec prestashop-git php bin/console prestashop:config set PS_MAIL_SERVER --value maildev
+   docker compose exec prestashop-git php bin/console prestashop:config set PS_MAIL_SMTP_PORT --value 1025
+   ```
+
 ---
 
 ## 🔌 Port Conflicts
