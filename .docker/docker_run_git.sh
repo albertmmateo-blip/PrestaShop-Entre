@@ -169,10 +169,30 @@ if [ $PS_DEMO_MODE -ne 0 ]; then
 fi
 
 if [ $PS_USE_DOCKER_MAILDEV -eq 1 ]; then
-    echo "\n* Configuring emails to use maildev ..."
-    runuser -g www-data -u www-data -- php /var/www/html/bin/console prestashop:config set PS_MAIL_METHOD --value "2"
-    runuser -g www-data -u www-data -- php /var/www/html/bin/console prestashop:config set PS_MAIL_SERVER --value "maildev"
-    runuser -g www-data -u www-data -- php /var/www/html/bin/console prestashop:config set PS_MAIL_SMTP_PORT --value "1025"
+    # Check if database is initialized by checking if ps_hook table exists
+    DB_INITIALIZED=0
+    if [ $DB_PASSWD = "" ]; then
+        TABLE_COUNT=$(mysql -h $DB_SERVER -P $DB_PORT -u $DB_USER -N -s -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='$DB_NAME' AND table_name='${DB_PREFIX}hook';" 2>/dev/null || echo "0")
+    else
+        TABLE_COUNT=$(mysql -h $DB_SERVER -P $DB_PORT -u $DB_USER -p$DB_PASSWD -N -s -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='$DB_NAME' AND table_name='${DB_PREFIX}hook';" 2>/dev/null || echo "0")
+    fi
+    
+    if [ "$TABLE_COUNT" = "1" ]; then
+        DB_INITIALIZED=1
+    fi
+    
+    if [ $DB_INITIALIZED -eq 1 ]; then
+        echo "\n* Configuring emails to use maildev ..."
+        runuser -g www-data -u www-data -- php /var/www/html/bin/console prestashop:config set PS_MAIL_METHOD --value "2"
+        runuser -g www-data -u www-data -- php /var/www/html/bin/console prestashop:config set PS_MAIL_SERVER --value "maildev"
+        runuser -g www-data -u www-data -- php /var/www/html/bin/console prestashop:config set PS_MAIL_SMTP_PORT --value "1025"
+    else
+        echo "\n* Skipping maildev configuration (database not initialized yet)..."
+        echo "\n* You can configure maildev manually after installation with:"
+        echo "   docker compose exec prestashop-git php bin/console prestashop:config set PS_MAIL_METHOD --value 2"
+        echo "   docker compose exec prestashop-git php bin/console prestashop:config set PS_MAIL_SERVER --value maildev"
+        echo "   docker compose exec prestashop-git php bin/console prestashop:config set PS_MAIL_SMTP_PORT --value 1025"
+    fi
 fi
 
 if [ $BLACKFIRE_ENABLE -eq 1 ]; then
