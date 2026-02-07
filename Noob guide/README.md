@@ -7,6 +7,9 @@ Welcome to the **Noob Guide** for PrestaShop! This folder contains beginner-frie
 ### [Installation Guide](INSTALLATION_GUIDE.md)
 A comprehensive, step-by-step guide for installing PrestaShop via Docker for local development.
 
+### [Troubleshooting Guide](TROUBLESHOOTING.md)
+Detailed solutions for common Docker and PrestaShop issues, including permission errors, database problems, and more.
+
 **Perfect for**:
 - Complete beginners to PrestaShop
 - Developers new to Docker
@@ -27,6 +30,7 @@ If you're brand new and want to get started immediately:
 2. Follow the guide step-by-step
 3. Don't skip the prerequisites!
 4. Take your time - first-time setup can take 30-45 minutes
+5. **Having issues?** Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
 ## 💡 Why Docker?
 
