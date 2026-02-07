@@ -234,6 +234,31 @@ First, decide where you want to store PrestaShop on your computer. We recommend:
 
 Now for the exciting part – let's start PrestaShop!
 
+### Important: Set User Permissions (Required!)
+
+To avoid permission errors, set your user ID and group ID:
+
+**Windows (Git Bash or WSL)**:
+```bash
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+```
+
+**macOS/Linux**:
+```bash
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+```
+
+**Or add to `.env` file** (recommended for permanent setup):
+```bash
+# Create or edit .env file
+echo "USER_ID=$(id -u)" >> .env
+echo "GROUP_ID=$(id -g)" >> .env
+```
+
+💡 **Why?** This ensures the Docker container can write to your files without permission errors.
+
 ### Check Docker is Running
 
 Before starting, make sure Docker Desktop is running:
@@ -451,6 +476,56 @@ make assets
 ---
 
 ## 🔧 Common Issues & Solutions
+
+⚠️ **Experiencing problems?** See our comprehensive [Troubleshooting Guide](TROUBLESHOOTING.md) for detailed solutions!
+
+### Issue 0: Permission Denied Errors (Most Common!)
+
+**Problem**: Errors like "Permission denied" when writing to `/var/www/html/var/logs/` or `/var/www/html/var/cache/`.
+
+**Symptoms**:
+```
+Warning: file_put_contents(/var/www/html/var/logs/...): Failed to open stream: Permission denied
+```
+
+**Solution**:
+
+**Method 1 - Set User ID (Recommended)**:
+```bash
+# Set environment variables
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+
+# Rebuild and restart
+docker compose down
+docker compose build
+docker compose up -d
+```
+
+**Method 2 - Fix Permissions Manually**:
+```bash
+# Stop containers
+docker compose down
+
+# Fix ownership
+sudo chown -R $(id -u):$(id -g) var/
+
+# Fix permissions  
+chmod -R 775 var/logs var/cache
+
+# Restart
+docker compose up -d
+```
+
+**Method 3 - Complete Reset**:
+```bash
+# If above doesn't work, start fresh
+docker compose down -v
+rm -rf var/logs/* var/cache/*
+docker compose up -d --build
+```
+
+📖 **For more details**: See the [Permission Errors section in the Troubleshooting Guide](TROUBLESHOOTING.md#-permission-errors)
 
 ### Issue 1: "Port 8001 is already in use"
 

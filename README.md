@@ -42,23 +42,80 @@ You can find more information on our [System requirements][system-requirements] 
 Installation
 --------
 
+### 🆕 New to PrestaShop? Start Here!
+
+If you're a beginner or new to Docker, we have comprehensive guides with step-by-step instructions:
+
+#### For Windows Users 🪟
+- 📖 **[Windows Installation Guide](./Noob%20guide/INSTALLATION_GUIDE_WINDOWS.md)** ⭐ - Windows-specific setup
+- 🔧 **[Windows Troubleshooting Guide](./Noob%20guide/TROUBLESHOOTING_WINDOWS.md)** ⭐ - Windows-specific solutions
+- 🚀 **[Windows Quick Setup](./DOCKER_SETUP_WINDOWS.md)** - Fast permission fix
+
+#### For macOS/Linux Users 🍎🐧
+- 📖 **[Installation Guide](./Noob%20guide/INSTALLATION_GUIDE.md)** - All platforms
+- 🔧 **[Troubleshooting Guide](./Noob%20guide/TROUBLESHOOTING.md)** - All platforms
+
+#### General Resources
+- 📚 **[Noob Guide](./Noob%20guide/)** - Complete beginner documentation
+
+### For Experienced Developers
+
 If you downloaded the source code from GitHub, read our guide on [installing PrestaShop for development][install-guide-dev]. If you intend to install a production shop, make sure to download the latest version from [our releases page][download], then read the [install guide for users][install-guide].
 
 ## 🐳 Docker Development Environment
 
 PrestaShop provides a complete Docker-based development environment.
 
+> **👋 First time using Docker?**  
+> **Windows users**: Check out our **[Windows Installation Guide](./Noob%20guide/INSTALLATION_GUIDE_WINDOWS.md)** ⭐  
+> **macOS/Linux users**: Check out our **[Installation Guide](./Noob%20guide/INSTALLATION_GUIDE.md)**
+
 ### Quick Start
 
+#### For Windows (Git Bash)
+
 ```bash
+# IMPORTANT: Set user permissions to avoid permission errors
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+
 # Start the development environment
-make docker-start
+docker compose build
+docker compose up -d
 
 # Access your PrestaShop installation
 # Frontend: http://localhost:8001
 # Backend: http://localhost:8001/admin-dev
 # Email testing: http://localhost:1080
 ```
+
+#### For Windows (PowerShell)
+
+```powershell
+# Set user permissions
+$env:USER_ID=1000
+$env:GROUP_ID=1000
+
+# Start the development environment
+docker compose build
+docker compose up -d
+```
+
+#### For macOS/Linux
+
+```bash
+# Set user permissions
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+
+# Start the development environment
+docker compose build
+docker compose up -d
+```
+
+⚠️ **Troubleshooting**:  
+- **Windows**: See **[Windows Troubleshooting Guide](./Noob%20guide/TROUBLESHOOTING_WINDOWS.md)** ⭐  
+- **macOS/Linux**: See **[Troubleshooting Guide](./Noob%20guide/TROUBLESHOOTING.md)**
 
 **Default Admin Credentials:**
 - Email: `demo@prestashop.com`

@@ -131,3 +131,51 @@ prestashop-git-1 exited with code 1
 
 Albert@LAPTOP-IRHKHEDP MINGW64 ~/Documents/PrestaShop (develop)
 $
+
+================================================================================
+ISSUE ANALYSIS AND RESOLUTION
+================================================================================
+
+PROBLEM IDENTIFIED:
+The PrestaShop installation failed due to permission errors. The Docker container 
+user (www-data) could not write to the /var/www/html/var/logs directory.
+
+KEY ERRORS IN THE LOG:
+- Line 104-105: "Permission denied" when writing to var/logs/20260207_exception.log
+- Line 109-110: "Permission denied" when writing to var/logs/dev-2026-02-07.log
+
+ROOT CAUSE:
+When Docker mounts host directories into the container, they retain the host's
+file ownership. The www-data user inside the container (UID typically 33 or 82)
+doesn't have permission to write to directories owned by the host user.
+
+SOLUTION IMPLEMENTED:
+1. Updated .docker/docker_run_git.sh to ensure proper permissions are set
+   on var/logs and var/cache directories before PrestaShop tries to use them.
+
+2. Created comprehensive troubleshooting documentation:
+   - Noob guide/TROUBLESHOOTING.md: Detailed guide for common Docker issues
+   - Updated INSTALLATION_GUIDE.md: Added permission setup instructions
+   - Updated README.md: Added links to troubleshooting resources
+
+3. Documented the importance of setting USER_ID and GROUP_ID environment
+   variables to match the host system user.
+
+HOW TO FIX YOUR INSTALLATION:
+See the "Noob guide/TROUBLESHOOTING.md" file for detailed solutions, or follow
+these quick steps:
+
+   # Set your user ID and group ID
+   export USER_ID=$(id -u)
+   export GROUP_ID=$(id -g)
+   
+   # Rebuild and restart
+   docker compose down
+   docker compose build
+   docker compose up -d
+
+For more help, see:
+- Noob guide/TROUBLESHOOTING.md
+- Noob guide/INSTALLATION_GUIDE.md
+
+================================================================================
