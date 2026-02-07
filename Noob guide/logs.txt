@@ -1,0 +1,133 @@
+
+Albert@LAPTOP-IRHKHEDP MINGW64 ~
+$ cd /c/Users/Albert/Documents/PrestaShop
+
+Albert@LAPTOP-IRHKHEDP MINGW64 ~/Documents/PrestaShop (develop)
+$ docker compose logs -f prestashop-git
+prestashop-git-1  | wait-for-it.sh: waiting 60 seconds for mysql:3306
+prestashop-git-1  | wait-for-it.sh: Fetching status from docker mysql
+prestashop-git-1  | ERROR 2002 (HY000): Can't connect to server on 'mysql' (115)
+prestashop-git-1  | wait-for-it.sh: Fetching status from docker mysql
+prestashop-git-1  | ERROR 2002 (HY000): Can't connect to server on 'mysql' (115)
+prestashop-git-1  | wait-for-it.sh: Fetching status from docker mysql
+prestashop-git-1  | ERROR 2002 (HY000): Can't connect to server on 'mysql' (115)
+prestashop-git-1  | wait-for-it.sh: Fetching status from docker mysql
+prestashop-git-1  | --------------
+prestashop-git-1  | mysql  Ver 15.1 Distrib 10.11.14-MariaDB, for debian-linux-gnu (x86_64) using  EditLine wrapper
+prestashop-git-1  |
+prestashop-git-1  | Connection id:              8
+prestashop-git-1  | Current database:
+prestashop-git-1  | Current user:               root@172.18.0.4
+prestashop-git-1  | SSL:                        Cipher in use is TLS_AES_256_GCM_SHA384
+prestashop-git-1  | Current pager:              stdout
+prestashop-git-1  | Using outfile:              ''
+prestashop-git-1  | Using delimiter:    ;
+prestashop-git-1  | Server:                     MySQL
+prestashop-git-1  | Server version:             8.4.8 MySQL Community Server - GPL
+prestashop-git-1  | Protocol version:   10
+prestashop-git-1  | Connection:         mysql via TCP/IP
+prestashop-git-1  | Server characterset:        utf8mb4
+prestashop-git-1  | Db     characterset:        utf8mb4
+prestashop-git-1  | Client characterset:        latin1
+prestashop-git-1  | Conn.  characterset:        latin1
+prestashop-git-1  | TCP port:           3306
+prestashop-git-1  | Uptime:                     3 sec
+prestashop-git-1  |
+prestashop-git-1  | Threads: 2  Questions: 5  Slow queries: 0  Opens: 119  Flush tables: 3  Open tables: 38  Queries per second avg: 1.666
+prestashop-git-1  | --------------
+prestashop-git-1  |
+prestashop-git-1  | wait-for-it.sh: mysql:3306 is available after 4 seconds
+prestashop-git-1  |
+prestashop-git-1  | * HTTPS is not enabled.
+prestashop-git-1  |
+prestashop-git-1  | * Install node 20.19.5...
+prestashop-git-1  |   % Total    % Received % Xferd  Average Speed   Time    Timprestashop-git-1  | [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+prestashop-git-1  | v20.19.5 is already installed.
+prestashop-git-1  | Now using node v20.19.5 (npm v10.8.2)
+prestashop-git-1  | default -> 20.19.5 (-> v20.19.5 *)
+prestashop-git-1  | Now using node v20.19.5 (npm v10.8.2)
+prestashop-git-1  |
+prestashop-git-1  | * Install composer ...
+prestashop-git-1  | All settings correct for using Composer
+prestashop-git-1  | Downloading...
+prestashop-git-1  |
+prestashop-git-1  | Composer (version 2.9.5) successfully installed to: /usr/local/bin/composer
+prestashop-git-1  | Use it: php /usr/local/bin/composer
+prestashop-git-1  |
+prestashop-git-1  |
+prestashop-git-1  | * Running composer ...
+prestashop-git-1  | Installing dependencies from lock file (including require-dev)
+prestashop-git-1  | Verifying lock file contents can be installed on current platform.
+prestashop-git-1  | Nothing to install, update or remove
+prestashop-git-1  | Generating autoload files
+prestashop-git-1  | 134 packages you are using are looking for funding.
+prestashop-git-1  | Use the `composer fund` command to find out more!
+prestashop-git-1  | phpstan/extension-installer: Extensions installed
+prestashop-git-1  |
+prestashop-git-1  | * Build assets ...
+prestashop-git-1  | > Front core already exists (use --force to rebuild)
+prestashop-git-1  | > Front hummingbird already exists (use --force to rebuild)
+prestashop-git-1  | > Front classic already exists (use --force to rebuild)
+prestashop-git-1  | > Admin default theme already exists (use --force to rebuild)
+prestashop-git-1  | > Admin new theme already exists (use --force to rebuild)
+prestashop-git-1  | All done!
+prestashop-git-1  |
+prestashop-git-1  | * Wait for assets built...
+prestashop-git-1  | >>> Waiting for all assets...
+prestashop-git-1  | Checking for all these lock files /var/www/html/admin-dev/themes/default/buildLock /var/www/html/admin-dev/themes/new-theme/buildLock /var/www/html/themes/classic/_dev/buildLock /var/www/html/themes/buildLock
+prestashop-git-1  | /var/www/html/admin-dev/themes/default/buildLock is no longer present
+prestashop-git-1  | /var/www/html/admin-dev/themes/new-theme/buildLock is no longer present
+prestashop-git-1  | /var/www/html/themes/classic/_dev/buildLock is no longer present
+prestashop-git-1  | /var/www/html/themes/buildLock is no longer present
+prestashop-git-1  | /var/www/html/vendor/autoload.php is present
+prestashop-git-1  |
+prestashop-git-1  | * Checking if mysql is available...
+prestashop-git-1  |
+prestashop-git-1  | * DB server mysql is available, let's continue !
+prestashop-git-1  |
+prestashop-git-1  | * Enabling DEV mode ...
+prestashop-git-1  |
+prestashop-git-1  | * Define PHP error logs ...
+prestashop-git-1  |
+prestashop-git-1  | * PrestaShop Core already installed...
+prestashop-git-1  |
+prestashop-git-1  | * Configuring emails to use maildev ...
+prestashop-git-1  | PrestaShopDatabaseException in /var/www/html/classes/db/Db.php line 777
+prestashop-git-1  | #0 /var/www/html/classes/db/Db.php(389): DbCore->displayError('SELECT s.id_sho...')
+prestashop-git-1  | #1 /var/www/html/classes/db/Db.php(618): DbCore->query('SELECT s.id_sho...')
+prestashop-git-1  | #2 /var/www/html/classes/shop/Shop.php(1392): DbCore->executeS('SELECT s.id_sho...')
+prestashop-git-1  | #3 /var/www/html/classes/shop/Shop.php(356): ShopCore::findShopByHost(false)
+prestashop-git-1  | #4 /var/www/html/config/config.inc.php(123): ShopCore::initialize()
+prestashop-git-1  | #5 /var/www/html/bin/console(29): require_once('/var/www/html/c...')
+prestashop-git-1  | #6 {main}
+prestashop-git-1  |
+prestashop-git-1  | Warning: file_put_contents(/var/www/html/var/logs/20260207_exception.log): Failed to open stream: Permission denied in /var/www/html/classes/log/FileLogger.php on line 48
+prestashop-git-1  | PHP Warning:  file_put_contents(/var/www/html/var/logs/20260207_exception.log): Failed to open stream: Permission denied in /var/www/html/classes/log/FileLogger.php on line 48
+prestashop-git-1  |
+prestashop-git-1  | In StreamHandler.php line 157:
+prestashop-git-1  |
+prestashop-git-1  |   The stream or file "/var/www/html/var/logs/dev-2026-02-07.log" could not be
+prestashop-git-1  |    opened in append mode: Failed to open stream: Permission denied
+prestashop-git-1  |   The exception occurred while attempting to log: Connecting with parameters
+prestashop-git-1  |   array{"driver":"pdo_mysql","host":"mysql","port":"3306","dbname":"prestasho
+prestashop-git-1  |   p","user":"root","password":"<redacted>","charset":"utf8mb4","driverOptions
+prestashop-git-1  |   ":{"1002":"SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY','')
+prestashop-git-1  |   )","1013":false},"wrapperClass":"PrestaShopBundle\\Doctrine\\DatabaseConnec
+prestashop-git-1  |   tion","defaultTableOptions":[]}
+prestashop-git-1  |   Context: {"params":{"driver":"pdo_mysql","host":"mysql","port":"3306","dbna
+prestashop-git-1  |   me":"prestashop","user":"root","password":"<redacted>","charset":"utf8mb4",
+prestashop-git-1  |   "driverOptions":{"1002":"SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL
+prestashop-git-1  |   _GROUP_BY',''))","1013":false},"wrapperClass":"PrestaShopBundle\\Doctrine\\
+prestashop-git-1  |   DatabaseConnection","defaultTableOptions":[]}}
+prestashop-git-1  |
+prestashop-git-1  |
+prestashop-git-1  | 2026-02-07T20:15:06+01:00 [info] User Deprecated: Method "Symfony\Component\HttpKernel\Bundle\Bundle::build()" might add "void" as a native return type declaration in the future. Do the same in child class "Doctrine\Bundle\DoctrineBundle\DoctrineBundle" now to avoid errors or add an explicit @return annotation to suppress this message.
+prestashop-git-1  | 2026-02-07T20:15:06+01:00 [info] User Deprecated: Method "Symfony\Component\HttpKernel\Bundle\Bundle::boot()" might add "void" as a native return type declaration in the future. Do the same in child class "Doctrine\Bundle\DoctrineBundle\DoctrineBundle" now to avoid errors or add an explicit @return annotation to suppress this message.
+prestashop-git-1  | 2026-02-07T20:15:06+01:00 [info] User Deprecated: Method "Symfony\Component\HttpKernel\Bundle\Bundle::shutdown()" might add "void" as a native return type declaration in the future. Do the same in child class "Doctrine\Bundle\DoctrineBundle\DoctrineBundle" now to avoid errors or add an explicit @return annotation to suppress this message.
+prestashop-git-1  | 2026-02-07T20:15:06+01:00 [info] User Deprecated: Method "Symfony\Component\HttpKernel\Bundle\Bundle::registerCommands()" might add "void" as a native return type declaration in the future. Do the same in child class "Doctrine\Bundle\DoctrineBundle\DoctrineBundle" now to avoid errors or add an explicit @return annotation to suppress this message.
+prestashop-git-1  | 2026-02-07T20:15:06+01:00 [info] User Deprecated: Method "Symfony\Component\HttpKernel\Bundle\Bundle::build()" might add "void" as a native return type declaration in the future. Do the same in child class "PrestaShop\TranslationToolsBundle\TranslationToolsBundle" now to avoid errors or add an explicit @return annotation to suppress this message.
+prestashop-git-1  | 2026-02-07T20:15:06+01:00 [info] User Deprecated: Since symfony/http-kernel 6.3: Parameter "container.dumper.inline_class_loader" is deprecated, use ".container.dumper.inline_class_loader" instead.
+prestashop-git-1 exited with code 1
+
+Albert@LAPTOP-IRHKHEDP MINGW64 ~/Documents/PrestaShop (develop)
+$
