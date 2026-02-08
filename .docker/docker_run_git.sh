@@ -104,6 +104,15 @@ fi
 
 # From now, stop at error
 set -e
+# Fix permissions for critical directories
+echo "\n* Ensuring proper permissions for PrestaShop directories...";
+mkdir -p /var/www/html/var/logs
+mkdir -p /var/www/html/var/cache
+chown -R www-data:www-data /var/www/html/var/logs
+chown -R www-data:www-data /var/www/html/var/cache
+chmod -R 775 /var/www/html/var/logs
+chmod -R 775 /var/www/html/var/cache
+
 
 if [ $PS_DEV_MODE -ne 1 ]; then
   echo "\n* Disabling DEV mode ...";

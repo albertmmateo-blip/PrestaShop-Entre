@@ -1,5 +1,13 @@
 volumes:
   db-data:
+  app_config:
+  ps_translations:
+  ps_mails:
+  ps_img:
+  ps_config:
+  prestashop_var:
+
+
 
 services:
   mysql:
@@ -22,13 +30,13 @@ services:
       context: .
       args:
         - VERSION=${VERSION:-8.1-apache}
-        - USER_ID=${USER_ID:-1000}
-        - GROUP_ID=${GROUP_ID:-1000}
+        - USER_ID=${USER_ID:-197609}
+        - GROUP_ID=${GROUP_ID:-197609}
         - NODE_VERSION=${NODE_VERSION:-20.19.5}
         - INSTALL_XDEBUG=${INSTALL_XDEBUG:-false}
     environment:
       DISABLE_MAKE: ${DISABLE_MAKE:-0}
-      PS_INSTALL_AUTO: ${PS_INSTALL_AUTO:-1}
+      PS_INSTALL_AUTO: ${PS_INSTALL_AUTO:-0}
       DB_PASSWD: ${DB_PASSWD:-prestashop}
       DB_NAME: ${DB_NAME:-prestashop}
       DB_SERVER: ${DB_SERVER:-mysql}
@@ -38,7 +46,7 @@ services:
       PS_FOLDER_ADMIN: ${PS_FOLDER_ADMIN:-admin-dev}
       PS_COUNTRY: ${PS_COUNTRY:-fr}
       PS_LANGUAGE: ${PS_LANGUAGE:-en}
-      PS_DEV_MODE: ${PS_DEV_MODE:-1}
+      PS_DEV_MODE: ${PS_DEV_MODE:-0}
       PS_ENABLE_SSL: ${PS_ENABLE_SSL:-0}
       PS_ERASE_DB: ${PS_ERASE_DB:-0}
       PS_USE_DOCKER_MAILDEV: ${PS_USE_DOCKER_MAILDEV:-1}
@@ -55,6 +63,16 @@ services:
       - mysql
     volumes:
       - ./:/var/www/html
+      - app_config:/var/www/html/app/config
+      - prestashop_var:/var/www/html/var
+      - ps_translations:/var/www/html/translations
+      - ps_mails:/var/www/html/mails
+      - ps_img:/var/www/html/img
+      - ps_config:/var/www/html/config
+
+
+
+
     networks:
       - prestashop-network
 
@@ -69,3 +87,5 @@ services:
 networks:
   prestashop-network:
     name: prestashop-network
+
+
