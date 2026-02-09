@@ -319,9 +319,11 @@ http://localhost:8001
 ```
 http://localhost:8001/admin-dev
 ```
-Login with:
+Login with default development credentials:
 - Email: demo@prestashop.com
 - Password: Correct Horse Battery Staple
+
+**⚠️ SECURITY WARNING**: These are default development credentials only. **NEVER use these credentials in production**. Always change admin credentials before deploying to any public or production environment.
 
 Then:
 - Upload a product image
@@ -372,7 +374,8 @@ If issues persist after trying these solutions:
 If all else fails, completely reset the Docker environment:
 
 ```bash
-# WARNING: This removes ALL containers, images, and volumes!
+# WARNING: This removes all PrestaShop containers, images, and volumes!
+# Your database data will be lost - back up if needed!
 
 # Stop all containers
 docker compose down -v
