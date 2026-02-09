@@ -323,7 +323,9 @@ Login with default development credentials:
 - Email: demo@prestashop.com
 - Password: Correct Horse Battery Staple
 
-**⚠️ SECURITY WARNING**: These are default development credentials only. **NEVER use these credentials in production**. Always change admin credentials before deploying to any public or production environment.
+**⚠️ SECURITY WARNING**: These are default development credentials only. **NEVER use these credentials in production**. Always change both:
+- **Admin credentials** before deploying to any public or production environment
+- **Database credentials** (in .env or docker-compose.yml: MYSQL_ROOT_PASSWORD, DB_PASSWD)
 
 Then:
 - Upload a product image
