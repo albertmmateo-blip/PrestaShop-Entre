@@ -7,25 +7,45 @@ A user-friendly Windows batch script that provides an interactive menu system fo
 ### Core Functionality
 - ✅ Interactive numbered menu system
 - ✅ Keyboard navigation (number keys + Enter)
-- ✅ Display current branch in menu header
+- ✅ Display current branch in menu header **with sync status indicators**
+- ✅ **Real-time commit sync status** (behind/ahead/synced/diverged)
+- ✅ **Uncommitted changes indicator** in menu header
 - ✅ Color-coded output for better readability
 - ✅ Clear screen between operations
 - ✅ Shows actual Git commands before execution
+- ✅ **Detailed explanations** for each operation
+
+### Sync Status Indicators
+
+The menu header now shows real-time information about your branch:
+
+- 🟢 **[Synced]** - Your branch matches origin (up to date)
+- 🟡 **[N behind]** - Origin has N commits you don't have (need to pull)
+- 🔵 **[N ahead]** - You have N commits not on origin (need to push)
+- 🔴 **[N behind, M ahead]** - Diverged: both local and remote have unique commits
+- 🟡 **[No remote branch]** - Branch doesn't exist on origin yet
+- 🟡 **[Uncommitted changes]** - You have modified files not yet committed
 
 ### Supported Git Operations
 
-1. **Fetch from origin** - Download all branches and tags from remote
-2. **Pull from current branch** - Pull changes from origin for current branch
-3. **Checkout to a different branch** - Switch to an existing branch
-4. **Checkout a Pull Request by number** - Fetch and checkout a GitHub PR
-5. **Create and checkout a new branch** - Create a new branch from current
-6. **Push to origin (current branch)** - Push commits to remote
-7. **Push to a specific branch** - Push to a different branch name
-8. **View current branch and status** - Display detailed status information
-9. **View recent commit history** - Show last 10 commits with graph
-10. **Stash changes** - Save uncommitted changes for later
-11. **Apply stash** - Restore previously stashed changes
-12. **Reset to origin** - ⚠️ DESTRUCTIVE: Reset branch to match origin exactly
+Each operation now includes comprehensive explanations about:
+- What the operation does (step-by-step breakdown)
+- When to use it (common scenarios)
+- Important warnings and notes
+- Tips for safe usage
+
+1. **Fetch from origin** - Downloads new commits/branches/tags without merging
+2. **Pull from current branch** - Fetches and merges changes from remote
+3. **Checkout to a different branch** - Switches working directory to another branch
+4. **Checkout a Pull Request by number** - Tests/reviews GitHub PRs locally
+5. **Create and checkout a new branch** - Creates new branch from current HEAD
+6. **Push to origin (current branch)** - Uploads local commits to remote
+7. **Push to a specific branch** - Pushes to a different remote branch name
+8. **View current branch and status** - Shows status, sync info, and stash list
+9. **View recent commit history** - Displays last 10 commits with graph
+10. **Stash changes** - Temporarily saves uncommitted work
+11. **Apply stash** - Restores previously stashed changes
+12. **Reset to origin** - ⚠️ DESTRUCTIVE: Completely resets to match origin
 13. **Exit** - Close the menu system
 
 ### Safety Features
@@ -33,10 +53,12 @@ A user-friendly Windows batch script that provides an interactive menu system fo
 - ✅ Confirmation prompts for all operations
 - ✅ Warning messages for destructive operations (reset, force push)
 - ✅ Display uncommitted changes before checkout/reset
+- ✅ **Shows commits that will be pushed/pulled before execution**
 - ✅ Input validation for branch names and PR numbers
 - ✅ Error handling with helpful messages
 - ✅ Option to cancel at any confirmation step
 - ✅ Success/failure feedback after execution
+- ✅ **Alternative suggestions for dangerous operations**
 
 ## Installation
 

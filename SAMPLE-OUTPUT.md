@@ -2,14 +2,15 @@
 
 This document shows what users will see when running the git-menu.bat script.
 
-## Main Menu Display
+## Main Menu Display (With Sync Status)
 
+### Example 1: Branch is Synced
 ```
 ============================================================
            Git Interactive Menu System
 ============================================================
 
-Current Branch: copilot/add-git-interactive-menu
+Current Branch: main [Synced]
 
 ------------------------------------------------------------
 Select a Git operation:
@@ -33,7 +34,81 @@ Select a Git operation:
 Enter your choice (1-13): _
 ```
 
-## Sample Operation: Create New Branch (Option 5)
+### Example 2: Branch Has Uncommitted Changes and is Behind
+```
+============================================================
+           Git Interactive Menu System
+============================================================
+
+Current Branch: feature-branch [2 behind] [Uncommitted changes]
+
+------------------------------------------------------------
+Select a Git operation:
+...
+```
+
+### Example 3: Branch is Ahead (Ready to Push)
+```
+============================================================
+           Git Interactive Menu System
+============================================================
+
+Current Branch: feature-work [3 ahead]
+
+------------------------------------------------------------
+Select a Git operation:
+...
+```
+
+### Example 4: Branch is Diverged
+```
+============================================================
+           Git Interactive Menu System
+============================================================
+
+Current Branch: develop [1 behind, 2 ahead]
+
+------------------------------------------------------------
+Select a Git operation:
+...
+```
+
+## Sample Operation: Fetch from Origin (Option 1) - Enhanced
+
+```
+============================================================
+   Fetch from Origin
+============================================================
+
+What this does:
+  - Downloads all new commits, branches, and tags from the remote repository
+  - Safe operation - Does NOT merge or modify your working directory
+  - Updates your local copy of remote branches (origin/branch-name)
+  - After fetching, you can see what changed with 'git log' or merge manually
+
+Use this when:
+  - You want to see what's new on the remote without changing your code
+  - Before pulling to check what changes are incoming
+  - To update all remote branch information
+
+Command to execute: git fetch origin
+
+Continue? (y/n): y
+
+Executing: git fetch origin
+
+From https://github.com/user/repo
+   abc1234..def5678  main       -> origin/main
+ * [new branch]      feature-x  -> origin/feature-x
+
+Success: Fetched from origin successfully.
+
+------------------------------------------------------------
+
+Press 'M' for menu or 'E' to exit: _
+```
+
+## Sample Operation: Create New Branch (Option 5) - Enhanced
 
 ```
 ============================================================
@@ -44,7 +119,23 @@ Current branch: main
 
 Enter new branch name: feature/new-awesome-feature
 
-This will create a new branch 'feature/new-awesome-feature' from the current branch.
+What this does:
+  - Creates a new branch starting from your current commit (HEAD)
+  - Automatically switches to the newly created branch
+  - The new branch starts with all commits from the current branch
+  - Your working directory remains unchanged
+
+Use this when:
+  - Starting work on a new feature or bug fix
+  - Creating a branch for experimentation
+  - Separating development work from the main branch
+
+Branch name tips:
+  - Use descriptive names: feature/user-login, bugfix/crash-on-save
+  - Avoid spaces and special characters (~, ^, :, \, etc.)
+  - Common conventions: feature/, bugfix/, hotfix/, release/
+
+This will create and switch to: 'feature/new-awesome-feature' from current branch.
 Command to execute: git checkout -b feature/new-awesome-feature
 
 Continue? (y/n): y
@@ -93,7 +184,7 @@ Success: Checked out Pull Request #123 to branch pr-123.
 Press 'M' for menu or 'E' to exit: _
 ```
 
-## Sample Operation: Reset to Origin (Option 12) - DESTRUCTIVE
+## Sample Operation: Reset to Origin (Option 12) - Enhanced DESTRUCTIVE
 
 ```
 ============================================================
@@ -102,29 +193,42 @@ Press 'M' for menu or 'E' to exit: _
 
 WARNING: This operation is DESTRUCTIVE and CANNOT be undone easily!
 
+What this does:
+  1. Fetches the latest version of the branch from origin
+  2. HARD RESETS your branch to match origin exactly (discards all local commits)
+  3. DELETES all uncommitted changes (modified, staged, new files)
+  4. Cleans untracked files and directories from your working tree
+
+Use this when:
+  - Your local branch is corrupted or in a bad state
+  - You want to completely abandon local changes and start fresh
+  - Recovering from a merge conflict by discarding local work
+  - ONLY if you're absolutely sure you don't need the local changes
+
+CANNOT BE UNDONE: Once executed, your local commits and changes are gone forever!
+ALTERNATIVES: Consider using 'git stash' (option 10) or creating a backup branch.
+
 Current branch: feature-branch
 
-This will:
-  - Discard ALL local commits not pushed to origin
-  - Discard ALL uncommitted changes
-  - Reset your branch to match origin/feature-branch exactly
+What will be DELETED:
 
-Current uncommitted changes:
+Current uncommitted changes (will be LOST):
  M file1.txt
  M file2.js
 
-Unpushed commits (will be LOST):
+Unpushed local commits (will be LOST FOREVER):
 abc1234 Work in progress
 def5678 Added new feature
 
-Commands to execute:
-  git fetch origin
-  git reset --hard origin/feature-branch
-  git clean -fd
+Commands that will be executed:
+  git fetch origin (download latest remote state)
+  git reset --hard origin/feature-branch (DESTROY local commits)
+  git clean -fd (DELETE untracked files)
 
-====== FINAL WARNING ======
-This will permanently delete your local changes!
-============================
+╔═══════════════════════════════════════════════════════════════╗
+║  FINAL WARNING: This will permanently delete your local work! ║
+║  Make sure you have pushed or backed up anything important!   ║
+╚═══════════════════════════════════════════════════════════════╝
 
 Type 'RESET' to confirm (case-sensitive): RESET
 

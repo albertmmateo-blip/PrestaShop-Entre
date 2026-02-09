@@ -32,7 +32,38 @@ if "!CURRENT_BRANCH!"=="" (
     exit /b 1
 )
 
-echo %GREEN%Current Branch:%RESET% %YELLOW%!CURRENT_BRANCH!%RESET%
+REM Get sync status (commits behind/ahead)
+set BEHIND=0
+set AHEAD=0
+set SYNC_STATUS=
+git rev-list --left-right --count origin/!CURRENT_BRANCH!...HEAD 2>nul >nul
+if %ERRORLEVEL%==0 (
+    for /f "tokens=1,2" %%a in ('git rev-list --left-right --count origin/!CURRENT_BRANCH!...HEAD 2^>nul') do (
+        set BEHIND=%%a
+        set AHEAD=%%b
+    )
+    if !BEHIND!==0 if !AHEAD!==0 (
+        set SYNC_STATUS=%GREEN%[Synced]%RESET%
+    ) else if !BEHIND! GTR 0 if !AHEAD!==0 (
+        set SYNC_STATUS=%YELLOW%[!BEHIND! behind]%RESET%
+    ) else if !BEHIND!==0 if !AHEAD! GTR 0 (
+        set SYNC_STATUS=%CYAN%[!AHEAD! ahead]%RESET%
+    ) else (
+        set SYNC_STATUS=%RED%[!BEHIND! behind, !AHEAD! ahead]%RESET%
+    )
+) else (
+    set SYNC_STATUS=%YELLOW%[No remote branch]%RESET%
+)
+
+REM Check for uncommitted changes
+git diff-index --quiet HEAD -- 2>nul
+if %ERRORLEVEL%==1 (
+    set UNCOMMITTED=%YELLOW%[Uncommitted changes]%RESET%
+) else (
+    set UNCOMMITTED=
+)
+
+echo %GREEN%Current Branch:%RESET% %YELLOW%!CURRENT_BRANCH!%RESET% !SYNC_STATUS! !UNCOMMITTED!
 echo.
 echo %CYAN%------------------------------------------------------------%RESET%
 echo %WHITE%Select a Git operation:%RESET%
@@ -93,7 +124,17 @@ echo %CYAN%============================================================%RESET%
 echo %CYAN%   Fetch from Origin%RESET%
 echo %CYAN%============================================================%RESET%
 echo.
-echo %WHITE%This will fetch all branches and tags from origin.%RESET%
+echo %WHITE%What this does:%RESET%
+echo   - Downloads all new commits, branches, and tags from the remote repository
+echo   - %GREEN%Safe operation%RESET% - Does NOT merge or modify your working directory
+echo   - Updates your local copy of remote branches (origin/branch-name)
+echo   - After fetching, you can see what changed with 'git log' or merge manually
+echo.
+echo %WHITE%Use this when:%RESET%
+echo   - You want to see what's new on the remote without changing your code
+echo   - Before pulling to check what changes are incoming
+echo   - To update all remote branch information
+echo.
 echo %WHITE%Command to execute:%RESET% %YELLOW%git fetch origin%RESET%
 echo.
 set /p CONFIRM="Continue? (y/n): "
@@ -127,7 +168,20 @@ echo %CYAN%============================================================%RESET%
 echo.
 echo %WHITE%Current branch:%RESET% %YELLOW%!CURRENT_BRANCH!%RESET%
 echo.
-echo %WHITE%This will pull changes from origin/!CURRENT_BRANCH!.%RESET%
+echo %WHITE%What this does:%RESET%
+echo   - Fetches commits from origin/!CURRENT_BRANCH!
+echo   - Automatically merges them into your current branch
+echo   - Combines 'git fetch' and 'git merge' in one command
+echo   - May require resolving conflicts if changes overlap
+echo.
+echo %WHITE%Use this when:%RESET%
+echo   - You want to get the latest changes from the remote branch
+echo   - Your branch is behind the remote and you want to sync
+echo   - Working in a team and need to integrate others' work
+echo.
+echo %YELLOW%Note:%RESET% If you have uncommitted changes, they may conflict with incoming changes.
+echo Consider stashing your changes first (option 10) if you have conflicts.
+echo.
 echo %WHITE%Command to execute:%RESET% %YELLOW%git pull origin !CURRENT_BRANCH!%RESET%
 echo.
 
@@ -170,6 +224,20 @@ echo %CYAN%   Checkout to a Different Branch%RESET%
 echo %CYAN%============================================================%RESET%
 echo.
 echo %WHITE%Current branch:%RESET% %YELLOW%!CURRENT_BRANCH!%RESET%
+echo.
+echo %WHITE%What this does:%RESET%
+echo   - Switches your working directory to a different branch
+echo   - Updates all files to match the selected branch
+echo   - Changes HEAD pointer to the target branch
+echo   - Uncommitted changes will be carried over if they don't conflict
+echo.
+echo %WHITE%Use this when:%RESET%
+echo   - You need to work on a different feature or bug fix
+echo   - Reviewing someone else's work on another branch
+echo   - Switching between development tasks
+echo.
+echo %YELLOW%Important:%RESET% Uncommitted changes may prevent checkout or be carried over.
+echo Consider committing or stashing changes first (option 10).
 echo.
 echo %WHITE%Available branches:%RESET%
 git branch -a
@@ -224,7 +292,19 @@ echo %CYAN%============================================================%RESET%
 echo %CYAN%   Checkout Pull Request%RESET%
 echo %CYAN%============================================================%RESET%
 echo.
-echo %WHITE%This will fetch and checkout a Pull Request from GitHub.%RESET%
+echo %WHITE%What this does:%RESET%
+echo   - Fetches a specific Pull Request from GitHub by its number
+echo   - Creates a local branch named 'pr-{number}' with the PR's code
+echo   - Switches to the new branch so you can test/review the PR
+echo   - Uses GitHub's PR reference: pull/{number}/head
+echo.
+echo %WHITE%Use this when:%RESET%
+echo   - You want to test someone's Pull Request locally
+echo   - Reviewing code changes before merging
+echo   - Running tests on a PR before approval
+echo.
+echo %YELLOW%Note:%RESET% The PR must exist in the remote repository.
+echo The local branch 'pr-{number}' will be created if it doesn't exist.
 echo.
 
 set /p PR_NUMBER="Enter Pull Request number: "
@@ -302,7 +382,23 @@ if %ERRORLEVEL%==0 (
 )
 
 echo.
-echo %WHITE%This will create a new branch '!NEW_BRANCH!' from the current branch.%RESET%
+echo %WHITE%What this does:%RESET%
+echo   - Creates a new branch starting from your current commit (HEAD)
+echo   - Automatically switches to the newly created branch
+echo   - The new branch starts with all commits from the current branch
+echo   - Your working directory remains unchanged
+echo.
+echo %WHITE%Use this when:%RESET%
+echo   - Starting work on a new feature or bug fix
+echo   - Creating a branch for experimentation
+echo   - Separating development work from the main branch
+echo.
+echo %WHITE%Branch name tips:%RESET%
+echo   - Use descriptive names: feature/user-login, bugfix/crash-on-save
+echo   - Avoid spaces and special characters (~, ^, :, \, etc.)
+echo   - Common conventions: feature/, bugfix/, hotfix/, release/
+echo.
+echo %WHITE%This will create and switch to: '%YELLOW%!NEW_BRANCH!%WHITE%' from current branch.%RESET%
 echo %WHITE%Command to execute:%RESET% %YELLOW%git checkout -b !NEW_BRANCH!%RESET%
 echo.
 set /p CONFIRM="Continue? (y/n): "
@@ -337,7 +433,21 @@ echo %CYAN%============================================================%RESET%
 echo.
 echo %WHITE%Current branch:%RESET% %YELLOW%!CURRENT_BRANCH!%RESET%
 echo.
-echo %WHITE%This will push your commits to origin/!CURRENT_BRANCH!.%RESET%
+echo %WHITE%What this does:%RESET%
+echo   - Uploads your local commits to the remote repository (origin)
+echo   - Updates origin/!CURRENT_BRANCH! with your new commits
+echo   - Makes your changes available to other team members
+echo   - If the remote branch doesn't exist, it will be created
+echo.
+echo %WHITE%Use this when:%RESET%
+echo   - You've made commits and want to share them with the team
+echo   - Backing up your work to the remote repository
+echo   - Your branch is ahead of origin and you want to sync
+echo   - Before creating a Pull Request
+echo.
+echo %YELLOW%Note:%RESET% If the remote branch has changes you don't have, push may fail.
+echo You'll need to pull first (option 2) to merge remote changes.
+echo.
 echo %WHITE%Command to execute:%RESET% %YELLOW%git push origin !CURRENT_BRANCH!%RESET%
 echo.
 
@@ -389,10 +499,22 @@ if "!TARGET_BRANCH!"=="" (
 )
 
 echo.
-echo %WHITE%This will push your current branch to origin/!TARGET_BRANCH!.%RESET%
-echo %WHITE%Command to execute:%RESET% %YELLOW%git push origin !CURRENT_BRANCH!:!TARGET_BRANCH!%RESET%
+echo %WHITE%What this does:%RESET%
+echo   - Pushes your current branch (!CURRENT_BRANCH!) to a different remote branch name
+echo   - Format: git push origin local-branch:remote-branch
+echo   - Creates the remote branch if it doesn't exist
+echo   - Can be used to rename a branch on the remote
 echo.
-echo %YELLOW%Warning: This can overwrite remote branch if names differ!%RESET%
+echo %WHITE%Use this when:%RESET%
+echo   - You want to push to a different branch name on the remote
+echo   - Creating a backup with a different name
+echo   - Contributing to a branch with a specific naming convention
+echo.
+echo %RED%WARNING:%RESET% %YELLOW%This can overwrite the remote branch if it already exists!%RESET%
+echo Make sure you know what you're doing to avoid data loss.
+echo.
+echo %WHITE%This will push:%RESET% %YELLOW%!CURRENT_BRANCH!%RESET% %WHITE%to remote:%RESET% %YELLOW%!TARGET_BRANCH!%RESET%
+echo %WHITE%Command to execute:%RESET% %YELLOW%git push origin !CURRENT_BRANCH!:!TARGET_BRANCH!%RESET%
 echo.
 
 set /p CONFIRM="Continue? (y/n): "
@@ -424,6 +546,18 @@ echo %CYAN%============================================================%RESET%
 echo %CYAN%   Current Branch and Status%RESET%
 echo %CYAN%============================================================%RESET%
 echo.
+echo %WHITE%What this shows:%RESET%
+echo   - Current branch name and tracking status
+echo   - Modified, added, deleted, and untracked files
+echo   - Whether you're ahead/behind the remote branch
+echo   - Number of stashed changes (if any)
+echo.
+echo %WHITE%Use this when:%RESET%
+echo   - You want to see what changes you've made
+echo   - Checking if you're in sync with the remote
+echo   - Before committing to review what will be included
+echo   - Verifying your working directory state
+echo.
 echo %WHITE%Current branch:%RESET% %YELLOW%!CURRENT_BRANCH!%RESET%
 echo.
 echo %CYAN%------------------------------------------------------------%RESET%
@@ -445,6 +579,15 @@ if %ERRORLEVEL%==0 (
 ) else (
     echo %YELLOW%Could not compare with origin (branch may not exist remotely).%RESET%
 )
+echo.
+echo %CYAN%------------------------------------------------------------%RESET%
+echo %WHITE%Stash List:%RESET%
+echo %CYAN%------------------------------------------------------------%RESET%
+echo.
+git stash list
+if %ERRORLEVEL%==1 (
+    echo No stashes found.
+)
 goto OPERATION_END
 
 REM ============================================================
@@ -457,6 +600,19 @@ echo %CYAN%============================================================%RESET%
 echo %CYAN%   Recent Commit History%RESET%
 echo %CYAN%============================================================%RESET%
 echo.
+echo %WHITE%What this shows:%RESET%
+echo   - Last 10 commits in a graphical tree view
+echo   - Commit hash (short form) for referencing commits
+echo   - Commit messages showing what changed
+echo   - Branch and tag decorations
+echo   - Commit relationships and merge history
+echo.
+echo %WHITE%Use this when:%RESET%
+echo   - You want to see recent changes to the codebase
+echo   - Finding a specific commit by its message
+echo   - Understanding the branch structure and merges
+echo   - Before resetting or reverting changes
+echo.
 echo %WHITE%Current branch:%RESET% %YELLOW%!CURRENT_BRANCH!%RESET%
 echo.
 echo %WHITE%Last 10 commits:%RESET%
@@ -466,7 +622,7 @@ git log -10 --oneline --decorate --graph
 echo.
 echo %CYAN%------------------------------------------------------------%RESET%
 echo.
-echo %WHITE%For more details, use:%RESET% %YELLOW%git log%RESET%
+echo %WHITE%For more details, use:%RESET% %YELLOW%git log%RESET% %WHITE%or%RESET% %YELLOW%git log --stat%RESET%
 goto OPERATION_END
 
 REM ============================================================
@@ -478,6 +634,21 @@ echo.
 echo %CYAN%============================================================%RESET%
 echo %CYAN%   Stash Changes%RESET%
 echo %CYAN%============================================================%RESET%
+echo.
+echo %WHITE%What this does:%RESET%
+echo   - Temporarily saves your uncommitted changes (modified and staged files)
+echo   - Reverts your working directory to match the last commit (clean state)
+echo   - Allows you to switch branches without committing incomplete work
+echo   - Creates a stash entry you can apply later
+echo.
+echo %WHITE%Use this when:%RESET%
+echo   - You need to switch branches but aren't ready to commit
+echo   - Pulling changes and you have local modifications
+echo   - Want to test something with a clean working directory
+echo   - Saving work in progress before trying something risky
+echo.
+echo %YELLOW%Note:%RESET% Untracked files are NOT stashed by default.
+echo Use 'git stash -u' manually to include untracked files.
 echo.
 echo %WHITE%This will save your uncommitted changes to the stash.%RESET%
 echo.
@@ -537,6 +708,21 @@ echo.
 echo %CYAN%============================================================%RESET%
 echo %CYAN%   Apply Stash%RESET%
 echo %CYAN%============================================================%RESET%
+echo.
+echo %WHITE%What this does:%RESET%
+echo   - Restores previously stashed changes to your working directory
+echo   - Applies changes on top of your current code
+echo   - Keeps the stash in the list (use 'git stash pop' to remove it)
+echo   - May create conflicts if changes overlap with current work
+echo.
+echo %WHITE%Use this when:%RESET%
+echo   - You want to restore work you previously stashed
+echo   - Continuing work after switching back to a branch
+echo   - Applying the same changes to multiple branches
+echo   - Testing if stashed changes still work with current code
+echo.
+echo %YELLOW%Note:%RESET% If there are conflicts, you'll need to resolve them manually.
+echo The stash will remain in the list until you use 'git stash drop' or 'pop'.
 echo.
 echo %WHITE%Available stashes:%RESET%
 echo.
@@ -604,30 +790,43 @@ echo %RED%============================================================%RESET%
 echo.
 echo %RED%WARNING: This operation is DESTRUCTIVE and CANNOT be undone easily!%RESET%
 echo.
+echo %WHITE%What this does:%RESET%
+echo   %RED%1. Fetches the latest version of the branch from origin%RESET%
+echo   %RED%2. HARD RESETS your branch to match origin exactly (discards all local commits)%RESET%
+echo   %RED%3. DELETES all uncommitted changes (modified, staged, new files)%RESET%
+echo   %RED%4. Cleans untracked files and directories from your working tree%RESET%
+echo.
+echo %WHITE%Use this when:%RESET%
+echo   - Your local branch is corrupted or in a bad state
+echo   - You want to completely abandon local changes and start fresh
+echo   - Recovering from a merge conflict by discarding local work
+echo   - %YELLOW%ONLY if you're absolutely sure you don't need the local changes%RESET%
+echo.
+echo %RED%CANNOT BE UNDONE:%RESET% %WHITE%Once executed, your local commits and changes are gone forever!%RESET%
+echo %YELLOW%ALTERNATIVES:%RESET% Consider using 'git stash' (option 10) or creating a backup branch.
+echo.
 echo %WHITE%Current branch:%RESET% %YELLOW%!CURRENT_BRANCH!%RESET%
 echo.
-echo %WHITE%This will:%RESET%
-echo   %RED%- Discard ALL local commits not pushed to origin%RESET%
-echo   %RED%- Discard ALL uncommitted changes%RESET%
-echo   %RED%- Reset your branch to match origin/!CURRENT_BRANCH! exactly%RESET%
+echo %WHITE%What will be DELETED:%RESET%
 echo.
-echo %WHITE%Current uncommitted changes:%RESET%
+echo %WHITE%Current uncommitted changes (will be LOST):%RESET%
 git status --short
 echo.
-echo %WHITE%Unpushed commits (will be LOST):%RESET%
+echo %WHITE%Unpushed local commits (will be LOST FOREVER):%RESET%
 git log origin/!CURRENT_BRANCH!..HEAD --oneline 2>nul
 if %ERRORLEVEL%==1 (
-    echo %YELLOW%Could not determine unpushed commits.%RESET%
+    echo %YELLOW%Could not determine unpushed commits (branch may not exist on origin).%RESET%
 )
 echo.
-echo %WHITE%Commands to execute:%RESET%
-echo   %YELLOW%git fetch origin%RESET%
-echo   %YELLOW%git reset --hard origin/!CURRENT_BRANCH!%RESET%
-echo   %YELLOW%git clean -fd%RESET%
+echo %WHITE%Commands that will be executed:%RESET%
+echo   %YELLOW%git fetch origin%RESET% %WHITE%(download latest remote state)%RESET%
+echo   %YELLOW%git reset --hard origin/!CURRENT_BRANCH!%RESET% %RED%(DESTROY local commits)%RESET%
+echo   %YELLOW%git clean -fd%RESET% %RED%(DELETE untracked files)%RESET%
 echo.
-echo %RED%====== FINAL WARNING ======%RESET%
-echo %RED%This will permanently delete your local changes!%RESET%
-echo %RED%============================%RESET%
+echo %RED%╔═══════════════════════════════════════════════════════════════╗%RESET%
+echo %RED%║  FINAL WARNING: This will permanently delete your local work! ║%RESET%
+echo %RED%║  Make sure you have pushed or backed up anything important!   ║%RESET%
+echo %RED%╚═══════════════════════════════════════════════════════════════╝%RESET%
 echo.
 
 set /p CONFIRM1="Type 'RESET' to confirm (case-sensitive): "
