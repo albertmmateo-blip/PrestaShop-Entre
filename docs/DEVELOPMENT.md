@@ -59,25 +59,6 @@ docker-compose.override.yml.dist # Development overrides
 Makefile                         # Development commands
 ```
 
-### Volume Configuration
-
-The Docker setup uses a **bind mount** strategy to ensure seamless development workflow:
-
-```yaml
-volumes:
-  - ./:/var/www/html
-```
-
-This configuration:
-- **Maps the entire repository** directly into the container
-- **Enables real-time file synchronization** between your local filesystem and the container
-- **Allows PrestaShop to serve images and uploads** from the local filesystem
-- **Ensures product images, logos, and uploaded files** are accessible in both front office and back office
-
-The only named volume used is `db-data` for MySQL database persistence, which is essential for maintaining database state across container restarts.
-
-**Important:** Do not use additional named volumes for directories like `var/`, `img/`, `upload/`, or `download/`, as they would overlay the bind mount and isolate these directories from your local filesystem, breaking image loading and file upload functionality.
-
 ## Makefile Commands
 
 ### Quick Reference
@@ -305,59 +286,6 @@ make admin-default
 If your database is corrupted / data is lost, you can reset your data by running the following command:
    ```bash
    make install-prestashop
-   ```
-
-#### Images or Uploads Not Loading
-
-If product images, logos, or uploaded files are not appearing in the front office or back office:
-
-**Symptoms:**
-- Missing product images in catalog
-- Logo not displaying
-- Uploaded files not accessible
-- 404 errors for image URLs
-
-**Causes:**
-This typically happens when named volumes overlay the bind mount, isolating directories like `img/`, `upload/`, `var/`, or `download/` from the local filesystem.
-
-**Solutions:**
-
-1. **Verify docker-compose.yml configuration:**
-   ```bash
-   cat docker-compose.yml | grep -A 10 "prestashop-git:" | grep volumes
-   ```
-   
-   Expected output should show only the bind mount:
-   ```yaml
-   volumes:
-     - ./:/var/www/html
-   ```
-
-2. **If additional named volumes are present, remove them:**
-   - Edit `docker-compose.yml`
-   - Remove any volume mounts like `ps-var:/var/www/html/var`, `ps-img:/var/www/html/img`, etc.
-   - Keep only the bind mount: `- ./:/var/www/html`
-   - Remove unused volume declarations from the top-level `volumes:` section
-
-3. **Restart containers:**
-   ```bash
-   make docker-down
-   make docker-up
-   ```
-
-4. **Clear cache:**
-   ```bash
-   make cc
-   ```
-
-5. **Check file permissions:**
-   ```bash
-   ls -la img/ upload/ var/
-   ```
-   
-   If needed, fix permissions:
-   ```bash
-   chmod -R 755 img/ upload/ var/
    ```
 
 ### Asset Build Issues
