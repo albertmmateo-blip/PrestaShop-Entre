@@ -42,7 +42,9 @@ Once started, access your PrestaShop installation at:
 
 ## Need Help?
 
-See the full documentation: [COPILOT DOCUMENTATION/WINDOWS_BATCH_SCRIPTS.md](COPILOT%20DOCUMENTATION/WINDOWS_BATCH_SCRIPTS.md)
+See the full documentation:
+- [Windows Batch Scripts Guide](COPILOT%20DOCUMENTATION/WINDOWS_BATCH_SCRIPTS.md) - How to use the batch scripts
+- [Windows Troubleshooting Guide](COPILOT%20DOCUMENTATION/WINDOWS_TROUBLESHOOTING.md) - Solutions for common Windows issues
 
 ## For Linux/Mac Users
 

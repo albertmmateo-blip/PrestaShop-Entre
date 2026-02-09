@@ -42,6 +42,22 @@ Per project requirements, all additional documentation created by Copilot agents
 
 **Why This Matters**: Provides Windows users with simple, native batch commands to manage Docker Compose services, correctly pointing to the current admin folder structure.
 
+### WINDOWS_TROUBLESHOOTING.md
+**Topic**: Windows-Specific Troubleshooting for PrestaShop Docker  
+**Related Files**: `/docker-compose.yml`, `/docker-compose.mariadb.yml`, `.env`  
+**Summary**: Comprehensive troubleshooting guide for common Windows-specific issues when running PrestaShop in Docker, including volume cleanup, permission errors, performance optimization, and WSL2 configuration.
+
+**Key Solutions**:
+- Removing old named volumes that may persist after fix
+- Fixing file permission errors on Windows
+- Resolving image directory sync issues
+- Handling port conflicts
+- Improving performance with WSL2
+- MySQL connection troubleshooting
+- Complete reset procedures
+
+**Why This Matters**: Windows Docker environments have unique challenges. This guide helps users quickly identify and resolve common issues specific to Windows, ensuring smooth PrestaShop development experience.
+
 ## How to Use This Documentation
 
 1. **Finding Relevant Documentation**: Each document clearly states which files it relates to
