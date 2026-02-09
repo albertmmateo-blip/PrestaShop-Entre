@@ -622,7 +622,7 @@ git log -10 --oneline --decorate --graph
 echo.
 echo %CYAN%------------------------------------------------------------%RESET%
 echo.
-echo %WHITE%For more details, use:%RESET% %YELLOW%git log%RESET% %WHITE%or%RESET% %YELLOW%git log --stat%RESET%
+echo %WHITE%For more details, use:%RESET% %YELLOW%git log%RESET% %WHITE% or %RESET% %YELLOW%git log --stat%RESET%
 goto OPERATION_END
 
 REM ============================================================

@@ -2,43 +2,45 @@
 
 This document highlights the improvements made to the Git Interactive Menu script.
 
+> **Note:** Emojis in this document are for visual clarity in documentation only. The actual script uses text-based color-coded indicators that work in all Windows terminals.
+
 ## 🆕 New Feature 1: Real-Time Sync Status Indicators
 
 The menu header now displays your branch's synchronization status with origin in real-time!
 
 ### Status Indicators
 
-#### ✅ Synced
+#### ✅ Synced (Green Text)
 ```
 Current Branch: main [Synced]
 ```
 Your local branch matches the remote - everything is up to date!
 
-#### ⬇️ Behind (Need to Pull)
+#### ⬇️ Behind (Yellow Text - Need to Pull)
 ```
 Current Branch: develop [3 behind]
 ```
 The remote has 3 commits you don't have. Use **Pull** (option 2) to get them.
 
-#### ⬆️ Ahead (Need to Push)
+#### ⬆️ Ahead (Cyan Text - Need to Push)
 ```
 Current Branch: feature-x [2 ahead]
 ```
 You have 2 local commits not on the remote. Use **Push** (option 6) to share them.
 
-#### 🔀 Diverged (Need to Sync)
+#### 🔀 Diverged (Red Text - Need to Sync)
 ```
 Current Branch: hotfix [1 behind, 2 ahead]
 ```
 Both local and remote have unique commits. You'll need to pull, resolve conflicts, then push.
 
-#### 🆕 No Remote Branch
+#### 🆕 No Remote Branch (Yellow Text)
 ```
 Current Branch: new-feature [No remote branch]
 ```
 This branch doesn't exist on the remote yet. First push will create it.
 
-#### 📝 Uncommitted Changes
+#### 📝 Uncommitted Changes (Yellow Text)
 ```
 Current Branch: main [Synced] [Uncommitted changes]
 ```
