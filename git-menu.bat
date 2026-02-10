@@ -7,7 +7,9 @@ REM ============================================================
 SETLOCAL EnableDelayedExpansion
 
 REM Enable ANSI color support in Windows 10+
+REM Set ESC character for potential use with ANSI sequences
 for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do set "ESC=%%b"
+REM Enable Virtual Terminal Processing to interpret ANSI codes in Console
 reg add HKCU\Console /v VirtualTerminalLevel /t REG_DWORD /d 1 /f >nul 2>&1
 
 REM Set up colors using ANSI escape codes (Windows 10+)
