@@ -34,6 +34,7 @@ import './facets';
 import './listing';
 import './product';
 import './address';
+import './quantity-meters';
 
 import {psShowHide} from './common';
 import initEmailFields from './email-idn';
