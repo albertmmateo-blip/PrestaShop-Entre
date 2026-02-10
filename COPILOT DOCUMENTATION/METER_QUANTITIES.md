@@ -1,8 +1,66 @@
-# Meter-Based Product Quantities
+# Meter-Based Product Quantities (CONDITIONAL)
 
 ## Overview
 
 This feature allows PrestaShop to handle product quantities in meters with decimal precision (multiples of 0.05 meters) while maintaining full compatibility with PrestaShop's integer-based internal processing.
+
+**IMPORTANT**: This feature is **conditional** and only applies to products explicitly marked as meter-based. Standard products continue to work with regular integer quantities.
+
+## Enabling Meter-Based Quantities
+
+The meter conversion system only activates for products that are marked with one of these indicators:
+
+### Method 1: Data Attribute on Quantity Input
+Add `data-unity="m"` to the quantity input:
+```html
+<input type="number" id="quantity_wanted" data-unity="m" value="1" />
+```
+
+### Method 2: Data Attribute on Product Form
+Add `data-unity="m"` to the product form:
+```html
+<form data-unity="m">
+  <input type="number" id="quantity_wanted" value="1" />
+</form>
+```
+
+### Method 3: CSS Class on Quantity Input
+Add the class `quantity-meters` to the quantity input:
+```html
+<input type="number" id="quantity_wanted" class="quantity-meters" value="1" />
+```
+
+### Method 4: CSS Class on Product Form
+Add the class `product-meters` to the product form:
+```html
+<form class="product-meters">
+  <input type="number" id="quantity_wanted" value="1" />
+</form>
+```
+
+### Method 5: Data Attribute Anywhere on Page
+Add `data-product-unity="m"` anywhere on the product page:
+```html
+<div data-product-unity="m">
+  <!-- Product details -->
+</div>
+```
+
+## Product Types
+
+### Meter-Based Products
+Products marked with any of the above indicators will:
+- Display quantities in meters (1.00, 1.25, 2.75)
+- Round user input UP to nearest 0.05 meters
+- Store quantities as centimeters (100, 125, 275)
+- Convert between meters and centimeters automatically
+
+### Standard Products
+Products **without** any meter indicators will:
+- Display quantities as regular integers (1, 2, 3)
+- Use standard PrestaShop quantity handling
+- Store quantities as entered (1, 2, 3)
+- Work exactly as PrestaShop normally does
 
 ## How It Works
 

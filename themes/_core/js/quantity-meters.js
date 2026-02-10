@@ -27,11 +27,21 @@ import $ from 'jquery';
 import prestashop from 'prestashop';
 
 /**
- * Quantity Meters Handler
+ * Quantity Meters Handler (CONDITIONAL)
  * 
  * Handles product quantities in meters with decimal precision (multiples of 0.05).
  * Converts meters to centimeters for backend processing while maintaining
  * user-friendly meter-based interface.
+ * 
+ * IMPORTANT: This module only activates for products marked as meter-based.
+ * To enable meter-based quantities for a product, add one of these:
+ * - data-unity="m" or data-unity="meter" on the quantity input
+ * - data-unity="m" or data-unity="meter" on the product form
+ * - class="quantity-meters" on the quantity input
+ * - class="product-meters" on the product form
+ * - data-product-unity="m" anywhere on the page
+ * 
+ * Standard products (without these markers) will use regular integer quantities.
  */
 
 const METER_STEP = 0.05; // Minimum step for meters (5 centimeters)
@@ -80,12 +90,50 @@ function formatMeters(meters) {
 }
 
 /**
+ * Check if meter-based quantities should be enabled for this product
+ * 
+ * @param {jQuery} $quantityInput - The quantity input element
+ * @return {boolean} True if meter mode should be enabled
+ */
+function shouldEnableMeterMode($quantityInput) {
+  // Check for explicit data attribute
+  if ($quantityInput.data('unity') === 'm' || $quantityInput.data('unity') === 'meter') {
+    return true;
+  }
+  
+  // Check parent form for unity data
+  const $form = $quantityInput.closest('form');
+  if ($form.data('unity') === 'm' || $form.data('unity') === 'meter') {
+    return true;
+  }
+  
+  // Check for a class indicating meter-based product
+  if ($quantityInput.hasClass('quantity-meters') || $form.hasClass('product-meters')) {
+    return true;
+  }
+  
+  // Check if there's a meter indicator in the product page
+  if ($('[data-product-unity="m"]').length > 0 || $('[data-product-unity="meter"]').length > 0) {
+    return true;
+  }
+  
+  // Default: do NOT enable meter mode (preserve standard behavior)
+  return false;
+}
+
+/**
  * Initialize meter-based quantity handling
  */
 function initQuantityMeters() {
   const $quantityInput = $(prestashop.selectors.quantityWanted);
   
   if ($quantityInput.length === 0) {
+    return;
+  }
+
+  // Check if meter mode should be enabled for this product
+  if (!shouldEnableMeterMode($quantityInput)) {
+    // Standard product - do not apply meter conversion
     return;
   }
 
@@ -153,8 +201,14 @@ function initQuantityMeters() {
 
   /**
    * Intercept AJAX calls to convert meters to centimeters
+   * Only intercepts if this input is in meter mode
    */
   $(document).ajaxSend(function(event, jqxhr, settings) {
+    // Only intercept if meter mode is active for this input
+    if (!$quantityInput.data('is-meters-mode')) {
+      return;
+    }
+    
     // Check if this is a product-related AJAX call
     if (settings.data && typeof settings.data === 'string' && settings.data.includes('quantity_wanted')) {
       const meters = parseFloat($quantityInput.val());
@@ -173,6 +227,11 @@ function initQuantityMeters() {
    * Convert response data from centimeters back to meters for display
    */
   prestashop.on('updatedProduct', function(data) {
+    // Only process if meter mode is active
+    if (!$quantityInput.data('is-meters-mode')) {
+      return;
+    }
+    
     if (data.product_minimal_quantity) {
       let minQuantity = parseInt(data.product_minimal_quantity, 10);
       
@@ -197,8 +256,14 @@ function initQuantityMeters() {
 
   /**
    * Handle add to cart - ensure we send centimeters
+   * Only applies to meter-based products
    */
   $(document).on('click', prestashop.selectors.product.addToCart + ', [data-button-action="add-to-cart"]', function(e) {
+    // Only intercept if meter mode is active
+    if (!$quantityInput.data('is-meters-mode')) {
+      return;
+    }
+    
     const meters = parseFloat($quantityInput.val());
     const roundedMeters = roundToMeterStep(meters);
     const centimeters = metersToCentimeters(roundedMeters);

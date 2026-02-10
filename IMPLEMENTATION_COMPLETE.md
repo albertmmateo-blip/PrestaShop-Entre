@@ -1,21 +1,33 @@
-# ✅ Implementation Complete: Meter-Based Quantity System
+# ✅ Implementation Complete: Meter-Based Quantity System (CONDITIONAL)
 
 ## Summary
 
-Successfully implemented a meter-based quantity system for PrestaShop that allows customers to purchase products in meters with decimal precision (multiples of 0.05 meters), while the system internally works with integers (centimeters).
+Successfully implemented a **conditional** meter-based quantity system for PrestaShop that allows customers to purchase products in meters with decimal precision (multiples of 0.05 meters), while the system internally works with integers (centimeters).
+
+**KEY UPDATE**: The system is now **conditional per product**. Only products marked with meter indicators use the conversion system. Standard products continue to work with regular integer quantities.
 
 ## What Was Implemented
 
-### 1. JavaScript Module (`themes/_core/js/quantity-meters.js`)
-- **Automatic Rounding**: Rounds user input UP to nearest 0.05 meters
+### 1. JavaScript Module (`themes/_core/js/quantity-meters.js`) - NOW CONDITIONAL
+- **Conditional Activation**: Only activates for products marked with meter indicators
+- **Automatic Rounding**: Rounds user input UP to nearest 0.05 meters (for meter products)
   - 2.71 → 2.75
   - 2.76 → 2.80
   - 1.23 → 1.25
 - **Meter ↔ Centimeter Conversion**: Seamlessly converts between display (meters) and storage (centimeters)
-- **AJAX Interception**: Ensures all quantity submissions use centimeters
-- **Backward Compatibility**: Heuristic to work with existing products
+- **AJAX Interception**: Ensures all quantity submissions use centimeters (only for meter products)
+- **Standard Product Support**: Standard products use regular integer quantities without conversion
 
-### 2. Comprehensive Documentation
+### 2. Enabling Meter-Based Quantities
+Add one of these markers to products that should use meters:
+- `data-unity="m"` on quantity input or form
+- `class="quantity-meters"` on quantity input
+- `class="product-meters"` on form
+- `data-product-unity="m"` anywhere on page
+
+Products **without** these markers work with standard integer quantities.
+
+### 3. Comprehensive Documentation
 - **Feature Guide**: `COPILOT DOCUMENTATION/METER_QUANTITIES.md`
 - **Implementation Details**: `COPILOT DOCUMENTATION/IMPLEMENTATION_SUMMARY.md`
 - Complete usage examples and troubleshooting

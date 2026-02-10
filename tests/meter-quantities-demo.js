@@ -3,6 +3,10 @@
  * 
  * This file demonstrates the rounding behavior of the quantity-meters module.
  * Run in browser console or Node.js environment.
+ * 
+ * NOTE: The meter-based quantity system is CONDITIONAL and only applies to
+ * products marked with meter indicators (data-unity="m", class="quantity-meters", etc.)
+ * Standard products use regular integer quantities without conversion.
  */
 
 // Import the functions (in a real test, these would be imported from the module)

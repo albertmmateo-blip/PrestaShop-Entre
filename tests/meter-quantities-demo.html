@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meter-Based Quantity Demo</title>
+    <title>Meter-Based Quantity Demo (CONDITIONAL)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -105,10 +105,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎯 Meter-Based Quantity System Demo</h1>
+        <h1>🎯 Meter-Based Quantity System Demo (CONDITIONAL)</h1>
         
         <div class="info-box">
-            <strong>How it works:</strong> Enter any quantity in meters. The system will automatically round UP to the nearest 0.05 meters (5 centimeters) and convert to centimeters for storage.
+            <strong>⚠️ IMPORTANT:</strong> The meter-based quantity system is <strong>conditional</strong> and only applies to products marked with meter indicators (e.g., <code>data-unity="m"</code>, <code>class="quantity-meters"</code>). Standard products continue to use regular integer quantities without conversion.
+        </div>
+        
+        <div class="info-box">
+            <strong>How it works:</strong> Enter any quantity in meters. The system will automatically round UP to the nearest 0.05 meters (5 centimeters) and convert to centimeters for storage. This demo shows the conversion logic for meter-based products only.
         </div>
 
         <div class="demo-section">

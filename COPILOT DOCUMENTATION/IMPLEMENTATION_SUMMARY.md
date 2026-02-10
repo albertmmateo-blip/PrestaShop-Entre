@@ -1,7 +1,9 @@
-# Meter-Based Quantity System - Implementation Summary
+# Meter-Based Quantity System - Implementation Summary (CONDITIONAL)
 
 ## Overview
-This implementation adds support for selling products by meter with decimal quantities (multiples of 0.05 meters), while maintaining PrestaShop's integer-based processing internally by using centimeters.
+This implementation adds **conditional** support for selling products by meter with decimal quantities (multiples of 0.05 meters), while maintaining PrestaShop's integer-based processing internally by using centimeters.
+
+**IMPORTANT**: The meter-based quantity system is **optional per product**. It only activates for products marked with meter indicators. Standard products continue to use regular integer quantities.
 
 ## Files Changed/Added
 
@@ -36,12 +38,39 @@ This implementation adds support for selling products by meter with decimal quan
   - Visual demonstration of conversions
   - Quick test buttons for common values
 
+## Enabling Meter-Based Quantities
+
+The system only activates for products marked with one of these indicators:
+
+1. **Data attribute on input**: `<input data-unity="m" />`
+2. **Data attribute on form**: `<form data-unity="m">`
+3. **CSS class on input**: `<input class="quantity-meters" />`
+4. **CSS class on form**: `<form class="product-meters">`
+5. **Data attribute on page**: `<div data-product-unity="m">`
+
+Products **without** these markers use standard PrestaShop integer quantities.
+
+## Product Types
+
+### Meter-Based Products
+Products with meter indicators will:
+- Display quantities in meters (1.00, 1.25, 2.75)
+- Round input UP to nearest 0.05 meters
+- Store as centimeters (100, 125, 275)
+
+### Standard Products
+Products without meter indicators will:
+- Display quantities as integers (1, 2, 3)
+- Use standard PrestaShop handling
+- No conversion applied
+
 ## How It Works
 
-### User Flow
+### User Flow (Meter-Based Products Only)
 1. **Product Page Load**
-   - Quantity input shows in meters (e.g., "1.00")
-   - Input configured with step="0.05", min="0.05"
+   - System checks for meter indicators
+   - If found: Quantity input shows in meters (e.g., "1.00")
+   - If not found: Standard integer display
 
 2. **User Inputs Quantity**
    - User types: "2.71 meters"
