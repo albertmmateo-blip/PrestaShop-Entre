@@ -13,13 +13,13 @@ REM Enable Virtual Terminal Processing to interpret ANSI codes in Console
 reg add HKCU\Console /v VirtualTerminalLevel /t REG_DWORD /d 1 /f >nul 2>&1
 
 REM Set up colors using ANSI escape codes (Windows 10+)
-set "RED=[91m"
-set "GREEN=[92m"
-set "YELLOW=[93m"
-set "BLUE=[94m"
-set "CYAN=[96m"
-set "WHITE=[97m"
-set "RESET=[0m"
+set "RED=%ESC%[91m"
+set "GREEN=%ESC%[92m"
+set "YELLOW=%ESC%[93m"
+set "BLUE=%ESC%[94m"
+set "CYAN=%ESC%[96m"
+set "WHITE=%ESC%[97m"
+set "RESET=%ESC%[0m"
 
 :MAIN_MENU
 cls
