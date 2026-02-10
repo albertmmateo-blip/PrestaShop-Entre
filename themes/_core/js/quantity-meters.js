@@ -89,16 +89,29 @@ function initQuantityMeters() {
     return;
   }
 
+  // Get initial value
+  let initialValue = parseInt($quantityInput.val(), 10) || 1;
+  let initialMeters;
+  
+  // Heuristic: if value < 50, treat as meters; if >= 50, treat as centimeters
+  // This allows compatibility with existing PrestaShop installations
+  if (initialValue < 50) {
+    initialMeters = initialValue; // Treat as meters
+  } else {
+    initialMeters = centimetersToMeters(initialValue); // Already in centimeters
+  }
+  
   // Set input attributes for meter input
   $quantityInput.attr('step', METER_STEP);
   $quantityInput.attr('min', METER_STEP);
+  $quantityInput.attr('type', 'number');
   
-  // Store original centimeter value as data attribute
-  const initialCentimeters = parseInt($quantityInput.val(), 10) || 100; // Default to 100cm (1 meter)
+  // Store centimeter value
+  const initialCentimeters = metersToCentimeters(initialMeters);
   $quantityInput.data('centimeters', initialCentimeters);
+  $quantityInput.data('is-meters-mode', true);
   
-  // Convert initial value from centimeters to meters for display
-  const initialMeters = centimetersToMeters(initialCentimeters);
+  // Display in meters
   $quantityInput.val(formatMeters(initialMeters));
 
   /**
@@ -161,8 +174,16 @@ function initQuantityMeters() {
    */
   prestashop.on('updatedProduct', function(data) {
     if (data.product_minimal_quantity) {
-      const minCentimeters = parseInt(data.product_minimal_quantity, 10);
-      const minMeters = centimetersToMeters(minCentimeters);
+      let minQuantity = parseInt(data.product_minimal_quantity, 10);
+      
+      // Apply same heuristic: < 50 means meters, >= 50 means centimeters
+      let minMeters;
+      if (minQuantity < 50) {
+        minMeters = minQuantity;
+      } else {
+        minMeters = centimetersToMeters(minQuantity);
+      }
+      
       $quantityInput.attr('min', formatMeters(minMeters));
     }
     
