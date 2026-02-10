@@ -156,6 +156,11 @@ app/config/config.php
 
 modules/*
 override/*
+!override/controllers
+!override/controllers/front
+!override/controllers/front/CartController.php
+!override/controllers/front/ProductController.php
+!override/controllers/front/index.php
 themes/*/
 themes/classic
 !themes/_core
