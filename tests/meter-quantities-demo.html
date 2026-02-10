@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meter-Based Quantity Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="number"] {
+            width: 200px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #e7f3ff;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .result-label {
+            font-weight: bold;
+            color: #0056b3;
+        }
+        .examples {
+            margin-top: 30px;
+        }
+        .example-item {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+        .example-arrow {
+            color: #28a745;
+            font-weight: bold;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .info-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .success-box {
+            background-color: #d4edda;
+            border: 1px solid #28a745;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Meter-Based Quantity System Demo</h1>
+        
+        <div class="info-box">
+            <strong>How it works:</strong> Enter any quantity in meters. The system will automatically round UP to the nearest 0.05 meters (5 centimeters) and convert to centimeters for storage.
+        </div>
+
+        <div class="demo-section">
+            <h2>Try It Out</h2>
+            
+            <div class="input-group">
+                <label for="meterInput">Enter Quantity (meters):</label>
+                <input type="number" id="meterInput" step="0.01" min="0" value="1.00" placeholder="e.g., 2.71">
+                <button onclick="processQuantity()">Process</button>
+            </div>
+
+            <div class="result" id="result" style="display:none;">
+                <div><span class="result-label">Input:</span> <span id="inputValue"></span> meters</div>
+                <div><span class="result-label">Rounded (UP):</span> <span id="roundedValue"></span> meters</div>
+                <div><span class="result-label">Stored as:</span> <span id="centimeterValue"></span> centimeters</div>
+                <div><span class="result-label">Display:</span> <span id="displayValue"></span> meters</div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Example Conversions</h2>
+            <div class="examples">
+                <div class="example-item">
+                    2.71 meters <span class="example-arrow">→</span> 2.75 meters <span class="example-arrow">→</span> 275 centimeters
+                </div>
+                <div class="example-item">
+                    2.76 meters <span class="example-arrow">→</span> 2.80 meters <span class="example-arrow">→</span> 280 centimeters
+                </div>
+                <div class="example-item">
+                    1.23 meters <span class="example-arrow">→</span> 1.25 meters <span class="example-arrow">→</span> 125 centimeters
+                </div>
+                <div class="example-item">
+                    2.45 meters <span class="example-arrow">→</span> 2.45 meters <span class="example-arrow">→</span> 245 centimeters
+                </div>
+                <div class="example-item">
+                    0.03 meters <span class="example-arrow">→</span> 0.05 meters <span class="example-arrow">→</span> 5 centimeters
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>Quick Test Values</h2>
+            <button onclick="testValue(2.71)">Test 2.71</button>
+            <button onclick="testValue(2.76)">Test 2.76</button>
+            <button onclick="testValue(1.23)">Test 1.23</button>
+            <button onclick="testValue(3.98)">Test 3.98</button>
+            <button onclick="testValue(0.01)">Test 0.01</button>
+        </div>
+
+        <div class="success-box">
+            <strong>✓ Key Benefits:</strong>
+            <ul>
+                <li>User-friendly decimal input (meters)</li>
+                <li>Automatic rounding to valid increments</li>
+                <li>Integer storage for reliability (centimeters)</li>
+                <li>No changes to PrestaShop core functionality</li>
+                <li>Full backward compatibility</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const METER_STEP = 0.05;
+        const METER_TO_CM = 100;
+
+        function roundToMeterStep(meters) {
+            return Math.ceil(meters / METER_STEP) * METER_STEP;
+        }
+
+        function metersToCentimeters(meters) {
+            return Math.round(meters * METER_TO_CM);
+        }
+
+        function centimetersToMeters(centimeters) {
+            return centimeters / METER_TO_CM;
+        }
+
+        function formatMeters(meters) {
+            return meters.toFixed(2);
+        }
+
+        function processQuantity() {
+            const input = parseFloat(document.getElementById('meterInput').value) || 0;
+            
+            if (input <= 0) {
+                alert('Please enter a positive value');
+                return;
+            }
+
+            const rounded = roundToMeterStep(input);
+            const centimeters = metersToCentimeters(rounded);
+            const display = centimetersToMeters(centimeters);
+
+            document.getElementById('inputValue').textContent = input.toFixed(2);
+            document.getElementById('roundedValue').textContent = formatMeters(rounded);
+            document.getElementById('centimeterValue').textContent = centimeters;
+            document.getElementById('displayValue').textContent = formatMeters(display);
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function testValue(value) {
+            document.getElementById('meterInput').value = value.toFixed(2);
+            processQuantity();
+        }
+
+        // Auto-process on page load
+        window.onload = function() {
+            processQuantity();
+        };
+    </script>
+</body>
+</html>
