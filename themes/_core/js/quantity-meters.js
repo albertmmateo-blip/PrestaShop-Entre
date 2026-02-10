@@ -38,15 +38,15 @@ const METER_STEP = 0.05; // Minimum step for meters (5 centimeters)
 const METER_TO_CM = 100; // Conversion factor
 
 /**
- * Round a meter value to the nearest multiple of 0.05
+ * Round a meter value UP to the nearest multiple of 0.05
  * Examples: 2.71 -> 2.75, 2.76 -> 2.80, 2.23 -> 2.25
  * 
  * @param {number} meters - The meter value to round
  * @return {number} The rounded meter value
  */
 function roundToMeterStep(meters) {
-  // Round to nearest 0.05 (5 centimeters)
-  return Math.round(meters / METER_STEP) * METER_STEP;
+  // Round UP to nearest 0.05 (5 centimeters)
+  return Math.ceil(meters / METER_STEP) * METER_STEP;
 }
 
 /**
