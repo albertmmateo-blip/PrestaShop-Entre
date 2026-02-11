@@ -46,6 +46,65 @@ Per project requirements, all additional documentation created by Copilot agents
 
 **Why This Matters**: Provides Windows users with simple, native batch commands to manage Docker Compose services, correctly pointing to the current admin folder structure.
 
+### METER_QUANTITIES.md
+**Topic**: Meter-Based Product Quantities (Conditional)  
+**Related Files**: `/themes/_core/js/quantity-meters.js`, `/themes/_core/js/theme.js`  
+**Summary**: Documents the meter-based quantity system that allows products to be sold by meter with decimal precision (multiples of 0.05 meters) while maintaining PrestaShop's integer-based backend.
+
+**Key Features**:
+- Conditional activation (only for marked products)
+- Automatic rounding UP to nearest 0.05 meters (e.g., 2.71 → 2.75)
+- Meter to centimeter conversion (2.75m → 275cm for storage)
+- Multiple activation methods (data attributes, CSS classes)
+- Works with both Classic and Hummingbird themes
+
+**Why This Matters**: Enables selling products by meter (fabrics, cables, etc.) with user-friendly decimal input while maintaining database integrity with integer storage.
+
+### THEME_COMPATIBILITY.md
+**Topic**: Theme Compatibility for Meter-Based Quantities  
+**Related Files**: `/themes/_core/js/quantity-meters.js`, `/themes/_core/js/theme.js`, `/themes/_core/js/selectors.js`  
+**Summary**: Documents comprehensive theme compatibility information for the meter-based quantity system, confirming it works with both Classic and Hummingbird themes.
+
+**Key Features**:
+- Verification of Classic theme compatibility (v3.0.0+)
+- Verification of Hummingbird theme compatibility (v1.0.1+)
+- Theme-agnostic design using standard PrestaShop selectors
+- Troubleshooting guide for custom themes
+- Integration instructions for theme developers
+
+**Why This Matters**: Clarifies that the meter-based quantity system works out-of-the-box with all standard PrestaShop themes without requiring theme-specific modifications.
+
+### IMPLEMENTATION_SUMMARY.md
+**Topic**: Meter-Based Quantity System Implementation Summary  
+**Related Files**: Multiple files in `/themes/_core/js/`, `/COPILOT DOCUMENTATION/`  
+**Summary**: Technical summary of the meter-based quantity system implementation including architecture, file changes, and implementation details.
+
+### CONDITIONAL_UPDATE.md
+**Topic**: Conditional Meter-Based Quantities Update  
+**Related Files**: `/themes/_core/js/quantity-meters.js`  
+**Summary**: Documents the update that made the meter-based quantity system conditional, only activating for explicitly marked products while preserving standard behavior for regular products.
+
+### CONFIGURATION_EXAMPLES.html
+**Topic**: Configuration Examples for Meter-Based Products  
+**Format**: Interactive HTML demonstration  
+**Summary**: Visual guide showing the 5 different methods to enable meter-based quantities for products, with code examples and explanations.
+
+### IMPLEMENTATION_COMPLETE.md
+**Topic**: Implementation Completion Summary  
+**Summary**: Final summary of the meter-based quantity system implementation, including feature list, testing results, and deployment instructions.
+
+### CODE_REVIEW_METER_QUANTITIES.md
+**Topic**: Code Review for Meter-Based Quantity System  
+**Summary**: Comprehensive code review analyzing all components of the meter-based quantity system, identifying issues, and providing recommendations for improvements.
+
+### CODE_REVIEW_SUMMARY.md
+**Topic**: Code Review Executive Summary  
+**Summary**: Executive summary of the code review process, checklist completion, improvements implemented, and production readiness assessment.
+
+### DOCUMENTATION_ORGANIZATION.md
+**Topic**: Documentation Organization Summary  
+**Summary**: Summary of how all AI-generated documentation has been organized, labeled, and structured within the COPILOT DOCUMENTATION folder.
+
 ## How to Use This Documentation
 
 1. **Finding Relevant Documentation**: Each document clearly states which files it relates to
