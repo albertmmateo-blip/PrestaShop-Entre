@@ -42,6 +42,21 @@ import prestashop from 'prestashop';
  * - data-product-unity="m" anywhere on the page
  * 
  * Standard products (without these markers) will use regular integer quantities.
+ * 
+ * @requires jQuery 3.x
+ * @requires prestashop (PrestaShop global object)
+ * 
+ * Browser Compatibility:
+ * - Chrome 90+
+ * - Firefox 88+
+ * - Safari 14+
+ * - Edge 90+
+ * - Requires ES6 support (or transpilation via webpack)
+ * 
+ * Note: Value Heuristic
+ * When initializing, values < 50 are treated as meters (e.g., 1 → 1.00m),
+ * while values >= 50 are treated as centimeters (e.g., 100 → 1.00m).
+ * This allows backward compatibility with existing PrestaShop installations.
  */
 
 const METER_STEP = 0.05; // Minimum step for meters (5 centimeters)
@@ -125,18 +140,38 @@ function shouldEnableMeterMode($quantityInput) {
  * Initialize meter-based quantity handling
  */
 function initQuantityMeters() {
-  const $quantityInput = $(prestashop.selectors.quantityWanted);
-  
-  if ($quantityInput.length === 0) {
-    return;
-  }
+  try {
+    const $quantityInput = $(prestashop.selectors.quantityWanted);
+    
+    if ($quantityInput.length === 0) {
+      return;
+    }
 
-  // Check if meter mode should be enabled for this product
-  if (!shouldEnableMeterMode($quantityInput)) {
-    // Standard product - do not apply meter conversion
-    return;
-  }
+    // Check if meter mode should be enabled for this product
+    if (!shouldEnableMeterMode($quantityInput)) {
+      // Standard product - do not apply meter conversion
+      return;
+    }
 
+    // Setup meter mode with error handling
+    try {
+      setupMeterMode($quantityInput);
+    } catch (setupError) {
+      console.error('Failed to setup meter mode:', setupError);
+      // Gracefully degrade to standard behavior
+      return;
+    }
+  } catch (error) {
+    console.error('Error initializing quantity meters:', error);
+    // Fail silently to not break standard functionality
+  }
+}
+
+/**
+ * Setup meter mode for the quantity input
+ * @param {jQuery} $quantityInput - The quantity input element
+ */
+function setupMeterMode($quantityInput) {
   // Get initial value
   let initialValue = parseInt($quantityInput.val(), 10) || 1;
   let initialMeters;
@@ -189,39 +224,20 @@ function initQuantityMeters() {
    */
   const $form = $quantityInput.closest('form');
   
-  // Store original form submit handler
-  const originalSubmit = $form[0].submit;
-  
   // Override form submit
   $form.on('submit', function(e) {
-    const meters = parseFloat($quantityInput.val());
-    const centimeters = metersToCentimeters(roundToMeterStep(meters));
-    $quantityInput.val(centimeters);
+    if ($quantityInput.data('is-meters-mode')) {
+      const meters = parseFloat($quantityInput.val());
+      const centimeters = metersToCentimeters(roundToMeterStep(meters));
+      $quantityInput.val(centimeters);
+    }
   });
 
   /**
-   * Intercept AJAX calls to convert meters to centimeters
+   * Setup AJAX interception - scoped to the product form
    * Only intercepts if this input is in meter mode
    */
-  $(document).ajaxSend(function(event, jqxhr, settings) {
-    // Only intercept if meter mode is active for this input
-    if (!$quantityInput.data('is-meters-mode')) {
-      return;
-    }
-    
-    // Check if this is a product-related AJAX call
-    if (settings.data && typeof settings.data === 'string' && settings.data.includes('quantity_wanted')) {
-      const meters = parseFloat($quantityInput.val());
-      const roundedMeters = roundToMeterStep(meters);
-      const centimeters = metersToCentimeters(roundedMeters);
-      
-      // Replace the quantity_wanted parameter with centimeter value
-      settings.data = settings.data.replace(
-        /quantity_wanted=[^&]*/,
-        `quantity_wanted=${centimeters}`
-      );
-    }
-  });
+  setupAjaxInterception($quantityInput, $form);
 
   /**
    * Convert response data from centimeters back to meters for display
@@ -258,6 +274,66 @@ function initQuantityMeters() {
    * Handle add to cart - ensure we send centimeters
    * Only applies to meter-based products
    */
+  setupAddToCartHandler($quantityInput);
+}
+
+/**
+ * Setup AJAX interception for form submissions
+ * @param {jQuery} $quantityInput - The quantity input element
+ * @param {jQuery} $form - The product form element
+ */
+function setupAjaxInterception($quantityInput, $form) {
+  // Intercept AJAX calls for this specific form only
+  $form.on('submit.meterQuantity', function(e) {
+    if (!$quantityInput.data('is-meters-mode')) {
+      return;
+    }
+    
+    // Convert value for submission
+    const meters = parseFloat($quantityInput.val());
+    const centimeters = metersToCentimeters(roundToMeterStep(meters));
+    
+    // Store original for potential restoration
+    $quantityInput.data('pre-submit-value', $quantityInput.val());
+    $quantityInput.val(centimeters);
+    
+    // Restore display value after a brief delay
+    setTimeout(function() {
+      const originalValue = $quantityInput.data('pre-submit-value');
+      if (originalValue) {
+        $quantityInput.val(originalValue);
+        $quantityInput.removeData('pre-submit-value');
+      }
+    }, 100);
+  });
+  
+  // Also handle AJAX calls globally but check for meter mode
+  $(document).ajaxSend(function(event, jqxhr, settings) {
+    // Only intercept if meter mode is active for this input
+    if (!$quantityInput.data('is-meters-mode')) {
+      return;
+    }
+    
+    // Check if this is a product-related AJAX call
+    if (settings.data && typeof settings.data === 'string' && settings.data.includes('quantity_wanted')) {
+      const meters = parseFloat($quantityInput.val());
+      const roundedMeters = roundToMeterStep(meters);
+      const centimeters = metersToCentimeters(roundedMeters);
+      
+      // Replace the quantity_wanted parameter with centimeter value
+      settings.data = settings.data.replace(
+        /quantity_wanted=[^&]*/,
+        `quantity_wanted=${centimeters}`
+      );
+    }
+  });
+}
+
+/**
+ * Setup add to cart button handler
+ * @param {jQuery} $quantityInput - The quantity input element
+ */
+function setupAddToCartHandler($quantityInput) {
   $(document).on('click', prestashop.selectors.product.addToCart + ', [data-button-action="add-to-cart"]', function(e) {
     // Only intercept if meter mode is active
     if (!$quantityInput.data('is-meters-mode')) {
@@ -268,17 +344,17 @@ function initQuantityMeters() {
     const roundedMeters = roundToMeterStep(meters);
     const centimeters = metersToCentimeters(roundedMeters);
     
+    // Store original value
+    const originalValue = $quantityInput.val();
+    
     // Temporarily set centimeter value for the add to cart action
-    $quantityInput.data('display-meters', $quantityInput.val());
     $quantityInput.val(centimeters);
     
-    // Restore meter display after a short delay
+    // Restore meter display after event propagation
+    // Use setTimeout with delay 0 to queue after current event completes
     setTimeout(function() {
-      const displayMeters = $quantityInput.data('display-meters');
-      if (displayMeters) {
-        $quantityInput.val(displayMeters);
-      }
-    }, 100);
+      $quantityInput.val(originalValue);
+    }, 0);
   });
 }
 
