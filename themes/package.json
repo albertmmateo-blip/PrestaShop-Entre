@@ -1,7 +1,7 @@
 {
     "name": "prestashop-core-theme-js",
-    "version": "9.1.0",
-    "description": "Tools to manage minimal assets for themes (PrestaShop 9.1+)",
+    "version": "1.7.5",
+    "description": "Tools to manage minimal assets for themes",
     "main": "index.js",
     "scripts": {
         "build": "webpack --progress --mode production",
