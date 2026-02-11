@@ -1,3 +1,4 @@
+<?php
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -22,27 +23,13 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-__webpack_public_path__ = window.prestashop.core_js_public_path;
 
-import $ from 'jquery';
-import './migrate-mute';
-import 'jquery-migrate';
-import './selectors';
-import './cart';
-import './checkout';
-import './facets';
-import './listing';
-import './product';
-import './address';
-import './quantity-meters';
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 
-import {psShowHide} from './common';
-import initEmailFields from './email-idn';
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 
-window.$ = $;
-window.jQuery = $;
-
-$(() => {
-  psShowHide();
-  initEmailFields('input[type="email"]');
-});
+header("Location: ../");
+exit;
