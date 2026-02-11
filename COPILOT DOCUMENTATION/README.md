@@ -16,6 +16,26 @@ Per project requirements, all additional documentation created by Copilot agents
 
 ## Documentation Files
 
+### 🚀 Getting Started (START HERE!)
+
+If you need to implement meter-based quantities, start with these guides:
+
+#### QUICK_START_GUIDE.md ⭐
+**Topic**: 5-Minute Quick Start for Meter-Based Quantities  
+**Summary**: Get meter-based quantities working in 5 minutes. Essential steps only: build JavaScript, set product unity, modify template, test.
+
+#### IMPLEMENTATION_GUIDE.md ⭐
+**Topic**: Complete Step-by-Step Implementation Guide  
+**Summary**: Comprehensive instructions for implementing meter-based quantities including prerequisites, three implementation methods, testing procedures, troubleshooting guide, and advanced configuration.
+
+#### TEMPLATE_EXAMPLES.md ⭐
+**Topic**: Ready-to-Use Template Code Examples  
+**Summary**: Five complete code examples for different scenarios: minimal add-to-cart, enhanced quantity input, full product form, cart updates, and category listings. Copy/paste ready.
+
+---
+
+### Core Documentation
+
 ### QUICK_REFERENCE.md
 **Topic**: Quick verification guide for Docker volumes fix  
 **Summary**: Fast reference with verification commands and what to expect after the fix. Use this for quick validation.
