@@ -215,7 +215,7 @@ To change the rounding increment (currently 0.05):
 ## Compatibility
 
 ### PrestaShop Version
-- Tested with PrestaShop 1.7.x+
+- Tested with PrestaShop 9.1+
 - Compatible with core PrestaShop quantity handling
 - Works with standard themes and modules
 

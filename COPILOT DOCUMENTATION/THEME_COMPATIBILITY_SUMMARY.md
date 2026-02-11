@@ -12,6 +12,8 @@
 
 The meter-based quantity functionality is **fully available and compatible with both Classic and Hummingbird themes**.
 
+**PrestaShop Version**: Tested with PrestaShop 9.1+
+
 ## How It Was Achieved
 
 ### 1. Architecture Analysis

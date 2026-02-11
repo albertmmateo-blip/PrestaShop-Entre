@@ -8,6 +8,8 @@
 
 The meter-based quantity system is **fully compatible with both Classic and Hummingbird themes** (and any other PrestaShop themes that follow standard conventions).
 
+**PrestaShop Version**: Tested with PrestaShop 9.1+
+
 ## How It Works
 
 ### Shared Core JavaScript
