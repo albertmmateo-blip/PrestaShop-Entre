@@ -1,5 +1,11 @@
 # Session Prompts: Component-Specific Workflows
 
+## Important: See BUILD_SEQUENCE.md First
+
+**If you are building the project from scratch or need an orderly sequence of steps**, see `BUILD_SEQUENCE.md` for a comprehensive, copy-and-paste ready guide that walks through the entire project implementation in order.
+
+This document (SESSION_PROMPTS.md) contains component-specific prompts for working on individual features after the initial project structure is in place.
+
 ## Purpose
 
 This document contains well-structured prompts that agents must use when working on specific components of the Fidelity Points loyalty system.

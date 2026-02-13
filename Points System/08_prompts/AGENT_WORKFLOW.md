@@ -350,4 +350,5 @@ Never do these:
 - `01_project/IMPLEMENTATION_PLAN.md` - Current status and timeline
 
 ### Specific Workflows
+- `08_prompts/BUILD_SEQUENCE.md` - Complete ordered build sequence (START HERE for new projects)
 - `08_prompts/SESSION_PROMPTS.md` - Component-specific prompts
