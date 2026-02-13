@@ -422,7 +422,7 @@ CREATE TABLE IF NOT EXISTS idempotency_keys (
 
 -- Indexes for idempotency_keys table
 CREATE INDEX IF NOT EXISTS idx_idempotency_key ON idempotency_keys(idempotency_key) WHERE processing_status = 'completed';
-CREATE INDEX IF NOT EXISTS idx_idempotency_expires ON idempotency_keys(expires_at) WHERE expires_at < NOW();
+CREATE INDEX IF NOT EXISTS idx_idempotency_expires ON idempotency_keys(expires_at);
 CREATE INDEX IF NOT EXISTS idx_idempotency_customer ON idempotency_keys(customer_id, created_at DESC);
 
 -- Comments

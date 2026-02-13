@@ -87,7 +87,7 @@ fi
 
 # Get list of migration files
 echo -e "${GREEN}Scanning for migration files...${NC}"
-MIGRATION_FILES=$(ls -1 "$MIGRATIONS_DIR"/*.sql 2>/dev/null | sort)
+MIGRATION_FILES=$(find "$MIGRATIONS_DIR" -name "*.sql" -type f | sort)
 
 if [ -z "$MIGRATION_FILES" ]; then
     echo -e "${RED}No migration files found in $MIGRATIONS_DIR${NC}"
@@ -102,7 +102,7 @@ APPLIED_MIGRATIONS=$(get_applied_migrations)
 
 # Run migrations
 MIGRATIONS_RUN=0
-for migration_file in $MIGRATION_FILES; do
+while IFS= read -r migration_file; do
     # Extract migration version from filename (e.g., 001 from 001_initial_schema.sql)
     migration_version=$(basename "$migration_file" | sed 's/^\([0-9]*\)_.*/\1/')
     migration_name=$(basename "$migration_file")
@@ -123,7 +123,7 @@ for migration_file in $MIGRATION_FILES; do
         fi
     fi
     echo ""
-done
+done <<< "$MIGRATION_FILES"
 
 # Summary
 echo "========================================="
