@@ -1,0 +1,317 @@
+name: Loyalty System - CI Checks
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+      - 'copilot/**'
+    paths:
+      - 'Points System/**'
+      - 'docker-compose.loyalty.yml'
+      - '.env.loyalty'
+      - '.github/workflows/loyalty-ci.yml'
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'Points System/**'
+      - 'docker-compose.loyalty.yml'
+      - '.env.loyalty'
+
+jobs:
+  database-migrations:
+    name: Database Migration Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:14-alpine
+        env:
+          POSTGRES_DB: loyalty_system_test
+          POSTGRES_USER: loyalty_user
+          POSTGRES_PASSWORD: test_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+      
+      - name: Verify PostgreSQL connection
+        env:
+          PGPASSWORD: test_password
+        run: |
+          psql -h localhost -U loyalty_user -d loyalty_system_test -c "SELECT version();"
+      
+      - name: Run database migrations
+        env:
+          LOYALTY_DB_HOST: localhost
+          LOYALTY_DB_PORT: 5432
+          LOYALTY_DB_NAME: loyalty_system_test
+          LOYALTY_DB_USER: loyalty_user
+          LOYALTY_DB_PASSWORD: test_password
+        run: |
+          chmod +x "Points System/07_operations/database/run_migrations.sh"
+          cd "Points System/07_operations/database"
+          ./run_migrations.sh
+      
+      - name: Verify schema
+        env:
+          PGPASSWORD: test_password
+        run: |
+          # Count tables
+          TABLE_COUNT=$(psql -h localhost -U loyalty_user -d loyalty_system_test -t -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE';")
+          echo "Found $TABLE_COUNT tables"
+          
+          # Expected: 8 tables
+          if [ "$TABLE_COUNT" -lt 8 ]; then
+            echo "Error: Expected at least 8 tables, found $TABLE_COUNT"
+            exit 1
+          fi
+          
+          # List applied migrations
+          echo "Applied migrations:"
+          psql -h localhost -U loyalty_user -d loyalty_system_test -c "SELECT * FROM schema_migrations;"
+      
+      - name: Test immutable ledger triggers
+        env:
+          PGPASSWORD: test_password
+        run: |
+          # Create test customer and account
+          psql -h localhost -U loyalty_user -d loyalty_system_test << 'EOF'
+          INSERT INTO customers (prestashop_email, first_name, last_name) 
+          VALUES ('test@test.com', 'Test', 'User');
+          
+          INSERT INTO loyalty_accounts (customer_id, current_balance_points)
+          SELECT customer_id, 0 FROM customers WHERE prestashop_email = 'test@test.com';
+          
+          -- Insert test ledger entry
+          INSERT INTO loyalty_ledger (
+            customer_id, account_id, transaction_type, points_delta, balance_after,
+            source_type, description, created_by
+          )
+          SELECT 
+            c.customer_id, la.account_id, 'earn', 1000, 1000,
+            'migration', 'Test entry', 'test'
+          FROM customers c
+          JOIN loyalty_accounts la ON la.customer_id = c.customer_id
+          WHERE c.prestashop_email = 'test@test.com';
+          EOF
+          
+          # Try to update (should fail)
+          UPDATE_RESULT=$(psql -h localhost -U loyalty_user -d loyalty_system_test -c "UPDATE loyalty_ledger SET points_delta = 2000 WHERE description = 'Test entry';" 2>&1 || echo "FAILED")
+          
+          if [[ "$UPDATE_RESULT" != *"FAILED"* ]]; then
+            echo "Error: Ledger UPDATE should have been blocked but succeeded"
+            exit 1
+          else
+            echo "✓ Ledger immutability verified - UPDATE blocked as expected"
+          fi
+          
+          # Try to delete (should fail)
+          DELETE_RESULT=$(psql -h localhost -U loyalty_user -d loyalty_system_test -c "DELETE FROM loyalty_ledger WHERE description = 'Test entry';" 2>&1 || echo "FAILED")
+          
+          if [[ "$DELETE_RESULT" != *"FAILED"* ]]; then
+            echo "Error: Ledger DELETE should have been blocked but succeeded"
+            exit 1
+          else
+            echo "✓ Ledger immutability verified - DELETE blocked as expected"
+          fi
+  
+  documentation-validation:
+    name: Validate Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check required documentation files
+        run: |
+          FILES=(
+            "Points System/01_project/PROJECT_OVERVIEW.md"
+            "Points System/01_project/IMPLEMENTATION_PLAN.md"
+            "Points System/02_architecture/SYSTEM_ARCHITECTURE.md"
+            "Points System/05_data/DATA_MODEL.md"
+            "Points System/07_operations/database/README.md"
+            "Points System/DEV_ENVIRONMENT_SETUP.md"
+          )
+          
+          MISSING=0
+          for file in "${FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "✗ Missing: $file"
+              MISSING=1
+            else
+              echo "✓ Found: $file"
+            fi
+          done
+          
+          if [ $MISSING -eq 1 ]; then
+            echo "Error: Required documentation files are missing"
+            exit 1
+          fi
+      
+      - name: Check migration files
+        run: |
+          MIGRATION_DIR="Points System/07_operations/database/migrations"
+          
+          if [ ! -d "$MIGRATION_DIR" ]; then
+            echo "Error: Migration directory not found"
+            exit 1
+          fi
+          
+          MIGRATION_COUNT=$(ls -1 "$MIGRATION_DIR"/*.sql 2>/dev/null | wc -l)
+          if [ "$MIGRATION_COUNT" -eq 0 ]; then
+            echo "Error: No migration files found"
+            exit 1
+          fi
+          
+          echo "✓ Found $MIGRATION_COUNT migration file(s)"
+      
+      - name: Validate environment template
+        run: |
+          if [ ! -f ".env.loyalty" ]; then
+            echo "Error: .env.loyalty template file not found"
+            exit 1
+          fi
+          
+          # Check for required variables
+          REQUIRED_VARS=(
+            "LOYALTY_DB_HOST"
+            "LOYALTY_DB_PORT"
+            "LOYALTY_DB_NAME"
+            "LOYALTY_DB_USER"
+            "LOYALTY_DB_PASSWORD"
+          )
+          
+          MISSING=0
+          for var in "${REQUIRED_VARS[@]}"; do
+            if ! grep -q "^$var=" ".env.loyalty"; then
+              echo "✗ Missing variable: $var"
+              MISSING=1
+            else
+              echo "✓ Found variable: $var"
+            fi
+          done
+          
+          if [ $MISSING -eq 1 ]; then
+            echo "Error: Required environment variables are missing from template"
+            exit 1
+          fi
+      
+      - name: Check for secrets in code
+        run: |
+          # Check that .env.loyalty.local is in .gitignore
+          if ! grep -q ".env.loyalty.local" .gitignore; then
+            echo "Error: .env.loyalty.local is not in .gitignore"
+            exit 1
+          fi
+          
+          # Check for accidentally committed secrets
+          if [ -f ".env.loyalty.local" ]; then
+            echo "Error: .env.loyalty.local should not be committed"
+            exit 1
+          fi
+          
+          echo "✓ Secrets management verified"
+  
+  docker-compose-validation:
+    name: Validate Docker Compose
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Validate docker-compose.loyalty.yml
+        run: |
+          docker compose -f docker-compose.loyalty.yml config > /dev/null
+          echo "✓ docker-compose.loyalty.yml is valid"
+      
+      - name: Check Docker Compose services
+        run: |
+          # Check that loyalty-postgres service exists
+          if ! docker compose -f docker-compose.loyalty.yml config --services | grep -q "loyalty-postgres"; then
+            echo "Error: loyalty-postgres service not found"
+            exit 1
+          fi
+          
+          # Check that loyalty-postgres-test service exists
+          if ! docker compose -f docker-compose.loyalty.yml config --services | grep -q "loyalty-postgres-test"; then
+            echo "Error: loyalty-postgres-test service not found"
+            exit 1
+          fi
+          
+          echo "✓ All required Docker Compose services defined"
+  
+  shell-script-validation:
+    name: Validate Shell Scripts
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      
+      - name: Check shell scripts
+        run: |
+          SCRIPT="Points System/07_operations/database/run_migrations.sh"
+          
+          if [ ! -f "$SCRIPT" ]; then
+            echo "Error: Migration script not found"
+            exit 1
+          fi
+          
+          # Run shellcheck
+          shellcheck "$SCRIPT"
+          
+          # Check if script is executable
+          if [ ! -x "$SCRIPT" ]; then
+            echo "Warning: $SCRIPT is not executable (will be fixed with chmod +x)"
+          fi
+          
+          echo "✓ Shell script validation passed"
+  
+  summary:
+    name: CI Summary
+    needs: [database-migrations, documentation-validation, docker-compose-validation, shell-script-validation]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Check job results
+        run: |
+          echo "==================================="
+          echo "Loyalty System CI Check Results"
+          echo "==================================="
+          echo "Database Migrations: ${{ needs.database-migrations.result }}"
+          echo "Documentation: ${{ needs.documentation-validation.result }}"
+          echo "Docker Compose: ${{ needs.docker-compose-validation.result }}"
+          echo "Shell Scripts: ${{ needs.shell-script-validation.result }}"
+          echo "==================================="
+          
+          if [ "${{ needs.database-migrations.result }}" != "success" ] || \
+             [ "${{ needs.documentation-validation.result }}" != "success" ] || \
+             [ "${{ needs.docker-compose-validation.result }}" != "success" ] || \
+             [ "${{ needs.shell-script-validation.result }}" != "success" ]; then
+            echo "❌ Some checks failed"
+            exit 1
+          else
+            echo "✅ All checks passed"
+          fi
