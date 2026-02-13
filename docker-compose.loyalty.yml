@@ -1,8 +1,6 @@
 # Docker Compose configuration for Loyalty System PostgreSQL Database
 # This extends the main PrestaShop docker-compose.yml
 
-version: '3.8'
-
 volumes:
   loyalty-db-data:
     name: loyalty-db-data
