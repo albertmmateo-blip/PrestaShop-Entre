@@ -21,6 +21,10 @@ on:
       - 'docker-compose.loyalty.yml'
       - '.env.loyalty'
 
+# Minimal permissions for security
+permissions:
+  contents: read
+
 jobs:
   database-migrations:
     name: Database Migration Tests
