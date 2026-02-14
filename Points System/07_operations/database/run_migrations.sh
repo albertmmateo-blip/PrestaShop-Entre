@@ -21,9 +21,7 @@ DB_NAME="${LOYALTY_DB_NAME:-loyalty_system}"
 DB_USER="${LOYALTY_DB_USER:-postgres}"
 
 # Check if --test flag is passed
-TEST_MODE=false
 if [[ "$1" == "--test" ]]; then
-    TEST_MODE=true
     DB_NAME="${LOYALTY_DB_NAME}_test"
     echo -e "${YELLOW}Running in TEST mode. Using database: ${DB_NAME}${NC}"
 fi

@@ -254,8 +254,8 @@ jobs:
             exit 1
           fi
           
-          # Check that loyalty-postgres-test service exists
-          if ! docker compose -f docker-compose.loyalty.yml config --services | grep -q "loyalty-postgres-test"; then
+          # Check that loyalty-postgres-test service exists (with test profile)
+          if ! docker compose -f docker-compose.loyalty.yml --profile test config --services | grep -q "loyalty-postgres-test"; then
             echo "Error: loyalty-postgres-test service not found"
             exit 1
           fi
