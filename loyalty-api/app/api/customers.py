@@ -383,7 +383,6 @@ async def update_customer(
         consent_changed = False
         if update_request.consent_marketing is not None and update_request.consent_marketing != customer.consent_marketing:
             consent_changed = True
-            old_consent = customer.consent_marketing
             customer.consent_marketing = update_request.consent_marketing
         
         # Update fields

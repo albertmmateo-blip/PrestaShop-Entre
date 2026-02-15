@@ -22,20 +22,6 @@ from app.models.customer_schemas import (
 router = APIRouter()
 
 
-def generate_card_number(last_number: str = None) -> str:
-    """Generate next sequential card number in format LC-XXXXXXXX."""
-    if last_number is None:
-        return "LC-00000001"
-    
-    # Extract number part
-    try:
-        num_part = int(last_number.split('-')[1])
-        next_num = num_part + 1
-        return f"LC-{next_num:08d}"
-    except (IndexError, ValueError):
-        return "LC-00000001"
-
-
 @router.post("/cards", response_model=dict, status_code=201)
 async def register_card(
     request: Request,
