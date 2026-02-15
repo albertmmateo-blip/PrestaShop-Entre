@@ -7,13 +7,20 @@ from sqlalchemy.orm import declarative_base
 from app.core.config import settings
 from app.core.logging import logger
 
-# Create async engine
+# Create async engine with conditional pool settings
+engine_kwargs = {
+    "echo": settings.debug,
+    "pool_pre_ping": True,
+}
+
+# Only add pool settings for databases that support them (not SQLite)
+if "sqlite" not in settings.database_url:
+    engine_kwargs["pool_size"] = 10
+    engine_kwargs["max_overflow"] = 20
+
 engine = create_async_engine(
     settings.database_url,
-    echo=settings.debug,
-    pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20,
+    **engine_kwargs
 )
 
 # Create async session factory

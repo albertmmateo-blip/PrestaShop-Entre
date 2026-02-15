@@ -166,10 +166,17 @@ class LoyaltyService:
         if transaction_type == "earn":
             expiration_date = (datetime.utcnow() + timedelta(days=EXPIRATION_MONTHS * 30)).date()
         
+        # Get next sequence number
+        result = await self.db.execute(
+            select(func.coalesce(func.max(LoyaltyLedger.ledger_sequence), 0))
+        )
+        next_sequence = (result.scalar() or 0) + 1
+        
         # Create ledger entry
         ledger_entry = LoyaltyLedger(
             customer_id=customer_id,
             account_id=account_id,
+            ledger_sequence=next_sequence,
             transaction_type=transaction_type,
             transaction_date=datetime.utcnow(),
             points_delta=points_delta,

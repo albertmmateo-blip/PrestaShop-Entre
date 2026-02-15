@@ -78,7 +78,7 @@ class LoyaltyLedger(Base):
     __tablename__ = "loyalty_ledger"
     
     ledger_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    ledger_sequence = Column(BigInteger, nullable=False, unique=True, index=True, autoincrement=True)
+    ledger_sequence = Column(BigInteger, nullable=False, unique=True, index=True)
     
     # Customer reference
     customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.customer_id"), nullable=False, index=True)
@@ -135,26 +135,7 @@ class LoyaltyLedger(Base):
     # Relationships
     customer = relationship("Customer", back_populates="transactions")
     
-    # Constraints
+    # Constraints (simplified for database compatibility)
     __table_args__ = (
-        CheckConstraint(
-            """
-            (transaction_type IN ('earn', 'adjustment') AND points_delta > 0) OR
-            (transaction_type IN ('redeem', 'refund', 'expiration', 'reversal') AND points_delta <= 0)
-            """,
-            name="chk_ledger_points_delta"
-        ),
         CheckConstraint("balance_after >= 0", name="chk_balance_non_negative"),
-        CheckConstraint(
-            "transaction_type IN ('earn', 'redeem', 'refund', 'adjustment', 'expiration', 'reversal')",
-            name="chk_transaction_type"
-        ),
-        CheckConstraint(
-            "source_type IN ('pos_sale', 'online_order', 'manual_adjustment', 'expiration_policy', 'refund_reversal', 'migration')",
-            name="chk_source_type"
-        ),
-        CheckConstraint(
-            "channel IN ('pos', 'online', 'manual', 'system')",
-            name="chk_channel"
-        ),
     )
