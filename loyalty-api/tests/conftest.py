@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from app.core.database import Base
 from app.core.config import settings
 # Import all models to ensure they're registered with Base
-from app.models import Customer, LoyaltyCard, LoyaltyAccount, LoyaltyLedger, TerminalCredential, IdempotencyKey
+from app.models import Customer, LoyaltyCard, LoyaltyAccount, LoyaltyLedger, TerminalCredential, IdempotencyKey, ConsentRecord
 
 
 # Use SQLite for tests
@@ -50,5 +50,11 @@ async def db_session(test_engine) -> AsyncGenerator[AsyncSession, None]:
     )
     
     async with async_session() as session:
-        yield session
-        await session.rollback()
+        async with session.begin():
+            yield session
+            await session.rollback()
+    
+    # Clean up all tables after each test
+    async with test_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
