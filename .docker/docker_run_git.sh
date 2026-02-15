@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Fix line endings for scripts that might have Windows CRLF (from volume mount)
+echo "\n* Fixing line endings for mounted scripts..."
+find /var/www/html/tools/assets /var/www/html/.docker/install -name "*.sh" -type f -exec dos2unix {} \; 2>/dev/null || true
+
 if [ $PS_ENABLE_SSL = 1 ]; then
   if [ -f ./.docker/ssl.key ]; then
     echo "\n* Remove default-ssl.conf file ...";

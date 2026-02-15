@@ -18,8 +18,8 @@ ARG INSTALL_XDEBUG
 RUN groupmod -g $GROUP_ID www-data \
   && usermod -u $USER_ID -g $GROUP_ID www-data
 
-# Install mailutils to make sendmail work
-RUN apt update && apt install -y mailutils
+# Install mailutils to make sendmail work and dos2unix for line ending fixes
+RUN apt update && apt install -y mailutils dos2unix
 
 ENV NODE_VERSION       $NODE_VERSION
 
@@ -36,5 +36,8 @@ fi
 COPY --link --chmod=755 .docker/docker_run_git.sh /tmp/
 COPY --link --chmod=755 .docker/wait-for-it.sh /tmp/
 COPY --link --chmod=755 .docker/install /var/www/html/.docker/install
+
+# Fix line endings in case files were checked out with Windows CRLF
+RUN dos2unix /tmp/docker_run_git.sh /tmp/wait-for-it.sh /var/www/html/.docker/install/*.sh
 
 CMD ["/tmp/docker_run_git.sh"]

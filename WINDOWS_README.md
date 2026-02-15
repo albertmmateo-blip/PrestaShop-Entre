@@ -46,9 +46,21 @@ Once started, access your PrestaShop installation at:
 
 If you see this error when running Docker containers, it means shell scripts have Windows line endings (CRLF) instead of Unix line endings (LF).
 
-**Fix for existing clones:**
+**Automatic Fix (Recommended):**
 
-1. Pull the latest changes (includes `.gitattributes` fix):
+The Dockerfile now automatically converts line endings during the build process. Simply rebuild your containers:
+
+```batch
+restart.bat
+```
+
+This will rebuild the Docker image with the automatic line ending fix applied.
+
+**Manual Fix (if needed):**
+
+If you still encounter issues or want to fix the files locally:
+
+1. Pull the latest changes (includes automatic fix):
    ```batch
    git pull
    ```
@@ -64,7 +76,7 @@ If you see this error when running Docker containers, it means shell scripts hav
    restart.bat
    ```
 
-**For new clones:** This issue is now prevented by the `.gitattributes` file and won't occur.
+**Prevention:** The `.gitattributes` file ensures that `.sh` files always use LF line endings, and the Dockerfile automatically converts any CRLF line endings during build.
 
 ## Need Help?
 
