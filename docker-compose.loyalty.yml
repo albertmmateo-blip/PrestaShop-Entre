@@ -1,0 +1,57 @@
+# Docker Compose configuration for Loyalty System PostgreSQL Database
+# This extends the main PrestaShop docker-compose.yml
+
+volumes:
+  loyalty-db-data:
+    name: loyalty-db-data
+
+services:
+  loyalty-postgres:
+    image: postgres:14-alpine
+    container_name: loyalty-postgres
+    restart: unless-stopped
+    ports:
+      - "${LOYALTY_DB_PORT:-5433}:5432"
+    environment:
+      POSTGRES_DB: ${LOYALTY_DB_NAME:-loyalty_system}
+      POSTGRES_USER: ${LOYALTY_DB_USER:-loyalty_user}
+      POSTGRES_PASSWORD: ${LOYALTY_DB_PASSWORD:-loyalty_password_change_me}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8"
+    volumes:
+      - loyalty-db-data:/var/lib/postgresql/data
+      - ./Points System/07_operations/database/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - prestashop-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${LOYALTY_DB_USER:-loyalty_user} -d ${LOYALTY_DB_NAME:-loyalty_system}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  loyalty-postgres-test:
+    image: postgres:14-alpine
+    container_name: loyalty-postgres-test
+    restart: unless-stopped
+    ports:
+      - "${LOYALTY_DB_TEST_PORT:-5434}:5432"
+    environment:
+      POSTGRES_DB: ${LOYALTY_DB_NAME:-loyalty_system}_test
+      POSTGRES_USER: ${LOYALTY_DB_USER:-loyalty_user}
+      POSTGRES_PASSWORD: ${LOYALTY_DB_PASSWORD:-loyalty_password_change_me}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8"
+    volumes:
+      - ./Points System/07_operations/database/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - prestashop-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${LOYALTY_DB_USER:-loyalty_user} -d ${LOYALTY_DB_NAME:-loyalty_system}_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - test
+
+networks:
+  prestashop-network:
+    name: prestashop-network
+    external: true
