@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  loyalty-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: loyalty-api
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - DEBUG=false
+      - API_KEY_SALT=${API_KEY_SALT}
+      - JWT_SECRET=${JWT_SECRET}
+      - RATE_LIMIT_ENABLED=true
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
+    depends_on:
+      - postgres
+    networks:
+      - loyalty-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:3000/health')"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  postgres:
+    image: postgres:14-alpine
+    container_name: loyalty-postgres
+    restart: unless-stopped
+    ports:
+      - "${LOYALTY_DB_PORT:-5433}:5432"
+    environment:
+      - POSTGRES_DB=${LOYALTY_DB_NAME:-loyalty_system}
+      - POSTGRES_USER=${LOYALTY_DB_USER:-loyalty_user}
+      - POSTGRES_PASSWORD=${LOYALTY_DB_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - loyalty-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${LOYALTY_DB_USER:-loyalty_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+
+networks:
+  loyalty-network:
+    driver: bridge
