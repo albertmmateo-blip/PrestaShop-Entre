@@ -8,10 +8,12 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.database import Base
 from app.core.config import settings
+# Import all models to ensure they're registered with Base
+from app.models import Customer, LoyaltyCard, LoyaltyAccount, LoyaltyLedger, TerminalCredential, IdempotencyKey
 
 
-# Use test database
-TEST_DATABASE_URL = settings.database_url.replace("/loyalty_system", "/loyalty_system_test")
+# Use SQLite for tests
+TEST_DATABASE_URL = "sqlite+aiosqlite:///./test.db"
 
 
 @pytest.fixture(scope="session")

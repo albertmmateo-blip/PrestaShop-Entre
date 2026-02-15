@@ -11,7 +11,7 @@ from app.core.config import settings
 from app.core.logging import logger
 from app.middleware.logging import RequestLoggingMiddleware
 from app.middleware.rate_limit import limiter
-from app.api import health
+from app.api import health, transactions
 
 
 @asynccontextmanager
@@ -142,6 +142,7 @@ async def add_security_headers(request: Request, call_next):
 
 # Include routers
 app.include_router(health.router, prefix="", tags=["Health"])
+app.include_router(transactions.router, prefix="/api/v1", tags=["Transactions"])
 
 
 @app.get("/")

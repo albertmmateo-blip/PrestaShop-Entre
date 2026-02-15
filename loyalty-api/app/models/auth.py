@@ -2,11 +2,11 @@
 from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ARRAY
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, JSON
 import uuid
 
 from app.core.database import Base
+from app.core.types import GUID
 
 
 class TerminalCredential(Base):
@@ -24,7 +24,8 @@ class TerminalCredential(Base):
     rotation_due_date = Column(DateTime)
     status = Column(String(20), default="active", nullable=False, index=True)
     created_by = Column(String(100))
-    ip_whitelist = Column(ARRAY(Text))
+    # Use JSON for database compatibility
+    ip_whitelist = Column(JSON, nullable=True)
 
 
 class IdempotencyKey(Base):
@@ -32,7 +33,7 @@ class IdempotencyKey(Base):
 
     __tablename__ = "idempotency_keys"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID, primary_key=True, default=uuid.uuid4)
     idempotency_key = Column(String(255), unique=True, nullable=False, index=True)
     request_hash = Column(String(64), nullable=False)
     endpoint = Column(String(100), nullable=False)
@@ -43,4 +44,4 @@ class IdempotencyKey(Base):
     card_uid = Column(String(20))
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     expires_at = Column(DateTime, nullable=False, index=True)
-    request_metadata = Column(JSONB)
+    request_metadata = Column(JSON)
