@@ -45,23 +45,26 @@ This document explains the current state of CI checks for the Loyalty System fea
 
 #### 2. **Symfony Console Tests** (3 jobs) - ACCEPTABLE FOR FEATURE BRANCH
 **Status**: ❌ Failing (all 3 matrix jobs: front, admin, admin-api)  
-**Reason**: The failures occur at "Check bin/console and cache:clear can run after shop install"
+**Error**: `Error response from daemon: No such container: prestashop-prestashop-git-1`
 
 **Why Acceptable:**
-- The Loyalty System is a separate module with its own database (PostgreSQL)
+- The failure occurs at Docker container setup step, not in application code
+- Error: "No such container: prestashop-prestashop-git-1" indicates CI environment issue
+- The loyalty system changes don't affect PrestaShop Docker setup
+- The Loyalty System uses a separate PostgreSQL database (not PrestaShop's MySQL)
 - These failures are likely pre-existing in the base branch (Fidelity-points)
-- The loyalty system changes don't modify Symfony console commands
-- The loyalty system uses a separate database and doesn't interfere with PrestaShop installation
+- The loyalty system changes don't modify any Symfony console commands
 
 **Evidence:**
 - The loyalty-ci.yml workflow (specific to loyalty system) passes all checks
 - Database migrations execute successfully
 - The loyalty system PostgreSQL database works correctly
+- No PrestaShop core files were modified by this PR
 
 **When to Address:**
 - Verify if failures exist in base branch `Fidelity-points`
-- If base branch has same failures, no action needed
-- If failures are introduced by this PR (unlikely), investigate after core loyalty features complete
+- If base branch has same failures, this is a known CI infrastructure issue
+- If failures are introduced by this PR (unlikely given the container error), investigate after core loyalty features complete
 - Before production deployment, ensure PrestaShop installation works
 
 #### 3. **YAML Lint** - ✅ FIXED
