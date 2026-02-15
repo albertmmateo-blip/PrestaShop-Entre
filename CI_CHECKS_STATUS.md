@@ -91,6 +91,11 @@ This document explains the current state of CI checks for the Loyalty System fea
 **Fixed**: 1 ✅  
 **Cancelled (dependent)**: 1 ⚠️
 
+**Comprehensive Documentation**:
+- 📋 [CI/CD Triage Summary](CI_CD_TRIAGE_SUMMARY.md) - Detailed triage with decision rationale
+- 📋 [Known Issues](KNOWN_ISSUES.md) - Tracked issues and technical debt
+- 📋 [Implementation Plan](Points%20System/01_project/IMPLEMENTATION_PLAN.md#technical-debt) - Project-level technical debt
+
 ## Recommendation
 
 The current CI state is **acceptable for continued development** of the Loyalty System feature. The failing checks are:
