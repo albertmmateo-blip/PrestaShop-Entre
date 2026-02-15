@@ -316,3 +316,97 @@ Proprietary - PrestaShop Entre
 ## Support
 
 For issues or questions, contact the development team.
+
+## Customer and Card Management API
+
+### Customer Endpoints
+
+#### Create Customer
+- **POST** `/api/v1/customers`
+- Creates a new customer with optional card assignment
+- Requires `X-Idempotency-Key` header
+- Records GDPR consent
+- Request body:
+```json
+{
+  "name": "string",
+  "email": "string (required, validated)",
+  "phone": "string (optional, E.164 format)",
+  "prestashop_customer_id": "integer (optional)",
+  "consent_loyalty": "boolean (required, must be true)",
+  "consent_marketing": "boolean (optional)",
+  "language": "string (es|ca|en, default: es)",
+  "card_uid": "string (optional, 14 hex chars)"
+}
+```
+
+#### Get Customer
+- **GET** `/api/v1/customers/{customer_id}`
+- Retrieves customer details including cards and balance
+- No authentication required (API key in headers)
+
+#### Update Customer
+- **PATCH** `/api/v1/customers/{customer_id}`
+- Updates customer contact information
+- Requires `X-Idempotency-Key` header
+- Tracks consent changes
+- Request body (all fields optional):
+```json
+{
+  "name": "string",
+  "email": "string (validated)",
+  "phone": "string (E.164 format)",
+  "consent_marketing": "boolean",
+  "language": "string (es|ca|en)"
+}
+```
+
+### Card Endpoints
+
+#### Register Card
+- **POST** `/api/v1/cards`
+- Registers a new NFC card (inactive status)
+- Requires `X-Idempotency-Key` header
+- Request body:
+```json
+{
+  "card_uid": "string (required, 14 hex chars)",
+  "card_number": "string (required, e.g. LC-00000001)"
+}
+```
+
+#### Assign Card
+- **POST** `/api/v1/cards/{card_uid}/assign`
+- Assigns an inactive card to a customer
+- Requires `X-Idempotency-Key` header
+- Prevents reassignment to different customer
+- Request body:
+```json
+{
+  "customer_id": "uuid"
+}
+```
+
+#### Lookup Customer by Card
+- **GET** `/api/v1/cards/{card_uid}/customer`
+- Retrieves customer information for a card
+- Used by POS terminals for card tap identification
+- Returns 404 if card not assigned or inactive
+
+### Validation Rules
+
+- **Email**: Must match standard email format (regex validated)
+- **Phone**: Must be E.164 format (e.g., +34612345678)
+- **Card UID**: Must be 14 hexadecimal characters (case-insensitive)
+- **Card Numbers**: Must be unique across all cards
+- **Customer Email**: Must be unique across all customers
+
+### Consent Tracking
+
+All customer creation and consent changes are logged in `consent_records` table with:
+- Consent type (loyalty_program, marketing_email, etc.)
+- Timestamp
+- Method (pos_enrollment, account_settings, etc.)
+- IP address (when available)
+- Consent text version
+

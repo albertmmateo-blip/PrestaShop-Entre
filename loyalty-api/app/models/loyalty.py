@@ -30,6 +30,7 @@ class Customer(Base):
     cards = relationship("LoyaltyCard", back_populates="customer")
     account = relationship("LoyaltyAccount", back_populates="customer", uselist=False)
     transactions = relationship("LoyaltyLedger", back_populates="customer")
+    consents = relationship("ConsentRecord", back_populates="customer", cascade="all, delete-orphan")
 
 
 class LoyaltyCard(Base):
@@ -40,9 +41,10 @@ class LoyaltyCard(Base):
     card_id = Column(GUID, primary_key=True, default=uuid.uuid4)
     card_uid = Column(String(20), unique=True, nullable=False, index=True)
     card_number = Column(String(50), unique=True, nullable=False)
-    customer_id = Column(GUID, ForeignKey("customers.customer_id"), nullable=False)
-    status = Column(String(20), default="active", nullable=False, index=True)
+    customer_id = Column(GUID, ForeignKey("customers.customer_id"), nullable=True)  # Nullable for unassigned cards
+    status = Column(String(20), default="inactive", nullable=False, index=True)  # Default inactive until assigned
     issued_date = Column(Date, default=lambda: datetime.utcnow().date(), nullable=False)
+    assigned_date = Column(DateTime, nullable=True)  # When card was assigned to customer
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     
@@ -138,4 +140,59 @@ class LoyaltyLedger(Base):
     # Constraints (simplified for database compatibility)
     __table_args__ = (
         CheckConstraint("balance_after >= 0", name="chk_balance_non_negative"),
+    )
+
+
+class ConsentRecord(Base):
+    """
+    Consent records for GDPR compliance.
+    Tracks customer consent to loyalty program and marketing communications.
+    """
+    
+    __tablename__ = "consent_records"
+    
+    consent_id = Column(GUID, primary_key=True, default=uuid.uuid4)
+    
+    # Customer reference
+    customer_id = Column(GUID, ForeignKey("customers.customer_id", ondelete="CASCADE"), nullable=False, index=True)
+    
+    # Consent type
+    consent_type = Column(
+        String(50), 
+        nullable=False,
+        index=True
+    )
+    
+    # Consent status
+    consent_given = Column(Boolean, nullable=False)
+    consent_date = Column(DateTime, default=datetime.utcnow, nullable=False)
+    
+    # Consent metadata
+    consent_method = Column(String(50), nullable=False)
+    consent_ip_address = Column(String(45), nullable=True)  # IPv4/IPv6
+    consent_user_agent = Column(Text, nullable=True)
+    
+    # Withdrawal tracking
+    withdrawn = Column(Boolean, default=False, nullable=False)
+    withdrawal_date = Column(DateTime, nullable=True)
+    withdrawal_method = Column(String(50), nullable=True)
+    
+    # Audit trail
+    consent_version = Column(String(20), nullable=False, default="v1.0")
+    consent_text = Column(Text, nullable=False)
+    
+    # Audit fields
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_by = Column(String(100), nullable=True)
+    
+    # Relationships
+    customer = relationship("Customer", back_populates="consents")
+    
+    # Constraints
+    __table_args__ = (
+        CheckConstraint(
+            "(withdrawn = false AND withdrawal_date IS NULL AND withdrawal_method IS NULL) OR "
+            "(withdrawn = true AND withdrawal_date IS NOT NULL AND withdrawal_method IS NOT NULL)",
+            name="chk_consent_withdrawal"
+        ),
     )

@@ -11,7 +11,7 @@ from app.core.config import settings
 from app.core.logging import logger
 from app.middleware.logging import RequestLoggingMiddleware
 from app.middleware.rate_limit import limiter
-from app.api import health, transactions
+from app.api import health, transactions, customers, cards
 
 
 @asynccontextmanager
@@ -79,12 +79,23 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     """Handle request validation errors."""
     logger.warning(f"Validation error: {exc.errors()}")
     
+    # Convert errors to JSON-serializable format
+    errors = []
+    for error in exc.errors():
+        error_dict = {
+            "type": error.get("type"),
+            "loc": error.get("loc"),
+            "msg": error.get("msg"),
+            "input": str(error.get("input", "")),
+        }
+        errors.append(error_dict)
+    
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content={
             "error_code": "VALIDATION_ERROR",
             "error_message": "Invalid request data",
-            "details": exc.errors(),
+            "details": errors,
         },
     )
 
@@ -143,6 +154,8 @@ async def add_security_headers(request: Request, call_next):
 # Include routers
 app.include_router(health.router, prefix="", tags=["Health"])
 app.include_router(transactions.router, prefix="/api/v1", tags=["Transactions"])
+app.include_router(customers.router, prefix="/api/v1", tags=["Customers"])
+app.include_router(cards.router, prefix="/api/v1", tags=["Cards"])
 
 
 @app.get("/")
