@@ -50,9 +50,8 @@ async def db_session(test_engine) -> AsyncGenerator[AsyncSession, None]:
     )
     
     async with async_session() as session:
-        async with session.begin():
-            yield session
-            await session.rollback()
+        yield session
+        await session.rollback()
     
     # Clean up all tables after each test
     async with test_engine.begin() as conn:
