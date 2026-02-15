@@ -1,7 +1,7 @@
 # Known Issues & Technical Debt
 
 **Last Updated**: 2026-02-15  
-**Branch**: copilot/implement-core-data-model  
+**Branches**: Multiple (copilot/implement-core-data-model, copilot/implement-loyalty-api-structure)  
 **Maintained By**: Development Team
 
 ## Purpose
@@ -20,24 +20,27 @@ This document tracks known issues, technical debt, and deferred CI/CD failures t
 
 - **Status**: 🟡 Deferred until merge to main branch
 - **Affected Checks/Components**: PR Metadata Validation workflow
-- **Description**: PrestaShop requires specific metadata (Category, Type, Milestone) for all PRs targeting core branches. This feature branch for the Loyalty System doesn't have this metadata as it's an additive feature rather than a core PrestaShop modification.
+- **Affected Branches**: All feature branches (copilot/implement-core-data-model, copilot/implement-loyalty-api-structure)
+- **Description**: PrestaShop requires specific metadata (Category, Type, Milestone) for all PRs targeting core branches. Feature branches for the Loyalty System don't have this metadata as it's an additive feature rather than a core PrestaShop modification.
 - **Impact**: 
   - User Impact: None - this is administrative
   - Developer Impact: CI check shows as failed but doesn't block development
   - Build Impact: Does not affect code functionality
 - **Why Not Fixed Now**: 
-  - This is a feature branch (`copilot/implement-core-data-model`) with a separate loyalty system
+  - These are feature branches with a separate loyalty system
   - PrestaShop metadata conventions are for core PrestaShop contributions
   - The loyalty system is additive and doesn't modify PrestaShop core files
   - Metadata will be added when preparing for merge to main/develop branches
 - **Planned Resolution**: 
   - Timeline: Before merge to main or develop branch
   - Approach: Add PR metadata with appropriate values:
-    - Category: PM (Project Management) or appropriate category
+    - Category: PM (Project Management) or FO (Front Office) depending on final scope
     - Type: new feature
     - Milestone: Next release version
 - **Workaround**: None needed - check is informational for feature branches
-- **Tracking**: Documented in CI_CHECKS_STATUS.md
+- **Tracking**: 
+  - Documented in CI_CHECKS_STATUS.md
+  - Documented in CI_CD_DIAGNOSIS_loyalty-api.md
 - **Owner**: Development Team
 - **Added**: 2026-02-15
 - **Severity**: Low (administrative only)
@@ -104,6 +107,58 @@ This document tracks known issues, technical debt, and deferred CI/CD failures t
 - **Owner**: Development Team (dependent on Symfony Console fix)
 - **Added**: 2026-02-15
 - **Severity**: Low (dependent check, no code changes in affected area)
+
+---
+
+### CI/CD - Docker Container Name Mismatch (loyalty-api branch)
+
+- **Status**: 🟡 Deferred - Infrastructure Issue (Not Code-Related)
+- **Affected Checks/Components**: Admin Security Attribute Linter, Symfony Console tests (expected)
+- **Affected Branch**: copilot/implement-loyalty-api-structure
+- **Description**: CI workflows fail when trying to execute commands in Docker container "prestashop-prestashop-git-1", but the actual container created is named "prestashop-entre-prestashop-git-1". This is a Docker Compose project name mismatch between CI configuration and the docker-compose.yml file.
+- **Impact**:
+  - User Impact: None - infrastructure only
+  - Developer Impact: CI shows failed checks but doesn't indicate code problems
+  - Build Impact: PrestaShop console commands and security linting not executed
+- **Why Not Fixed Now**:
+  - Error occurs at Docker container lookup, not in application code
+  - Loyalty system uses separate Python FastAPI backend with PostgreSQL (not PrestaShop's PHP/MySQL)
+  - No PrestaShop core files or Docker configuration modified by loyalty system
+  - Likely configuration issue in base branch or CI environment setup
+  - All loyalty-specific CI checks pass (loyalty-ci.yml workflow)
+- **Planned Resolution**:
+  - Timeline: Investigate within 1 week, fix before merge to main
+  - Approach:
+    1. Check if issue exists in base branch `Fidelity-points`
+    2. Identify source of container name: CI workflow vs. Docker Compose project name
+    3. Options:
+       - Update CI workflows to use "prestashop-entre-*" container names
+       - Normalize Docker Compose project name to "prestashop"
+       - Make workflow container detection more flexible
+  - Before production: Ensure PrestaShop and loyalty system integration works correctly
+- **Workaround**: 
+  - Loyalty system has dedicated CI workflow (loyalty-ci.yml) that passes all checks
+  - Python FastAPI backend tested independently
+  - PrestaShop integration can be validated manually in staging environment
+- **Tracking**: 
+  - [CI_CD_DIAGNOSIS_loyalty-api.md](CI_CD_DIAGNOSIS_loyalty-api.md)
+  - This document
+- **Owner**: DevOps / Infrastructure Team
+- **Added**: 2026-02-15
+- **Severity**: Medium (blocks some tests but doesn't affect loyalty system functionality)
+
+**Error Log Example**:
+```
+docker exec prestashop-prestashop-git-1 php bin/console prestashop:linter:security-attribute find-missing
+Error response from daemon: No such container: prestashop-prestashop-git-1
+```
+
+**Container Actually Created**:
+```
+Container prestashop-entre-prestashop-git-1  Creating
+Container prestashop-entre-prestashop-git-1  Created
+Container prestashop-entre-prestashop-git-1  Started
+```
 
 ---
 
