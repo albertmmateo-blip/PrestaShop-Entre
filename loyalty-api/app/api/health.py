@@ -52,7 +52,12 @@ async def health_check():
         uptime_seconds=uptime,
     )
 
-    # Return appropriate status code
-    status_code = status.HTTP_200_OK if db_healthy else status.HTTP_503_SERVICE_UNAVAILABLE
+    # Return 503 if unhealthy
+    if not db_healthy:
+        from fastapi import HTTPException
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=response.dict()
+        )
 
     return response

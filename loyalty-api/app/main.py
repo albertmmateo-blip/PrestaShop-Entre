@@ -6,7 +6,6 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from slowapi.errors import RateLimitExceeded
-import helmet
 
 from app.core.config import settings
 from app.core.logging import logger
