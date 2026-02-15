@@ -134,16 +134,8 @@ build_asset() {
     ;;
     front-entretelas)
       if should_build_asset "front-entretelas"; then
-        echo ">>> Verifying entretelas theme assets..."
-        # Entretelas is a pre-built theme based on Hummingbird
-        # No build process needed, just verify assets exist
-        if [[ -f "$PROJECT_PATH/themes/entretelas/assets/css/theme.css" ]] && \
-           [[ -f "$PROJECT_PATH/themes/entretelas/assets/js/theme.js" ]]; then
-          echo "> Entretelas theme assets verified successfully"
-        else
-          echo "ERROR: Entretelas theme assets are missing!"
-          exit 1
-        fi
+        echo ">>> Building entretelas theme assets..."
+        build "$PROJECT_PATH/themes/entretelas/_dev"
       else
         echo "> Front entretelas already exists (use --force to rebuild)"
       fi

@@ -1,0 +1,13 @@
+/**
+ * Entretelas Theme - Main SCSS Entry Point
+ * This file imports all styles for the Entretelas theme
+ */
+
+// Import base Hummingbird theme styles
+// Note: The base theme.css from Hummingbird is already compiled
+// We're adding our custom styles on top
+
+// Import custom Entretelas styles
+@import './entretelas-custom.scss';
+
+// Additional theme-specific styles can be added here
