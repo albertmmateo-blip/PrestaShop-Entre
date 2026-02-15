@@ -313,3 +313,172 @@ select:focus {
     font-size: 1.5rem;
   }
 }
+
+/* --- SECTION TITLES & HEADERS --- */
+.section-title,
+.page-header h1,
+.page-content h1 {
+  font-family: var(--entretelas-font-heading);
+  color: var(--entretelas-brown);
+  border-bottom: 2px solid var(--entretelas-orange);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* --- DISCOUNT & SPECIAL PRICING --- */
+.product-discount,
+.discount-percentage,
+.discount-amount {
+  background-color: var(--entretelas-red);
+  color: var(--entretelas-white);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--entretelas-border-radius-sm);
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+.regular-price,
+.product-price.has-discount .regular-price {
+  text-decoration: line-through;
+  color: var(--entretelas-text-secondary);
+  font-size: 0.9rem;
+}
+
+.discount-price,
+.product-price.has-discount .price {
+  color: var(--entretelas-red);
+  font-weight: bold;
+}
+
+/* --- FEATURED PRODUCTS & PROMOTIONS --- */
+.featured-products .product-miniature,
+.product-flags .product-flag {
+  position: relative;
+}
+
+.product-flag.new {
+  background-color: var(--entretelas-orange);
+  color: var(--entretelas-white);
+}
+
+.product-flag.on-sale {
+  background-color: var(--entretelas-red);
+  color: var(--entretelas-white);
+}
+
+/* --- TABS (Product Details, etc.) --- */
+.nav-tabs .nav-link {
+  color: var(--entretelas-brown);
+  border-color: transparent;
+}
+
+.nav-tabs .nav-link:hover {
+  color: var(--entretelas-orange);
+  border-color: var(--entretelas-border-light);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--entretelas-orange);
+  background-color: var(--entretelas-white);
+  border-color: var(--entretelas-border-light);
+  border-bottom-color: transparent;
+  font-weight: bold;
+}
+
+/* --- USER ACCOUNT AREA --- */
+.account-link,
+.my-account-link {
+  color: var(--entretelas-brown);
+}
+
+.account-link:hover,
+.my-account-link:hover {
+  color: var(--entretelas-orange);
+}
+
+/* --- QUANTITY SELECTOR --- */
+.qty .input-group {
+  border-radius: var(--entretelas-border-radius-sm);
+}
+
+.qty .btn {
+  background-color: var(--entretelas-brown);
+  border-color: var(--entretelas-brown);
+  color: var(--entretelas-white);
+}
+
+.qty .btn:hover {
+  background-color: var(--entretelas-orange);
+  border-color: var(--entretelas-orange);
+}
+
+/* --- FILTER & SORT CONTROLS --- */
+.facet-label,
+.custom-checkbox .custom-control-label {
+  color: var(--entretelas-text-main);
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: var(--entretelas-orange);
+  border-color: var(--entretelas-orange);
+}
+
+.products-sort-order select {
+  border-color: var(--entretelas-border-light);
+  border-radius: var(--entretelas-border-radius-sm);
+}
+
+/* --- IMAGES & THUMBNAILS --- */
+.product-images img,
+.product-cover img {
+  border-radius: var(--entretelas-border-radius-md);
+}
+
+.product-images .thumb-container {
+  border: 2px solid transparent;
+  border-radius: var(--entretelas-border-radius-sm);
+  transition: border-color 0.2s ease;
+}
+
+.product-images .thumb-container:hover,
+.product-images .thumb-container.selected {
+  border-color: var(--entretelas-orange);
+}
+
+/* --- NOTIFICATION MESSAGES --- */
+.notification-success,
+.alert-success {
+  background-color: var(--entretelas-success);
+  border-color: var(--entretelas-success);
+  color: var(--entretelas-white);
+}
+
+.notification-error,
+.alert-danger {
+  background-color: var(--entretelas-error);
+  border-color: var(--entretelas-error);
+  color: var(--entretelas-white);
+}
+
+.notification-info,
+.alert-info {
+  background-color: var(--entretelas-orange);
+  border-color: var(--entretelas-orange);
+  color: var(--entretelas-white);
+}
+
+/* --- MOBILE MENU ENHANCEMENTS --- */
+@media (max-width: 991px) {
+  .mobile-menu {
+    background-color: var(--entretelas-brown);
+  }
+  
+  .mobile-menu a {
+    color: var(--entretelas-white);
+  }
+  
+  .mobile-menu a:hover {
+    color: var(--entretelas-orange);
+    background-color: rgba(232, 119, 34, 0.1);
+  }
+}
