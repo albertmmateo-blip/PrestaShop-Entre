@@ -1,0 +1,22 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Shell scripts must always use LF line endings (for Docker/Linux compatibility)
+*.sh text eol=lf
+
+# Batch scripts must always use CRLF line endings (for Windows compatibility)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Docker-related files must use LF line endings
+Dockerfile text eol=lf
+docker-compose*.yml text eol=lf
+.dockerignore text eol=lf
+
+# Makefile must use LF
+Makefile text eol=lf
+
+# Configuration files
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf

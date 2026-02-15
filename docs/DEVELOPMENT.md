@@ -212,6 +212,23 @@ make admin-default
 
 ### Docker Issues
 
+#### Error: `/usr/bin/env: 'bash\r': No such file or directory`
+
+This error occurs on Windows when shell scripts have Windows line endings (CRLF) instead of Unix line endings (LF).
+
+**Fix for existing clones:**
+
+```bash
+git pull                  # Get the .gitattributes fix
+git rm --cached -r .      # Remove all files from git cache
+git reset --hard          # Reset to apply correct line endings
+make docker-restart       # Rebuild containers
+```
+
+**For new clones:** This issue is prevented by the `.gitattributes` file.
+
+**Windows users:** See [WINDOWS_README.md](../WINDOWS_README.md) for Windows-specific batch scripts.
+
 #### Container Won't Start
 
 **Solutions:**

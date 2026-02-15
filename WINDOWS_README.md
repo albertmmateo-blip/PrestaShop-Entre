@@ -40,6 +40,32 @@ Once started, access your PrestaShop installation at:
 - Email: `demo@prestashop.com`
 - Password: `Correct Horse Battery Staple`
 
+## Troubleshooting
+
+### Error: `/usr/bin/env: 'bash\r': No such file or directory`
+
+If you see this error when running Docker containers, it means shell scripts have Windows line endings (CRLF) instead of Unix line endings (LF).
+
+**Fix for existing clones:**
+
+1. Pull the latest changes (includes `.gitattributes` fix):
+   ```batch
+   git pull
+   ```
+
+2. Reset line endings for all files:
+   ```batch
+   git rm --cached -r .
+   git reset --hard
+   ```
+
+3. Rebuild Docker containers:
+   ```batch
+   restart.bat
+   ```
+
+**For new clones:** This issue is now prevented by the `.gitattributes` file and won't occur.
+
 ## Need Help?
 
 See the full documentation: [COPILOT DOCUMENTATION/WINDOWS_BATCH_SCRIPTS.md](COPILOT%20DOCUMENTATION/WINDOWS_BATCH_SCRIPTS.md)
