@@ -305,9 +305,33 @@ When deviations occur, log them here with:
 
 ### Current Technical Debt
 
-*No technical debt yet - project is in planning phase.*
+#### CI/CD Infrastructure Issues
 
-Technical debt items will be tracked here with:
+**Item**: Symfony Console Test Container Failures  
+**Description**: Three Symfony Console test jobs fail with Docker container error "No such container: prestashop-prestashop-git-1"  
+**Reason**: CI environment Docker setup issue, not related to loyalty system code  
+**Impact**: PrestaShop console commands are not tested in CI, but loyalty system uses separate PostgreSQL database  
+**Resolution Plan**: 
+1. Verify if failures exist in base branch
+2. If pre-existing: Document as known infrastructure issue
+3. If new: Investigate Docker Compose changes
+4. Update CI environment or Docker setup as needed  
+**Target**: Before production deployment  
+**Risk**: Low - loyalty system has dedicated CI workflow that passes all checks  
+**Tracking**: See [KNOWN_ISSUES.md](../../KNOWN_ISSUES.md#cicd---symfony-console-tests-container-failure)
+
+**Item**: PR Metadata Validation  
+**Description**: PR metadata check fails for feature branch (missing Category, Type, Milestone)  
+**Reason**: PrestaShop metadata conventions are for core contributions; loyalty system is additive feature  
+**Impact**: Administrative only - does not affect code functionality  
+**Resolution Plan**: Add metadata before merge to main/develop branches  
+**Target**: Before merge to main branch  
+**Risk**: None - purely administrative  
+**Tracking**: See [KNOWN_ISSUES.md](../../KNOWN_ISSUES.md#cicd---pr-metadata-validation-failure)
+
+---
+
+Technical debt items are tracked with:
 - Description of the shortcut taken
 - Why it was necessary
 - Impact on system
