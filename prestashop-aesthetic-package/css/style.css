@@ -1,0 +1,1657 @@
+/* =========================================
+   src/css/style.css
+   Main Stylesheet
+   ========================================= */
+
+@font-face {
+  font-family: 'Pump Trid';
+  src: url('../assets/fonts/PumpTriD Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quagmire';
+  src: url('../assets/fonts/Quagmire Extended Bold.otf') format('opentype');
+  font-display: swap;
+}
+
+/* Note: :root block removed. Variables are loaded from variables.css */
+
+/* =========================================
+   GLOBAL RESET & BASE
+   ========================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--soft-tan);
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* =========================================
+   NAVIGATION BAR
+   ========================================= */
+.navbar {
+  height: var(--nav-height);
+  width: 100%;
+  position: relative;
+  z-index: 1000;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  background: linear-gradient(
+    to bottom,
+    var(--logo-brown) 0%,
+    var(--logo-brown) 33.33%,
+    var(--logo-orange) 33.33%,
+    var(--logo-orange) 66.66%,
+    var(--logo-red) 66.66%,
+    var(--logo-red) 100%
+  );
+}
+
+.nav-links {
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  padding-left: var(--logo-width);
+  height: 100%;
+}
+
+.nav-links a {
+  font-family: var(--font-heading);
+  color: var(--white);
+  text-decoration: none;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.nav-links a:hover {
+  opacity: 0.8;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.nav-links a.nav-small-text {
+  font-size: 0.85rem;
+}
+
+/* Logo Overlay (Keeps it floating above the grid) */
+.nav-logo {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 66.66%;
+  /* Covers bottom 2 strips (Orange + Red) */
+  width: var(--logo-width);
+  z-index: 1001;
+}
+
+.nav-logo img {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+
+/* =========================================
+   RESPONSIVE ADJUSTMENT
+   ========================================= */
+@media (max-width: 768px) {
+  .navbar {
+    /* Mobile navbar: vertical layout with centered content */
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+  }
+
+  /* Mobile logo styling: centered with natural dimensions */
+  .nav-logo {
+    position: static;
+    height: auto;
+    width: 200px;
+    margin-bottom: 1rem;
+  }
+
+  /* Mobile navigation links: full width with centered wrapping */
+  .nav-links {
+    grid-row: auto;
+    width: 100%;
+    padding-left: 0;
+    padding-top: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: auto;
+  }
+
+  /* Mobile link styling: touch-friendly size with text wrapping */
+  .nav-links a {
+    font-size: 1rem;
+    padding: 0.5rem;
+    white-space: normal;
+  }
+
+  /* Portal window adjustments */
+  .featured-category-card {
+    flex: 1 1 100%;
+    height: 250px;
+  }
+
+  .category-label-overlay {
+    font-size: 2.5rem;
+  }
+}
+
+/* =========================================
+   4. CONTACT FOOTER (Persistent Bar)
+   ========================================= */
+.persistent-contact-bar {
+  background-color: var(--soft-tan);
+  border-bottom: 2px solid var(--logo-brown);
+  padding: 0.5rem 0;
+  text-align: center;
+}
+
+.contact-content {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-family: 'Quagmire', sans-serif;
+  color: var(--logo-brown);
+}
+
+.contact-content a {
+  color: var(--logo-brown);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.wa-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* =========================================
+   5. CATALOG & PRODUCT GRID
+   ========================================= */
+.catalog-container,
+.portal-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Section Headers */
+.section-title {
+  font-family: 'Quagmire', sans-serif;
+  color: var(--logo-brown);
+  font-size: 1.8rem;
+  margin: 2rem 0 1rem;
+  border-bottom: 2px solid var(--logo-orange);
+  display: block;
+}
+
+/* Product List Cards (Text Catalog) */
+.text-catalog-container {
+  /* Vertical stacking of product categories */
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* Product grid layout within each category */
+.text-catalog-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Section title spans full grid width */
+.text-catalog-section .section-title {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+/* =========================================
+   PRODUCT CARD LINK
+   ========================================= */
+.product-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card-link:hover {
+  transform: translateY(-3px);
+}
+
+.product-card-link:hover .product-list-item {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-card-link:focus {
+  outline: 3px solid var(--logo-orange);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-lg);
+}
+
+.product-card-link:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.product-list-item {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-lg);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  /* Ensure the item doesn't expand infinitely */
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.product-info {
+  /* Allow text to wrap/truncate properly inside flex */
+  flex: 1;
+  min-width: 0;
+}
+
+.product-info h4 {
+  font-family: 'Quagmire', sans-serif;
+  color: var(--logo-orange);
+  margin-bottom: 0.5rem;
+}
+
+/* Truncation styles */
+.description.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  /* Max number of lines to show */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toggle-desc-btn {
+  background: none;
+  border: none;
+  color: var(--logo-orange);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  margin-top: 0.25rem;
+  font-family: inherit;
+}
+
+.toggle-desc-btn:hover {
+  color: var(--logo-brown);
+}
+
+.product-thumb {
+  /* Prevents image from being squashed to 0px width */
+  flex-shrink: 0;
+}
+
+.product-thumb img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--border-radius-sm);
+  transition: transform 0.3s ease;
+}
+
+.product-card-link:hover .product-thumb img {
+  transform: scale(1.05);
+}
+
+.price {
+  font-weight: bold;
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.price.discount-price {
+  color: var(--logo-red);
+}
+
+/* Category Grid (Visual Catalog) */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.category-card {
+  position: relative;
+  border: 4px solid var(--dark-brown);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  height: 200px;
+  display: block;
+}
+
+.category-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.category-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-overlay h3 {
+  font-family: 'Pump Trid', sans-serif;
+  color: white;
+  font-size: 2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.category-card:hover img {
+  transform: scale(1.1);
+}
+
+/* =========================================
+   7. HOMEPAGE PORTAL (Image Links)
+   ========================================= */
+
+.portal-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  /* Stacks vertically on mobile */
+  padding: 2rem 1rem;
+}
+
+.portal-container.minimal-padding {
+  min-height: auto;
+  padding-top: 0;
+}
+
+.featured-category-card {
+  /* Set a fixed base size but allow shrinking */
+  flex: 0 1 450px;
+  height: 300px;
+  text-decoration: none;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  /* Keeps image inside the rounded corners */
+
+  /* The thick brown border */
+  border: 6px solid var(--logo-brown);
+  background-color: var(--logo-brown);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.interactive-image-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.interactive-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* This prevents stretching/distortion */
+  transition:
+    transform 0.5s ease,
+    opacity 0.3s ease;
+}
+
+/* Hover Text (Centered & Hidden by default) */
+.category-label-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-family: 'Pump Trid', sans-serif;
+  font-size: 3.5rem;
+  color: white;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+
+  opacity: 0;
+  /* Hidden initially */
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  /* Let clicks pass through to the link */
+  z-index: 10;
+}
+
+/* Hover Effects */
+.featured-category-card:hover {
+  transform: translateY(-5px);
+  /* Slight lift */
+}
+
+.featured-category-card:hover .interactive-image-container img {
+  transform: scale(1.1);
+  /* Zoom effect */
+  opacity: 0.4;
+  /* Darken image */
+}
+
+.featured-category-card:hover .category-label-overlay {
+  opacity: 1;
+  /* Show text */
+}
+
+/* =========================================
+   HOME PAGE STYLES
+   Converted to REM for accessibility
+   (Base calculation: 16px = 1rem)
+   ========================================= */
+
+.welcome-section {
+  text-align: center;
+  max-width: 50rem;
+  /* 800px */
+  margin: 2.5rem auto;
+  /* 40px */
+  padding: 0 1.25rem;
+  /* 20px */
+}
+
+.welcome-section h1 {
+  font-family: 'Pump Trid', sans-serif;
+  color: var(--logo-orange);
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
+  /* 20px */
+}
+
+.welcome-section p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.625rem;
+  /* 10px */
+}
+
+.customer-testimonial {
+  font-style: italic;
+  color: var(--logo-brown);
+  margin-top: 1.25rem;
+  /* 20px */
+  font-weight: bold;
+}
+
+.info-grid {
+  display: grid;
+  /* responsive columns min 300px -> 18.75rem */
+  grid-template-columns: repeat(auto-fit, minmax(18.75rem, 1fr));
+  gap: 1.875rem;
+  /* 30px */
+  max-width: 62.5rem;
+  /* 1000px */
+  margin: 3.125rem auto;
+  /* 50px */
+  padding: 1.875rem;
+  /* 30px */
+  background: white;
+  border-radius: 0.625rem;
+  /* 10px */
+  box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.05);
+  /* 0 4px 10px */
+}
+
+.info-box h3 {
+  font-family: 'Quagmire', sans-serif;
+  color: var(--logo-red);
+  border-bottom: 0.125rem solid var(--logo-orange);
+  /* 2px */
+  padding-bottom: 0.625rem;
+  /* 10px */
+  margin-bottom: 0.9375rem;
+  /* 15px */
+}
+
+.info-box a.facebook-link {
+  color: var(--logo-orange);
+  font-weight: bold;
+}
+
+.info-box.full-width {
+  grid-column: 1 / -1;
+}
+
+.info-box p.justified-text {
+  text-align: justify;
+  line-height: 1.8;
+}
+
+.brands-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.9375rem;
+  /* 15px */
+  margin-top: 0.625rem;
+  /* 10px */
+}
+
+.brand-tag {
+  background-color: var(--soft-tan);
+  color: var(--logo-brown);
+  padding: 0.3125rem 0.9375rem;
+  /* 5px 15px */
+  border-radius: 0.9375rem;
+  /* 15px */
+  font-size: 0.9rem;
+  border: 1px solid var(--logo-brown);
+  /* 1px usually stays 1px for sharpness */
+}
+
+.page-content-wrapper {
+  max-width: var(--mid-width);
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Contact page specific styles */
+
+.contact-info {
+  margin-bottom: 30px;
+  font-family: 'Quagmire', sans-serif;
+}
+
+.contact-info p {
+  margin-bottom: 10px;
+}
+
+.contact-map {
+  border: 0;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: block;
+}
+
+/* Taller page specific styles */
+.taller-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+}
+
+.taller-content h3 {
+  font-family: 'Quagmire', sans-serif;
+  color: var(--logo-orange);
+  margin-bottom: 0.5rem;
+}
+
+/* =========================================
+   REGISTRATION PAGES
+   ========================================= */
+
+/* Registration Card Styles */
+.registration-card {
+  flex: 0 1 450px;
+  min-height: 400px;
+  text-decoration: none;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 4px solid var(--logo-brown);
+  background: white;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.registration-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  border-color: var(--logo-orange);
+}
+
+.registration-card .card-content {
+  padding: 3rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  flex-grow: 1;
+}
+
+.registration-card .card-icon {
+  color: var(--logo-orange);
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.registration-card h2 {
+  font-family: 'Quagmire', sans-serif;
+  color: var(--logo-brown);
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.registration-card p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.registration-card .card-button {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background-color: var(--logo-orange);
+  color: white;
+  border-radius: var(--border-radius-pill);
+  font-weight: bold;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.registration-card:hover .card-button {
+  background-color: var(--logo-red);
+}
+
+/* Registration Form Container */
+.registration-form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--border-light);
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--logo-brown);
+  font-size: 0.95rem;
+}
+
+.form-group input[type='text'],
+.form-group input[type='email'],
+.form-group input[type='tel'],
+.form-group input[type='password'] {
+  padding: 0.75rem;
+  border: 2px solid var(--border-light);
+  border-radius: var(--border-radius-sm);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--logo-orange);
+}
+
+.form-group input:invalid:not(:placeholder-shown) {
+  border-color: var(--logo-red);
+}
+
+.form-group small {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+/* Checkbox Group */
+.checkbox-group label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.checkbox-group input[type='checkbox'] {
+  margin-top: 0.25rem;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox-group a {
+  color: var(--logo-orange);
+  text-decoration: underline;
+}
+
+.checkbox-group a:hover {
+  color: var(--logo-red);
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: var(--border-radius-pill);
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  flex: 1;
+  display: inline-block;
+}
+
+.btn-primary {
+  background-color: var(--logo-orange);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--logo-red);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--logo-brown);
+  border: 2px solid var(--logo-brown);
+}
+
+.btn-secondary:hover {
+  background-color: var(--logo-brown);
+  color: white;
+}
+
+/* Form Footer */
+.form-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.form-footer a {
+  color: var(--logo-orange);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.form-footer a:hover {
+  color: var(--logo-red);
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .registration-card {
+    flex: 1 1 100%;
+    min-height: 350px;
+  }
+
+  .registration-form-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+/* Registration Benefits Box */
+.registration-benefits {
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.registration-benefits ul {
+  text-align: left;
+  margin-top: 1rem;
+}
+
+/* =========================================
+   MULTI-STEP FORM
+   ========================================= */
+
+/* Progress Indicator */
+.progress-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  padding: 0 1rem;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.progress-step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--border-light);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.progress-step.active .progress-step-number {
+  background-color: var(--logo-orange);
+  color: white;
+  box-shadow: 0 2px 8px rgba(249, 144, 65, 0.4);
+}
+
+.progress-step.completed .progress-step-number {
+  background-color: var(--logo-brown);
+  color: white;
+}
+
+.progress-step.completed .progress-step-number::after {
+  content: '✓';
+}
+
+.progress-step-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+  font-weight: 500;
+}
+
+.progress-step.active .progress-step-label {
+  color: var(--logo-orange);
+  font-weight: 600;
+}
+
+.progress-step.completed .progress-step-label {
+  color: var(--logo-brown);
+}
+
+.progress-line {
+  flex: 1;
+  height: 2px;
+  background-color: var(--border-light);
+  margin: 0 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Form Steps */
+.form-step {
+  display: none;
+}
+
+.form-step.active {
+  display: block;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.form-step h2 {
+  color: var(--logo-brown);
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Password Strength Meter */
+.password-strength-meter {
+  width: 100%;
+  height: 4px;
+  background-color: var(--border-light);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.password-strength-bar {
+  height: 100%;
+  width: 0%;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.password-strength-text {
+  display: block;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* Form Row for side-by-side fields */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Select Styling */
+.form-group select {
+  padding: 0.75rem;
+  border: 2px solid var(--border-light);
+  border-radius: var(--border-radius-sm);
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: var(--logo-orange);
+}
+
+/* Checkbox Grid for multiple selections */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border: 2px solid var(--border-light);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.checkbox-item:hover {
+  border-color: var(--logo-orange);
+  background-color: rgba(249, 144, 65, 0.05);
+}
+
+.checkbox-item input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox-item input[type='checkbox']:checked + span {
+  color: var(--logo-brown);
+  font-weight: 600;
+}
+
+.checkbox-item:has(input[type='checkbox']:checked) {
+  border-color: var(--logo-brown);
+  background-color: rgba(91, 49, 21, 0.05);
+}
+
+/* Fallback for browsers that don't support :has() */
+.checkbox-item.checked {
+  border-color: var(--logo-brown);
+  background-color: rgba(91, 49, 21, 0.05);
+}
+
+/* Invalid field styling */
+input.invalid,
+select.invalid {
+  border-color: var(--logo-red) !important;
+}
+
+/* Button adjustments for multi-step */
+.multi-step-form .form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  justify-content: space-between;
+}
+
+.multi-step-form .form-actions .btn {
+  flex: 1;
+  max-width: 200px;
+}
+
+/* Responsive Design for Multi-Step Form */
+@media (max-width: 768px) {
+  .progress-indicator {
+    padding: 0 0.5rem;
+  }
+
+  .progress-step-number {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+
+  .progress-step-label {
+    font-size: 0.75rem;
+  }
+
+  .progress-line {
+    margin: 0 0.25rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .multi-step-form .form-actions {
+    flex-direction: column;
+  }
+
+  .multi-step-form .form-actions .btn {
+    max-width: 100%;
+  }
+}
+
+/* =========================================
+   LOGIN PAGE STYLES
+   ========================================= */
+
+.login-form-container {
+  max-width: 500px;
+}
+
+/* Password Input Wrapper */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  flex: 1;
+  padding-right: 45px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+  color: var(--logo-orange);
+}
+
+.toggle-password:focus {
+  outline: 2px solid var(--logo-orange);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Form Options Row */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+.remember-me {
+  margin: 0;
+}
+
+.remember-me label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: normal;
+  cursor: pointer;
+  margin: 0;
+}
+
+.forgot-password-link {
+  color: var(--logo-orange);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.forgot-password-link:hover {
+  color: var(--logo-red);
+  text-decoration: underline;
+}
+
+/* Social Login Section */
+.social-login-section {
+  margin-top: 2rem;
+}
+
+.social-login-divider {
+  position: relative;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.social-login-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--border-light);
+  z-index: 0;
+}
+
+.social-login-divider span {
+  position: relative;
+  display: inline-block;
+  padding: 0 1rem;
+  background-color: white;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  z-index: 1;
+}
+
+.social-login-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--border-light);
+  background-color: white;
+  color: var(--text-main);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-social:hover:not(:disabled) {
+  border-color: var(--logo-orange);
+  background-color: rgba(249, 144, 65, 0.05);
+}
+
+.btn-social:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-google svg,
+.btn-facebook svg {
+  width: 20px;
+  height: 20px;
+}
+
+.social-login-note {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+  font-style: italic;
+}
+
+/* Error and Success Messages */
+.error-message,
+.success-message {
+  padding: 1rem;
+  border-radius: var(--border-radius-sm);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.error-message {
+  background-color: #fee;
+  border: 2px solid var(--logo-red);
+  color: #c00;
+}
+
+.success-message {
+  background-color: #efe;
+  border: 2px solid #4caf50;
+  color: #2e7d32;
+}
+
+/* Field Errors */
+.field-error {
+  color: var(--logo-red);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: none;
+}
+
+.input-error {
+  border-color: var(--logo-red) !important;
+}
+
+/* Info Box Styling */
+.info-box {
+  background-color: rgba(249, 144, 65, 0.1);
+  border-left: 4px solid var(--logo-orange);
+  padding: 1rem;
+  margin-top: 1.5rem;
+  border-radius: 4px;
+}
+
+.info-box p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.registration-benefits {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.registration-benefits h3 {
+  color: var(--logo-brown);
+  margin-bottom: 1rem;
+}
+
+.registration-benefits ul {
+  list-style: none;
+  padding: 0;
+}
+
+.registration-benefits li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.registration-benefits li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--logo-orange);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Portal Container */
+.portal-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Password Input Wrapper with Toggle */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  flex: 1;
+  padding-right: 45px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle:hover {
+  color: var(--logo-orange);
+}
+
+.password-toggle.active {
+  color: var(--logo-orange);
+}
+
+/* Password Strength Meter */
+.password-strength-container {
+  margin-top: 0.75rem;
+}
+
+.password-strength-bar {
+  height: 6px;
+  background-color: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.password-strength-fill {
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  border-radius: 3px;
+}
+
+.password-strength-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.password-requirements {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.password-requirements li {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.password-requirements li .req-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 0.75rem;
+  color: #ccc;
+  font-weight: bold;
+}
+
+.password-requirements li.met {
+  color: #27ae60;
+}
+
+.password-requirements li.met .req-icon {
+  color: #27ae60;
+}
+
+/* Error and Success Messages */
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  padding: 1rem;
+  border-radius: var(--border-radius-sm);
+  border-left: 4px solid #c33;
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  background-color: #efe;
+  color: #2a6;
+  padding: 1rem;
+  border-radius: var(--border-radius-sm);
+  border-left: 4px solid #2a6;
+  margin-bottom: 1rem;
+}
+
+.field-error {
+  color: var(--logo-red);
+  font-size: 0.85rem;
+  display: none;
+  margin-top: 0.25rem;
+}
+
+.input-error {
+  border-color: var(--logo-red) !important;
+}
+
+.info-box {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: var(--border-radius-sm);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.info-box p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Responsive Design for Login */
+@media (max-width: 768px) {
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .social-login-buttons {
+    gap: 0.5rem;
+  }
+
+  .btn-social {
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* =========================================
+   WISHLIST BUTTON ON PRODUCT CARDS
+   ========================================= */
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.add-to-wishlist-btn {
+  background: transparent;
+  border: 2px solid #e0e0e0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #666;
+  position: relative;
+  z-index: 10;
+}
+}
+
+.add-to-wishlist-btn:hover {
+  background: #f5f5f5;
+  border-color: var(--logo-red, #d32f2f);
+  color: var(--logo-red, #d32f2f);
+  transform: scale(1.1);
+}
+
+.add-to-wishlist-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.add-to-wishlist-btn.loading {
+  animation: pulse 1s infinite;
+}
+
+.add-to-wishlist-btn.added {
+  background: var(--logo-red, #d32f2f);
+  border-color: var(--logo-red, #d32f2f);
+  color: white;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Wishlist Notification Toast */
+.wishlist-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 10000;
+  transform: translateX(400px);
+  transition: transform 0.3s ease;
+  max-width: 350px;
+}
+
+.wishlist-notification.show {
+  transform: translateX(0);
+}
+
+.wishlist-notification.hiding {
+  transform: translateX(400px);
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.wishlist-notification.success {
+  border-left: 4px solid #4caf50;
+}
+
+.wishlist-notification.success svg {
+  color: #4caf50;
+}
+
+.wishlist-notification.error {
+  border-left: 4px solid #f44336;
+}
+
+.wishlist-notification.error svg {
+  color: #f44336;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.notification-close:hover {
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .wishlist-notification {
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+

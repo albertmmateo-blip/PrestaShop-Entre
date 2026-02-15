@@ -1,0 +1,35 @@
+/* =========================================
+   src/css/variables.css
+   Global Design Tokens
+   ========================================= */
+:root {
+  /* --- Brand Palette --- */
+  --logo-brown: #542e26;
+  --logo-orange: #e87722;
+  --logo-red: #cb2c30;
+  --dark-brown: #3e221c;
+
+  /* --- UI Colors --- */
+  --soft-tan: #f1e5d6;
+  --white: #ffffff;
+  --border-light: #ddd;
+  --text-main: var(--logo-brown);
+  --text-secondary: #555;
+  --color-success: #28a745;
+  --color-error: #dc3545;
+
+  /* --- Typography --- */
+  --font-body: sans-serif;
+  --font-heading: 'Quagmire', sans-serif;
+  --font-display: 'Pump Trid', sans-serif;
+
+  /* --- Layout & Spacing --- */
+  --nav-height: 5rem;
+  --logo-width: 15.625rem; /* ~250px */
+  --max-width: 87.5rem; /* ~1400px */
+  --mid-width: 43.75rem; /* ~700px */
+  --border-radius-sm: 4px;
+  --border-radius-lg: 8px;
+  --border-radius-md: 20px;
+  --border-radius-pill: 30px;
+}

@@ -1,0 +1,277 @@
+/* =========================================
+   Critical CSS for Product Detail Pages (Above-the-Fold)
+   This file contains only the essential styles needed for
+   initial render of product detail pages
+   ========================================= */
+
+/* Note: CSS Variables are loaded separately via <link> tag in the layout */
+
+/* Breadcrumb Navigation (Above-the-fold) */
+.breadcrumb {
+  background-color: var(--white);
+  padding: clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 2rem);
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+  content: '>';
+  margin: 0 0.5rem;
+  color: var(--text-secondary);
+  font-weight: normal;
+}
+
+.breadcrumb-item a {
+  color: var(--logo-orange);
+  text-decoration: none;
+  transition: color 0.3s ease, text-decoration-color 0.3s ease;
+}
+
+.breadcrumb-item.active span {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Product Detail Container */
+.product-detail-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+/* Product Hero Section (Two-column layout) */
+.product-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4vw, 3rem);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  align-items: start;
+}
+
+/* Product Gallery (Left Column) */
+.product-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.product-image-main {
+  position: relative;
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  aspect-ratio: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.product-image-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: zoom-in;
+  transition: transform 0.4s ease;
+}
+
+/* Zoom Button Overlay */
+.zoom-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+/* Product Information (Right Column) */
+.product-info-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.product-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--logo-brown);
+  line-height: 1.2;
+  margin: 0 0 0.5rem 0;
+}
+
+.product-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+  color: var(--text-secondary);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.product-sku {
+  font-weight: 500;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stars {
+  color: var(--logo-orange);
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+}
+
+.product-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.price-label {
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.price-value {
+  font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+  font-weight: 700;
+  color: var(--logo-brown);
+}
+
+/* Stock Badge */
+.product-stock {
+  margin: 0.5rem 0 1rem 0;
+}
+
+.stock-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-pill);
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stock-badge.in-stock {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.stock-badge.low-stock {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.stock-badge.out-of-stock {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Action Buttons */
+.product-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.product-action-btn {
+  flex: 1 1 auto;
+  min-width: 150px;
+  padding: clamp(0.75rem, 1.5vw, 1rem) clamp(1rem, 2vw, 1.5rem);
+  font-size: clamp(0.9rem, 1.6vw, 1rem);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--logo-orange);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background-color: var(--logo-red);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(203, 44, 48, 0.3);
+}
+
+.btn-secondary {
+  background-color: var(--soft-tan);
+  color: var(--logo-brown);
+}
+
+.btn-secondary:hover {
+  background-color: var(--logo-brown);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+/* Responsive Styles for Above-the-fold */
+@media (max-width: 900px) {
+  .product-hero {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .product-actions {
+    flex-direction: column;
+  }
+
+  .product-action-btn {
+    width: 100%;
+  }
+}
+
+/* Screen Reader Only Class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

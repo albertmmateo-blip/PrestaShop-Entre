@@ -1,0 +1,327 @@
+/* =========================================
+   SHORTCUT BAR (Sticky Sub-nav)
+   ========================================= */
+
+.shortcut-bar {
+  width: 100%;
+  background-color: var(--white);
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 998;
+}
+
+.shortcut-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 5%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Row 1 layout: title | centered links | right section */
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 40px;
+  flex-wrap: nowrap;
+}
+
+.shortcut-title-left {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-family: 'Quagmire', sans-serif;
+  color: var(--logo-red);
+  font-size: 1.8rem;
+  text-transform: none;
+}
+
+/* Pills row (center) */
+.shortcut-links {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbar but keep scrolling */
+.shortcut-links::-webkit-scrollbar {
+  height: 0;
+}
+
+.shortcut-links span {
+  color: var(--logo-brown);
+  font-size: 0.9rem;
+  font-family: 'Quagmire', sans-serif;
+}
+
+.shortcut-links a {
+  text-decoration: none;
+  color: var(--logo-orange);
+  padding: 5px 15px;
+  border: 1px solid var(--logo-orange);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  font-family: 'Quagmire', sans-serif;
+  font-size: 0.9rem;
+}
+
+.shortcut-links a:hover {
+  background-color: var(--logo-orange);
+  color: var(--white);
+}
+
+/* Right-side section (Merceria / Teixits / Back) */
+.shortcut-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+/* Vertical divider */
+.shortcut-divider {
+  width: 4px;
+  height: 32px;
+  background-color: #8d1818;
+  display: block;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+/* Secondary links (Merceria / Teixits) */
+.shortcut-right a:not(.back-btn) {
+  text-decoration: none;
+  color: white;
+  background-color: var(--logo-red);
+  padding: 5px 15px;
+  border: 1px solid var(--logo-red);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  font-family: 'Quagmire', sans-serif;
+  font-size: 0.9rem;
+}
+
+.shortcut-right a.shortcut-secondary {
+  border-color: var(--logo-red);
+  color: white;
+  background-color: var(--logo-red);
+  font-weight: normal;
+}
+
+.shortcut-right a.shortcut-secondary:hover {
+  background-color: var(--logo-red);
+  border-color: var(--logo-red);
+  color: var(--white);
+}
+
+/* Back button styling */
+.back-btn {
+  text-decoration: none;
+  color: var(--white);
+  font-weight: bold;
+  padding: 4px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: var(--logo-orange);
+  transition: background-color 0.3s ease;
+  font-family: 'Quagmire';
+  font-size: 1.15rem;
+}
+
+.back-btn:hover {
+  background-color: var(--logo-red);
+  color: var(--white);
+}
+
+/* =========================================
+   Shortcut-bar embedded search (compact)
+   ========================================= */
+
+.shortcut-search-row {
+  display: flex;
+  justify-content: center;
+  padding: 2px 0 8px;
+}
+
+/* Search box in shortcut bar */
+.shortcut-search-box {
+  width: min(680px, 100%);
+  max-width: 680px;
+  gap: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Compact input */
+.shortcut-search-box input {
+  width: 100%;
+  padding: 8px 16px;
+  font-family: 'Quagmire', sans-serif;
+  font-size: 0.95rem;
+  border: 2px solid var(--logo-brown);
+  border-radius: 20px;
+  outline: none;
+  color: var(--logo-brown);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.shortcut-search-box input:focus {
+  border-color: var(--logo-orange);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.shortcut-search-button {
+  background-color: var(--logo-orange);
+  color: white;
+  border: none;
+  padding: 5px 25px;
+  border-radius: 30px;
+  font-family: 'Quagmire', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.shortcut-search-button:hover {
+  background-color: var(--logo-red);
+}
+
+/* Search results dropdown */
+.search-results-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 60px;
+  margin-top: 0.5rem;
+  background-color: var(--white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+
+.search-results-dropdown.is-open {
+  display: block;
+}
+
+/* =========================================
+   SHORTCUT DROPDOWN
+   ========================================= */
+
+.shortcut-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.shortcut-trigger {
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  color: var(--logo-orange);
+  padding: 5px 15px;
+  border: 1px solid var(--logo-orange);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  font-family: 'Quagmire', sans-serif;
+  font-size: 0.9rem;
+  display: inline-block;
+}
+
+.shortcut-trigger:hover {
+  background-color: var(--logo-orange);
+  color: var(--white);
+}
+
+/* Panel is in-flow so it expands the white bar */
+.shortcut-dropdown-panel {
+  position: static;
+  width: 100%;
+  border-top: 1px solid #eee;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    max-height 200ms ease,
+    opacity 150ms ease;
+}
+
+/* JS toggles .is-open and sets max-height inline */
+.shortcut-dropdown-panel.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Row 2 uses same pill styles as .shortcut-links */
+.shortcut-links--subrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0;
+  flex-wrap: wrap;
+  white-space: normal;
+}
+
+.shortcut-links--subrow span {
+  font-size: 0.85rem;
+}
+
+.shortcut-dropdown-link {
+  display: inline-block;
+  padding: 5px 15px;
+  text-decoration: none;
+  color: var(--logo-orange);
+  border: 1px solid var(--logo-orange);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  font-family: 'Quagmire', sans-serif;
+  font-size: 0.9rem;
+}
+
+.shortcut-dropdown-link:hover {
+  background-color: var(--logo-orange);
+  color: white !important;
+}
+
+/* Optional: keep dropdown trigger visually consistent */
+.shortcut-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* =========================================
+   SUBSECTION STYLING
+   ========================================= */
+
+.subsection {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--border-light);
+}
+
+.subsection-title {
+  font-family: 'Quagmire', sans-serif;
+  color: var(--logo-brown);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-transform: capitalize;
+}
