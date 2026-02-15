@@ -17,7 +17,7 @@ SYMFONY  = $(PHP_CONT) bin/console
 
 # Misc
 .DEFAULT_GOAL = install
-.PHONY        : help docker-build docker-up docker-start docker-restart docker-down docker-logs docker-sh composer cc test test-unit test-integration test-integration-behaviour test-api-module assets wait-assets admin front admin-default admin-new-theme front-core front-classic front-hummingbird install install-prestashop cs-fixer cs-fixer-dry phpstan scss-fixer es-linter
+.PHONY        : help docker-build docker-up docker-start docker-restart docker-down docker-logs docker-sh composer cc test test-unit test-integration test-integration-behaviour test-api-module assets wait-assets admin front admin-default admin-new-theme front-core front-classic front-hummingbird front-entretelas install install-prestashop cs-fixer cs-fixer-dry phpstan scss-fixer es-linter
 
 ## —— 🎵 🐳 PrestaShop Docker Makefile 🐳 🎵 ———————————————————————————————————
 help: ## Outputs this help screen
@@ -64,6 +64,7 @@ front: ## Build front assets
 	$(PHP_CONT_WITH_LOGIN) ./tools/assets/build.sh front-core --force
 	$(PHP_CONT_WITH_LOGIN) ./tools/assets/build.sh front-classic --force
 	$(PHP_CONT_WITH_LOGIN) ./tools/assets/build.sh front-hummingbird --force
+	$(PHP_CONT_WITH_LOGIN) ./tools/assets/build.sh front-entretelas --force
 
 admin-default: ## Build assets for default admin theme
 	$(PHP_CONT_WITH_LOGIN) ./tools/assets/build.sh admin-default --force
@@ -79,6 +80,9 @@ front-classic: ## Build assets for classic theme
 
 front-hummingbird: ## Build assets for hummingbird theme
 	$(PHP_CONT_WITH_LOGIN) ./tools/assets/build.sh front-hummingbird --force
+
+front-entretelas: ## Build assets for entretelas theme
+	$(PHP_CONT_WITH_LOGIN) ./tools/assets/build.sh front-entretelas --force
 
 ## —— Composer & Symfony 🧙 ————————————————————————————————————————————————————
 composer: ## Install PHP dependencies
