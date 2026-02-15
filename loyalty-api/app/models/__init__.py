@@ -1,6 +1,6 @@
 """Database models."""
 from app.models.auth import TerminalCredential, IdempotencyKey
-from app.models.loyalty import Customer, LoyaltyCard, LoyaltyAccount, LoyaltyLedger
+from app.models.loyalty import Customer, LoyaltyCard, LoyaltyAccount, LoyaltyLedger, ConsentRecord
 
 __all__ = [
     "TerminalCredential",
@@ -9,4 +9,5 @@ __all__ = [
     "LoyaltyCard",
     "LoyaltyAccount",
     "LoyaltyLedger",
+    "ConsentRecord",
 ]
