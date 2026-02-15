@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, Request, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
-from app.core.loyalty_service import LoyaltyService
+from app.core.loyalty_service import LoyaltyService, EARN_RATE_PERCENT, POINTS_PER_EURO
 from app.core.logging import logger
 from app.middleware.idempotency import check_idempotency, store_idempotency_key, require_idempotency_key
 from app.models.schemas import (
@@ -80,7 +80,7 @@ async def earn_points(
             channel=channel,
             description=f"Earned {euros_earned} EUR from order {earn_request.order_id}",
             idempotency_key=idempotency_key,
-            earn_rate=service.EARN_RATE_PERCENT,
+            earn_rate=EARN_RATE_PERCENT,
         )
         
         # Commit transaction
@@ -96,7 +96,7 @@ async def earn_points(
                 "amount_euros": float(euros_earned),
                 "amount_points": points_earned,
                 "order_id": earn_request.order_id,
-                "new_balance_euros": float(ledger_entry.balance_after / service.POINTS_PER_EURO),
+                "new_balance_euros": float(ledger_entry.balance_after / POINTS_PER_EURO),
                 "new_balance_points": ledger_entry.balance_after,
                 "timestamp": ledger_entry.created_at.isoformat(),
             },
@@ -216,7 +216,7 @@ async def redeem_points(
                 "amount_euros": float(-redeem_request.redemption_amount_euros),
                 "amount_points": -points_to_redeem,
                 "order_id": redeem_request.order_id,
-                "new_balance_euros": float(ledger_entry.balance_after / service.POINTS_PER_EURO),
+                "new_balance_euros": float(ledger_entry.balance_after / POINTS_PER_EURO),
                 "new_balance_points": ledger_entry.balance_after,
                 "voucher_code": f"LOYALTY-{ledger_entry.ledger_id.hex[:8].upper()}",
                 "timestamp": ledger_entry.created_at.isoformat(),

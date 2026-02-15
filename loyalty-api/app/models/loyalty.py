@@ -4,10 +4,10 @@ from typing import Optional
 import uuid
 
 from sqlalchemy import Column, String, Integer, DateTime, Date, Numeric, Text, Boolean, ForeignKey, CheckConstraint, BigInteger
-from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
+from app.core.types import GUID
 
 
 class Customer(Base):
@@ -15,7 +15,7 @@ class Customer(Base):
     
     __tablename__ = "customers"
     
-    customer_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    customer_id = Column(GUID, primary_key=True, default=uuid.uuid4)
     name = Column(String(200), nullable=False)
     phone = Column(String(20), nullable=True)
     email = Column(String(255), nullable=True)
@@ -37,10 +37,10 @@ class LoyaltyCard(Base):
     
     __tablename__ = "loyalty_cards"
     
-    card_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    card_id = Column(GUID, primary_key=True, default=uuid.uuid4)
     card_uid = Column(String(20), unique=True, nullable=False, index=True)
     card_number = Column(String(50), unique=True, nullable=False)
-    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.customer_id"), nullable=False)
+    customer_id = Column(GUID, ForeignKey("customers.customer_id"), nullable=False)
     status = Column(String(20), default="active", nullable=False, index=True)
     issued_date = Column(Date, default=datetime.utcnow, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
@@ -55,8 +55,8 @@ class LoyaltyAccount(Base):
     
     __tablename__ = "loyalty_accounts"
     
-    account_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.customer_id"), nullable=False, unique=True)
+    account_id = Column(GUID, primary_key=True, default=uuid.uuid4)
+    customer_id = Column(GUID, ForeignKey("customers.customer_id"), nullable=False, unique=True)
     current_balance_points = Column(Integer, default=0, nullable=False)
     current_balance_euros = Column(Numeric(10, 2), default=0.00, nullable=False)
     total_earned_points = Column(Integer, default=0, nullable=False)
@@ -77,12 +77,12 @@ class LoyaltyLedger(Base):
     
     __tablename__ = "loyalty_ledger"
     
-    ledger_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    ledger_id = Column(GUID, primary_key=True, default=uuid.uuid4)
     ledger_sequence = Column(BigInteger, nullable=False, unique=True, index=True)
     
     # Customer reference
-    customer_id = Column(UUID(as_uuid=True), ForeignKey("customers.customer_id"), nullable=False, index=True)
-    account_id = Column(UUID(as_uuid=True), ForeignKey("loyalty_accounts.account_id"), nullable=False)
+    customer_id = Column(GUID, ForeignKey("customers.customer_id"), nullable=False, index=True)
+    account_id = Column(GUID, ForeignKey("loyalty_accounts.account_id"), nullable=False)
     
     # Transaction details
     transaction_type = Column(
@@ -115,14 +115,14 @@ class LoyaltyLedger(Base):
     
     # Expiration tracking
     expiration_date = Column(Date, nullable=True)
-    expired_by_ledger_id = Column(UUID(as_uuid=True), ForeignKey("loyalty_ledger.ledger_id"), nullable=True)
+    expired_by_ledger_id = Column(GUID, ForeignKey("loyalty_ledger.ledger_id"), nullable=True)
     
     # Idempotency
     idempotency_key = Column(String(255), unique=True, nullable=True, index=True)
     
     # Reversal tracking
-    reversed_by_ledger_id = Column(UUID(as_uuid=True), ForeignKey("loyalty_ledger.ledger_id"), nullable=True)
-    reverses_ledger_id = Column(UUID(as_uuid=True), ForeignKey("loyalty_ledger.ledger_id"), nullable=True)
+    reversed_by_ledger_id = Column(GUID, ForeignKey("loyalty_ledger.ledger_id"), nullable=True)
+    reverses_ledger_id = Column(GUID, ForeignKey("loyalty_ledger.ledger_id"), nullable=True)
     
     # Terminal/channel
     terminal_id = Column(String(50), nullable=True)

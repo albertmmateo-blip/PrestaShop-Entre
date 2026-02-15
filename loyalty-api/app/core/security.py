@@ -35,9 +35,22 @@ def verify_api_key(api_key: str, stored_hash: str) -> bool:
 def hash_request_body(body: dict) -> str:
     """Hash request body for idempotency checking."""
     import json
-
+    from uuid import UUID
+    from datetime import datetime, date
+    from decimal import Decimal
+    
+    # Custom JSON encoder for special types
+    def json_encoder(obj):
+        if isinstance(obj, UUID):
+            return str(obj)
+        elif isinstance(obj, (datetime, date)):
+            return obj.isoformat()
+        elif isinstance(obj, Decimal):
+            return float(obj)
+        raise TypeError(f"Type {type(obj)} not serializable")
+    
     # Sort keys for deterministic hash
-    canonical_json = json.dumps(body, sort_keys=True, separators=(",", ":"))
+    canonical_json = json.dumps(body, sort_keys=True, separators=(",", ":"), default=json_encoder)
     return hashlib.sha256(canonical_json.encode()).hexdigest()
 
 
