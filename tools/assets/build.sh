@@ -3,7 +3,7 @@
 ###
 # This script rebuilds all the static assets, running npm install-clean as needed
 # Usage: ./tools/assets/build.sh [asset-name] [--force]
-#   asset-name: admin-default, admin-new-theme, front-core, front-classic, front-hummingbird, or all
+#   asset-name: admin-default, admin-new-theme, front-core, front-classic, front-hummingbird, front-entretelas, or all
 #   --force: Force rebuild even if assets already exist
 #
 
@@ -81,6 +81,9 @@ should_build_asset() {
     front-hummingbird)
       [[ ! -f "$PROJECT_PATH/themes/hummingbird/assets/css/theme.css" ]]
       ;;
+    front-entretelas)
+      [[ ! -f "$PROJECT_PATH/themes/entretelas/assets/css/theme.css" ]]
+      ;;
     *)
       return 0
       ;;
@@ -129,12 +132,20 @@ build_asset() {
         echo "> Front hummingbird already exists (use --force to rebuild)"
       fi
     ;;
+    front-entretelas)
+      if should_build_asset "front-entretelas"; then
+        echo ">>> Building entretelas theme assets..."
+        build "$PROJECT_PATH/themes/entretelas/_dev"
+      else
+        echo "> Front entretelas already exists (use --force to rebuild)"
+      fi
+    ;;
     all)
-      build_asset admin-default & build_asset admin-new-theme & build_asset front-core & build_asset front-classic & build_asset front-hummingbird
+      build_asset admin-default & build_asset admin-new-theme & build_asset front-core & build_asset front-classic & build_asset front-hummingbird & build_asset front-entretelas
     ;;
     *)
       echo "Unknown asset to build $1"
-      echo "Available assets: admin-default, admin-new-theme, front-core, front-classic, front-hummingbird, all"
+      echo "Available assets: admin-default, admin-new-theme, front-core, front-classic, front-hummingbird, front-entretelas, all"
       echo "Use --force to rebuild even if assets already exist"
       ;;
   esac
