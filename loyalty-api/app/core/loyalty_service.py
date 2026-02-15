@@ -161,14 +161,16 @@ class LoyaltyService:
                 }
             )
         
-        # Calculate expiration date for earned points
+        # Calculate expiration date for earned points (12 months from now)
         expiration_date = None
         if transaction_type == "earn":
-            expiration_date = (datetime.utcnow() + timedelta(days=EXPIRATION_MONTHS * 30)).date()
+            from dateutil.relativedelta import relativedelta
+            expiration_date = (datetime.utcnow() + relativedelta(months=EXPIRATION_MONTHS)).date()
         
-        # Get next sequence number
+        # Get next sequence number with row locking to prevent race conditions
+        # Note: In production with PostgreSQL, use a database sequence instead
         result = await self.db.execute(
-            select(func.coalesce(func.max(LoyaltyLedger.ledger_sequence), 0))
+            select(func.coalesce(func.max(LoyaltyLedger.ledger_sequence), 0)).with_for_update()
         )
         next_sequence = (result.scalar() or 0) + 1
         

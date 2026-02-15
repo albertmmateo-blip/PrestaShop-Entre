@@ -39,7 +39,7 @@ async def earn_points(
     idempotency_key = require_idempotency_key(request)
     
     # Check idempotency
-    cached_response = await check_idempotency(request, idempotency_key, earn_request.model_dump())
+    cached_response = await check_idempotency(request, idempotency_key, earn_request.model_dump(mode='json'))
     if cached_response:
         logger.info(f"Returning cached earn transaction: {idempotency_key}")
         from fastapi.responses import JSONResponse
@@ -109,7 +109,7 @@ async def earn_points(
         # Store idempotency key
         await store_idempotency_key(
             idempotency_key=idempotency_key,
-            request_body=earn_request.model_dump(),
+            request_body=earn_request.model_dump(mode='json'),  # Use json mode for serialization
             endpoint="/transactions/earn",
             http_method="POST",
             response_status=201,
@@ -150,7 +150,7 @@ async def redeem_points(
     idempotency_key = require_idempotency_key(request)
     
     # Check idempotency
-    cached_response = await check_idempotency(request, idempotency_key, redeem_request.model_dump())
+    cached_response = await check_idempotency(request, idempotency_key, redeem_request.model_dump(mode='json'))
     if cached_response:
         logger.info(f"Returning cached redeem transaction: {idempotency_key}")
         from fastapi.responses import JSONResponse
@@ -230,7 +230,7 @@ async def redeem_points(
         # Store idempotency key
         await store_idempotency_key(
             idempotency_key=idempotency_key,
-            request_body=redeem_request.model_dump(),
+            request_body=redeem_request.model_dump(mode='json'),
             endpoint="/transactions/redeem",
             http_method="POST",
             response_status=201,
@@ -272,7 +272,7 @@ async def reverse_transaction(
     idempotency_key = require_idempotency_key(request)
     
     # Check idempotency
-    cached_response = await check_idempotency(request, idempotency_key, reverse_request.model_dump())
+    cached_response = await check_idempotency(request, idempotency_key, reverse_request.model_dump(mode='json'))
     if cached_response:
         logger.info(f"Returning cached reverse transaction: {idempotency_key}")
         from fastapi.responses import JSONResponse
@@ -367,7 +367,7 @@ async def reverse_transaction(
         # Store idempotency key
         await store_idempotency_key(
             idempotency_key=idempotency_key,
-            request_body=reverse_request.model_dump(),
+            request_body=reverse_request.model_dump(mode='json'),
             endpoint="/transactions/reverse",
             http_method="POST",
             response_status=201,

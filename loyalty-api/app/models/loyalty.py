@@ -42,7 +42,7 @@ class LoyaltyCard(Base):
     card_number = Column(String(50), unique=True, nullable=False)
     customer_id = Column(GUID, ForeignKey("customers.customer_id"), nullable=False)
     status = Column(String(20), default="active", nullable=False, index=True)
-    issued_date = Column(Date, default=datetime.utcnow, nullable=False)
+    issued_date = Column(Date, default=lambda: datetime.utcnow().date(), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     
