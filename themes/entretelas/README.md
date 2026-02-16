@@ -110,6 +110,8 @@ docker compose -f docker/docker-compose-flashlight.yml down
 
 ## 🥵 Troubleshooting
 
+### Caching Issues
+
 > [!WARNING]  
 > If you're experiencing issues with styles or assets not updating while using HMR mode, follow these steps to avoid browser and PrestaShop caching problems:
 
@@ -124,6 +126,59 @@ docker compose -f docker/docker-compose-flashlight.yml down
         - Set Cache to `No`.
     - Under the CCC (Combine, Compress and Cache) section:
         - Disable all options.
+
+### Build Errors
+
+#### esbuild Version Mismatch
+
+**Error Message:**
+```
+[ERROR] Cannot start service: Host version "0.16.17" does not match binary version "0.27.3"
+
+[webpack-cli] HookWebpackError: The service is no longer running
+```
+
+**Cause:**  
+This error occurs when there are mismatched esbuild versions in your `node_modules` directory. This typically happens when:
+- Dependencies weren't properly installed or updated
+- There are conflicting esbuild versions from different packages
+- npm cache is corrupted
+
+**Solution:**
+
+1. **Clean install (Recommended):**
+   ```bash
+   # Remove node_modules and lock file
+   rm -rf node_modules package-lock.json
+   
+   # Reinstall all dependencies
+   npm install
+   ```
+
+2. **If the issue persists, clear npm cache:**
+   ```bash
+   # Clear npm cache
+   npm cache clean --force
+   
+   # Remove node_modules and lock file
+   rm -rf node_modules package-lock.json
+   
+   # Reinstall dependencies
+   npm install
+   ```
+
+3. **Verify all esbuild versions are consistent:**
+   ```bash
+   npm list esbuild
+   ```
+   
+   All esbuild packages should show version `0.16.17` with `deduped` markers, indicating they're using the same installation.
+
+**Prevention:**  
+The project now includes an `overrides` configuration in `package.json` that forces all packages to use the same esbuild version. This should prevent version mismatches when installing dependencies.
+
+> [!NOTE]  
+> **Windows Users:** If you're using Git Bash or MinGW on Windows and encounter this error, ensure you're running the commands in an elevated terminal (Run as Administrator) to avoid permission issues that could lead to incomplete installations.
 
 ## 📚 Storybook
 
