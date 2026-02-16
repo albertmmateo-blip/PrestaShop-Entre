@@ -12,7 +12,7 @@ A custom PrestaShop theme based on Hummingbird, featuring the Entretelas brand i
 
 ### Theme Information
 - **Name:** Entretelas
-- **Version:** 1.0.0
+- **Version:** 1.0.1
 - **Base Theme:** Hummingbird (PrestaShop 9.1.0)
 - **Framework:** Bootstrap 5.2.0
 - **Compatibility:** PrestaShop 8.1.0+
@@ -185,6 +185,20 @@ Before deploying to production:
 This theme is proprietary to Entretelas business. Not authorized for redistribution.
 
 ## Changelog
+
+### Version 1.0.1 (2026-02-16)
+- **CRITICAL FIX:** Added missing templates directory structure from full Hummingbird theme
+- Added all 160 template files (previously only had 28 minimal templates)
+- Added critical `templates/layouts/` directory with 6 layout files:
+  - layout-both-columns.tpl
+  - layout-content-only.tpl
+  - layout-error.tpl
+  - layout-full-width.tpl
+  - layout-left-column.tpl
+  - layout-right-column.tpl
+- Added missing partial templates and components
+- **Fixes HTTP 500 error** that occurred when theme was activated
+- Theme now fully functional with complete template structure
 
 ### Version 1.0.0 (2026-02-15)
 - Initial release
