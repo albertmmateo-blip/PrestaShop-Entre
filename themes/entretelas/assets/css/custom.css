@@ -6,7 +6,24 @@
  */
 
 /* ============================================
-   1. CSS Custom Properties (Design Tokens)
+   1. Font Face Declarations
+   ============================================ */
+@font-face {
+  font-family: "PumpTriD";
+  src: url(fonts/PumpTriD\ Regular.ttf) format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Quagmire Extended";
+  src: url(fonts/Quagmire\ Extended\ Bold.otf) format("opentype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* ============================================
+   2. CSS Custom Properties (Design Tokens)
    ============================================ */
 :root {
   /* Brand Colors */
@@ -22,12 +39,14 @@
   --text-secondary: #555;
   --text-muted: #777;
 
-  /* Typography */
-  --font-body: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Typography - Using system fonts as primary with custom fonts as accents */
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Quagmire Extended", Georgia, serif;
+  --font-accent: "PumpTriD", "Courier New", monospace;
 }
 
 /* ============================================
-   2. Body & Global Styles
+   3. Body & Global Styles
    ============================================ */
 body {
   background-color: var(--soft-tan);
@@ -35,15 +54,16 @@ body {
 }
 
 /* ============================================
-   3. Typography - Headings & Text
+   4. Typography - Headings & Text
    ============================================ */
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   color: var(--logo-brown);
+  font-family: var(--font-display);
 }
 
 /* ============================================
-   4. Links
+   5. Links
    ============================================ */
 a {
   color: var(--logo-orange);
@@ -55,7 +75,7 @@ a:focus {
 }
 
 /* ============================================
-   5. Primary Button Overrides
+   6. Primary Button Overrides
    ============================================ */
 .btn-primary,
 .btn-primary:hover {
@@ -82,7 +102,7 @@ a:focus {
 }
 
 /* ============================================
-   6. Secondary & Tertiary Button Adjustments
+   7. Secondary & Tertiary Button Adjustments
    ============================================ */
 .btn-secondary {
   color: var(--logo-brown);
@@ -97,7 +117,7 @@ a:focus {
 }
 
 /* ============================================
-   7. Content Areas - White Backgrounds
+   8. Content Areas - White Backgrounds
    ============================================ */
 #wrapper .container,
 .page-content,
@@ -106,7 +126,7 @@ a:focus {
 }
 
 /* ============================================
-   8. Header & Navigation Color Accents
+   9. Header & Navigation Color Accents
    ============================================ */
 .header-top {
   background-color: #fff;
@@ -114,7 +134,7 @@ a:focus {
 }
 
 /* ============================================
-   9. Footer Color Accents
+   10. Footer Color Accents
    ============================================ */
 .footer-container {
   background-color: var(--dark-brown);
@@ -130,7 +150,7 @@ a:focus {
 }
 
 /* ============================================
-   10. Breadcrumb Styling
+   11. Breadcrumb Styling
    ============================================ */
 .breadcrumb a {
   color: var(--logo-orange);
@@ -141,7 +161,7 @@ a:focus {
 }
 
 /* ============================================
-   11. Selection / Highlight Colors
+   12. Selection / Highlight Colors
    ============================================ */
 ::selection {
   background-color: var(--logo-orange);

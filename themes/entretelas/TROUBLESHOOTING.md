@@ -26,11 +26,11 @@ HTTP ERROR 500
 
 The theme's `theme.yml` configuration file was referencing a custom CSS file (`assets/css/custom.css`) that in turn references Manrope font files that don't exist in the theme's assets directory. These missing font files cause PrestaShop to fail when trying to load the theme.
 
-### Solution (Current - Version 0.1.0)
+### Solution (Current - Version 0.2.0)
 
-**Status:** ✅ **FIXED** in version 0.1.0
+**Status:** ✅ **FIXED** in version 0.2.0
 
-The custom CSS asset loading has been commented out in `config/theme.yml` to allow the theme to load successfully. The theme now works as a basic foundation theme without custom styling.
+The theme now includes the required custom font files (PumpTriD and Quagmire Extended) in `assets/css/fonts/` and custom CSS is properly configured. The theme loads successfully with custom branding and typography.
 
 ### Solution (Future - Adding Custom Styling)
 
@@ -155,7 +155,13 @@ Choose one of these approaches:
 
 ## Version History
 
-### Version 0.1.0 (Current)
+### Version 0.2.0 (Current)
+- **Status:** Production-ready with custom styling
+- **Custom Styling:** Enabled with local font files (PumpTriD Regular.ttf, Quagmire Extended Bold.otf)
+- **Known Issues:** None - theme loads successfully with custom branding
+- **Fonts Location:** `themes/entretelas/assets/css/fonts/`
+
+### Version 0.1.0
 - **Status:** Foundation theme (custom styling disabled)
 - **Known Issues:** None - theme loads successfully
 - **Custom Styling:** Disabled to prevent 500 errors
@@ -175,4 +181,4 @@ If you encounter issues not covered in this guide:
 ---
 
 **Last Updated:** 2026-02-16
-**Theme Version:** 0.1.0
+**Theme Version:** 0.2.0
