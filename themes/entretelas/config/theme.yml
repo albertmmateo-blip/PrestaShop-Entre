@@ -1,6 +1,6 @@
 name: entretelas
 display_name: Entretelas
-version: 0.1.0
+version: 0.1.1
 author:
   name: "PrestaShop Team"
   email: "pub@prestashop.com"
@@ -31,14 +31,13 @@ assets:
 # the parent theme assets, uncomment this line.
 #  use_parent_assets: true
 
-# Custom CSS assets commented out due to missing Manrope font files
-# See TROUBLESHOOTING.md for details on adding custom styling
-#  css:
-#    all:
-#      - id: entretelas-custom
-#        path: assets/css/custom.css
-#        media: all
-#        priority: 200
+# Custom CSS assets - Manrope fonts now loaded via Google Fonts CDN
+  css:
+    all:
+      - id: entretelas-custom
+        path: assets/css/custom.css
+        media: all
+        priority: 200
 
 
 global_settings:
