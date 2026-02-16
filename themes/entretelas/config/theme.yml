@@ -31,12 +31,14 @@ assets:
 # the parent theme assets, uncomment this line.
 #  use_parent_assets: true
 
-  css:
-    all:
-      - id: entretelas-custom
-        path: assets/css/custom.css
-        media: all
-        priority: 200
+# Custom CSS assets commented out due to missing Manrope font files
+# See TROUBLESHOOTING.md for details on adding custom styling
+#  css:
+#    all:
+#      - id: entretelas-custom
+#        path: assets/css/custom.css
+#        media: all
+#        priority: 200
 
 
 global_settings:

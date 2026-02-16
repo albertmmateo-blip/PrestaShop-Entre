@@ -117,18 +117,21 @@ The theme configuration is located at `config/theme.yml`. This file defines:
 
 ### Current Status
 
-This is version **0.1.0** - an initial clone of the Hummingbird theme with updated metadata for PrestaShop 9.1.x compatibility.
+This is version **0.1.0** - an initial foundation theme based on Hummingbird with PrestaShop 9.1.x compatibility.
 
 **What's included:**
-- Complete theme structure cloned from Hummingbird
+- Complete theme structure based on Hummingbird
 - Updated theme.yml with Entretelas identity
 - PrestaShop 9.1.x compatibility
 - Packaging scripts for easy distribution
+- ✅ **Fixed:** Theme now loads without 500 errors
 
 **What's NOT included yet:**
-- No custom design changes
-- No custom styling or branding
-- No additional features beyond base Hummingbird
+- Custom design changes (custom styling temporarily disabled to prevent errors)
+- Custom branding colors and fonts (see TROUBLESHOOTING.md to re-enable)
+- Additional features beyond base Hummingbird
+
+**Note:** Custom CSS styling has been temporarily disabled in this version to resolve a 500 error caused by missing font files. See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for details on how to re-enable custom styling.
 
 ### Future Development
 
@@ -139,6 +142,16 @@ Future versions will include:
 - Additional customization options
 
 ## Troubleshooting
+
+⚠️ **For detailed troubleshooting, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md)**
+
+### Common Issues
+
+#### Theme Causes 500 Error When Selected
+
+**Status:** ✅ **FIXED** in version 0.1.0
+
+If you're using an older version and experiencing 500 errors when selecting this theme, see the [TROUBLESHOOTING.md](TROUBLESHOOTING.md#theme-causes-500-error-when-selected) guide for detailed solutions.
 
 ### Import Fails
 
