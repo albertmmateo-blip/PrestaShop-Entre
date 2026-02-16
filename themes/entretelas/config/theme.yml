@@ -35,8 +35,8 @@ global_settings:
     PS_BLOCK_BESTSELLERS_TO_DISPLAY: 4
     PRODUCTS_VIEWED_NBR: 4
     CATEGORYPRODUCTS_DISPLAY_PRODUCTS: 4
-    PSR_ICON_COLOR: "#0b69f6"
-    PSR_TEXT_COLOR: "#212529"
+    PSR_ICON_COLOR: "#e87722"
+    PSR_TEXT_COLOR: "#542e26"
   modules:
     to_disable:
       - blockwishlist

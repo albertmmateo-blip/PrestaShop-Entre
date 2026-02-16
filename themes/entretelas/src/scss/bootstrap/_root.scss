@@ -2,4 +2,11 @@
 :root {
   --#{$prefix}transition-default: #{$transition-base};
   --#{$prefix}box-shadow-md: #{$box-shadow-md};
+
+  // Entretelas brand custom properties
+  --entretelas-brown: #{$entretelas-brown};
+  --entretelas-orange: #{$entretelas-orange};
+  --entretelas-red: #{$entretelas-red};
+  --entretelas-dark-brown: #{$entretelas-dark-brown};
+  --entretelas-soft-tan: #{$entretelas-soft-tan};
 }

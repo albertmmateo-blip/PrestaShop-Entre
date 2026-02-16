@@ -11,14 +11,18 @@ $grid-breakpoints: (
   "xxl": 1400px,
 );
 
-// Colors
+// Colors - Entretelas brand palette
 $blue: #0b69f6;
 $green: #188251;
-$red: #ff4657;
-$primary: $blue;
+$red: $entretelas-red;
+$primary: $entretelas-orange;
 $primary-text-emphasis: $primary;
 $danger: $red;
 $body-tertiary-color: rgba(#212529, 0.65);
+$body-color: $entretelas-brown;
+$body-bg: $entretelas-soft-tan;
+$link-color: $entretelas-orange;
+$link-hover-color: $entretelas-red;
 
 // Caret
 $caret-width: 1.375em;
@@ -42,6 +46,7 @@ $h6-font-size: calc(var(--bs-body-font-size) * 0.875);
 
 $headings-font-weight: 600;
 $headings-margin-bottom: 1rem;
+$headings-color: $entretelas-brown;
 
 // Box shadow
 $box-shadow-md: 0 0.625rem 1.25rem rgba(var(--bs-black-rgb), 0.1);
