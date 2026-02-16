@@ -236,8 +236,8 @@ docker-compose.override.yml
 
 # Theme packaging artifacts
 dist/*.zip
-.DS_Store
-Thumbs.db
+**/.DS_Store
+**/Thumbs.db
 *~
 *.swp
 *.swo

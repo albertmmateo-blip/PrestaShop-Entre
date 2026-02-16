@@ -95,7 +95,13 @@ if command -v rsync &> /dev/null; then
         "$THEME_SOURCE/" "$PACKAGE_DIR/"
 else
     # Fallback to cp if rsync is not available
-    cp -r "$THEME_SOURCE"/* "$PACKAGE_DIR/"
+    cp -r "$THEME_SOURCE/." "$PACKAGE_DIR/"
+    
+    # Validate PACKAGE_DIR before cleanup
+    if [ -z "$PACKAGE_DIR" ] || [ ! -d "$PACKAGE_DIR" ]; then
+        echo -e "${RED}ERROR: Package directory is invalid${NC}"
+        exit 1
+    fi
     
     # Clean up excluded items
     find "$PACKAGE_DIR" -type d \( -name '.git' -o -name '.github' -o -name '.idea' -o -name '.vscode' -o -name 'node_modules' -o -name '.sass-cache' -o -name 'cache' \) -exec rm -rf {} + 2>/dev/null || true

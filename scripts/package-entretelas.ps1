@@ -71,31 +71,47 @@ Write-Host "Copying theme files..."
 
 # Define exclusion patterns
 $ExcludePatterns = @(
-    '*.git*',
+    '.git',
     '.github',
     '.idea',
     '.vscode',
     '.DS_Store',
     'Thumbs.db',
     'node_modules',
+    '.sass-cache',
+    'cache'
+)
+
+$ExcludeFilePatterns = @(
     '*.log',
     '*.swp',
     '*.swo',
-    '*~',
-    '.sass-cache',
-    'cache'
+    '*~'
 )
 
 # Copy theme files with exclusions
 Get-ChildItem -Path $ThemeSource -Recurse | Where-Object {
     $item = $_
     $shouldExclude = $false
+    
+    # Check directory/file name exclusions
     foreach ($pattern in $ExcludePatterns) {
-        if ($item.Name -like $pattern -or $item.FullName -like "*\$pattern\*") {
+        if ($item.Name -eq $pattern -or $item.FullName -match [regex]::Escape($pattern)) {
             $shouldExclude = $true
             break
         }
     }
+    
+    # Check file pattern exclusions
+    if (-not $shouldExclude -and -not $item.PSIsContainer) {
+        foreach ($pattern in $ExcludeFilePatterns) {
+            if ($item.Name -like $pattern) {
+                $shouldExclude = $true
+                break
+            }
+        }
+    }
+    
     -not $shouldExclude
 } | ForEach-Object {
     $targetPath = $_.FullName.Replace($ThemeSource, $PackageDir)
