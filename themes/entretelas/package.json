@@ -24,6 +24,9 @@
   },
   "author": "PrestaShop",
   "license": "AFL-3.0",
+  "overrides": {
+    "esbuild": "^0.16.17"
+  },
   "devDependencies": {
     "@storybook/addon-a11y": "8.6.15",
     "@storybook/addon-actions": "8.6.15",
@@ -47,6 +50,7 @@
     "css-minimizer-webpack-plugin": "^7.0.0",
     "cssjanus": "^2.3.0",
     "dotenv": "^16.4.5",
+    "esbuild": "^0.16.17",
     "esbuild-loader": "^2.21.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",

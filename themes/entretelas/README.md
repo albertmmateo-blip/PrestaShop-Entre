@@ -110,6 +110,8 @@ docker compose -f docker/docker-compose-flashlight.yml down
 
 ## 🥵 Troubleshooting
 
+### Caching Issues
+
 > [!WARNING]  
 > If you're experiencing issues with styles or assets not updating while using HMR mode, follow these steps to avoid browser and PrestaShop caching problems:
 
@@ -124,6 +126,121 @@ docker compose -f docker/docker-compose-flashlight.yml down
         - Set Cache to `No`.
     - Under the CCC (Combine, Compress and Cache) section:
         - Disable all options.
+
+### Build Errors
+
+#### esbuild Version Mismatch (Windows)
+
+**Error Message:**
+```
+Albert@LAPTOP-IRHKHEDP MINGW64 ~/documents/prestashop/themes/entretelas (develop)
+$ npm run build
+
+[ERROR] Cannot start service: Host version "0.16.17" does not match binary version "0.27.3"
+
+[webpack-cli] HookWebpackError: The service is no longer running
+    at makeWebpackError (C:\Users\Albert\Documents\PrestaShop\themes\entretelas\node_modules\webpack\lib\HookWebpackError.js:48:9)
+```
+
+**Cause:**  
+This error occurs when there are mismatched esbuild versions in your `node_modules` directory. This is a common issue on Windows systems and typically happens when:
+- Dependencies weren't properly installed or updated
+- There are conflicting esbuild versions from different packages
+- npm cache is corrupted or locked by Windows file system
+- Antivirus software interfered with package installation
+
+**Solution for Windows Users:**
+
+> [!IMPORTANT]  
+> **For Windows users**, it's recommended to run these commands in an **elevated terminal** (Run as Administrator) to avoid permission issues. You can use **Command Prompt**, **PowerShell**, or **Git Bash**.
+
+1. **Clean install (Recommended for Windows):**
+
+   **Using Command Prompt (cmd):**
+   ```cmd
+   :: Remove node_modules and lock file
+   rmdir /s /q node_modules
+   del package-lock.json
+   
+   :: Reinstall all dependencies
+   npm install
+   ```
+
+   **Using PowerShell:**
+   ```powershell
+   # Remove node_modules and lock file
+   Remove-Item -Recurse -Force node_modules
+   Remove-Item package-lock.json
+   
+   # Reinstall all dependencies
+   npm install
+   ```
+
+   **Using Git Bash (MINGW64):**
+   ```bash
+   # Remove node_modules and lock file
+   rm -rf node_modules package-lock.json
+   
+   # Reinstall all dependencies
+   npm install
+   ```
+
+2. **If the issue persists, clear npm cache (Windows):**
+
+   **Using Command Prompt (cmd) or PowerShell:**
+   ```cmd
+   :: Clear npm cache
+   npm cache clean --force
+   
+   :: Remove node_modules and lock file
+   rmdir /s /q node_modules
+   del package-lock.json
+   
+   :: Reinstall dependencies
+   npm install
+   ```
+
+   **Using Git Bash (MINGW64):**
+   ```bash
+   # Clear npm cache
+   npm cache clean --force
+   
+   # Remove node_modules and lock file
+   rm -rf node_modules package-lock.json
+   
+   # Reinstall dependencies
+   npm install
+   ```
+
+3. **Verify all esbuild versions are consistent:**
+   ```cmd
+   npm list esbuild
+   ```
+   
+   All esbuild packages should show version `0.16.17` with `deduped` markers, indicating they're using the same installation:
+   ```
+   hummingbird@2.0.0 C:\Users\...\themes\entretelas
+   ├─┬ esbuild-loader@2.21.0
+   │ └── esbuild@0.16.17 deduped
+   ├── esbuild@0.16.17
+   └─┬ storybook@8.6.15
+     └─┬ @storybook/core@8.6.15
+       └── esbuild@0.16.17 deduped
+   ```
+
+**Additional Windows Troubleshooting:**
+
+- **Close all applications** that might be accessing files in `node_modules` (e.g., VS Code, file explorers)
+- **Temporarily disable antivirus** during npm install, as it can interfere with native binary installation
+- **Ensure your path doesn't contain spaces or special characters** that might cause issues with native modules
+- If using **Git Bash**, make sure you're using a recent version compatible with Windows
+- Consider using **Node.js version manager for Windows (nvm-windows)** to ensure you're using Node.js v20.x as required
+
+**Prevention:**  
+The project now includes an `overrides` configuration in `package.json` that forces all packages to use the same esbuild version. This should prevent version mismatches when installing dependencies on Windows systems.
+
+> [!TIP]  
+> **Windows Performance Tip:** If npm install is slow on Windows, consider excluding your project's `node_modules` folder from Windows Defender real-time scanning to significantly speed up installations.
 
 ## 📚 Storybook
 
