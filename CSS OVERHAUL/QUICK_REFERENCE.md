@@ -79,9 +79,11 @@ npm run build
 
 ```
 themes/entretelas/
-├── _dev/              ← Edit source files here
-│   ├── css/          ← SCSS files (edit these)
-│   └── js/           ← JavaScript (edit these)
+├── src/scss/          ← Edit SCSS source files here
+│   ├── abstract/     ← Variables, mixins (brand colors here)
+│   ├── bootstrap/    ← Bootstrap overrides
+│   └── prestashop/   ← PrestaShop components, layout, pages
+├── src/js/           ← Edit JavaScript/TypeScript here
 ├── assets/           ← Compiled files (DO NOT edit)
 │   ├── css/          ← Generated CSS
 │   └── js/           ← Generated JS
@@ -92,7 +94,7 @@ themes/entretelas/
 
 ## 🎨 Making Changes
 
-1. Edit files in `_dev/css/` or `_dev/js/`
+1. Edit files in `src/scss/` or `src/js/`
 2. Run `npm run build` (or use `npm run watch`)
 3. Refresh browser (Ctrl+F5 or Cmd+Shift+R)
 4. Clear PrestaShop cache if needed
@@ -100,15 +102,18 @@ themes/entretelas/
 ## 📚 Full Documentation
 
 - **Complete Setup Guide**: `CSS OVERHAUL/ENTRETELAS_THEME_SETUP.md`
+- **Brand CSS Changes**: `CSS OVERHAUL/PHASE2_BRAND_CUSTOMIZATION.md`
 - **Documentation Index**: `CSS OVERHAUL/README.md`
 - **Brand Style Guide**: `PRESTASHOP_THEME_STYLE_GUIDE.md`
 
 ## ⚠️ Important Notes
 
 - Theme files are in `.gitignore` - not committed to git
-- Always edit `_dev/` files, never `assets/` files
+- Always edit `src/scss/` files, never `assets/` files
 - Always run `npm run build` after changes
-- Keep Hummingbird structure intact (no custom files yet)
+- Brand colors are defined in `src/scss/abstract/variables/_colors.scss`
+- Bootstrap overrides are in `src/scss/bootstrap/overrides/variables/`
+- See `CSS OVERHAUL/PHASE2_BRAND_CUSTOMIZATION.md` for brand CSS details
 
 ---
 

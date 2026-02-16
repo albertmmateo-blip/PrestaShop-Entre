@@ -32,6 +32,35 @@ This folder contains **all documentation related to the Entretelas theme creatio
 
 ---
 
+### PHASE2_BRAND_CUSTOMIZATION.md 🎨 **BRAND CSS**
+
+**Purpose**: Complete record of the first conservative CSS brand customization implementation.
+
+**When to Use**:
+- Understanding what brand CSS changes were made and why
+- Reviewing which Bootstrap variables were overridden
+- Planning future CSS enhancements
+- Reverting or adjusting brand styling
+
+**What It Covers**:
+- All SCSS files modified with before/after comparisons
+- Brand color variable definitions
+- Bootstrap variable override explanations
+- Visual impact summary
+- Build verification results
+- Items intentionally deferred for future work
+
+**Related Files**:
+- `themes/entretelas/src/scss/abstract/variables/_colors.scss`
+- `themes/entretelas/src/scss/bootstrap/overrides/variables/_variables.scss`
+- `themes/entretelas/src/scss/bootstrap/_root.scss`
+- `themes/entretelas/src/scss/bootstrap/overrides/variables/components/_buttons.scss`
+- `themes/entretelas/src/scss/bootstrap/overrides/variables/components/_card.scss`
+- `themes/entretelas/src/scss/bootstrap/overrides/variables/components/_inputs.scss`
+- `themes/entretelas/config/theme.yml`
+
+---
+
 ## 🎯 Implementation Status
 
 ### Phase 1: Foundation ✅ **COMPLETE**
@@ -72,20 +101,30 @@ This folder contains **all documentation related to the Entretelas theme creatio
 
 ---
 
-### Phase 2: Brand Customization 🔜 **FUTURE**
+### Phase 2: Brand Customization ✅ **COMPLETE (Conservative)**
 
-**Goal**: Apply Entretelas brand identity (colors, fonts, logos).
+**Goal**: Apply Entretelas brand identity (colors, button styles, card shadows, input focus states).
 
-**Status**: Not started. Will begin after Phase 1 is complete.
+**Status**: ✅ First conservative implementation complete.
 
-**Planned Tasks**:
-- Apply Entretelas color palette
-- Integrate custom fonts (PumpTriD Regular, Quagmire Extended Bold)
-- Replace logos and branding
-- Update footer and header styling
-- Implement brand-specific UI elements
+**Tasks**:
+- [x] Define Entretelas brand color SCSS variables
+- [x] Override Bootstrap primary/body/link colors with brand palette
+- [x] Add Entretelas CSS custom properties to `:root`
+- [x] Apply pill-shaped button border radius
+- [x] Add subtle card box shadows for depth
+- [x] Set branded input focus styling (orange border/glow)
+- [x] Update theme.yml PSR module colors
+- [x] Build and verify compiled assets
 
-**Documentation**: Will reference `/PRESTASHOP_THEME_STYLE_GUIDE.md` for brand inspiration.
+**Documentation**: See `PHASE2_BRAND_CUSTOMIZATION.md` for complete implementation record.
+
+**Deferred for future work**:
+- Custom fonts (PumpTriD Regular, Quagmire Extended Bold)
+- Navigation gradient/background styling
+- Product card hover animations
+- Header/footer color adjustments
+- Price-specific color styling
 
 ---
 
@@ -302,6 +341,23 @@ All documentation in this folder must follow these standards:
 
 ## 📅 Change Log
 
+### 2026-02-16: Phase 2 - Conservative Brand CSS Implementation
+**Author**: GitHub Copilot
+**Branch**: copilot/update-entretelas-css-style-guide
+
+**Changes Made**:
+1. Added Entretelas brand color SCSS variables (`_colors.scss`)
+2. Overrode Bootstrap primary/body/link colors (`_variables.scss`)
+3. Added CSS custom properties for brand colors (`_root.scss`)
+4. Updated button border radius to pill shape (`_buttons.scss`)
+5. Added subtle card box shadow (`_card.scss`)
+6. Set branded input focus styling (`_inputs.scss`)
+7. Updated theme.yml PSR module colors
+8. Created `PHASE2_BRAND_CUSTOMIZATION.md` documentation
+
+**Files Modified**: 7 theme files + 3 documentation files
+**Build Status**: ✅ Successful
+
 ### 2026-02-16: Initial Setup
 **Author**: GitHub Copilot  
 **Branch**: copilot/reset-entretelas-theme
@@ -325,6 +381,6 @@ All documentation in this folder must follow these standards:
 
 ---
 
-**Last Updated**: 2026-02-16  
+**Last Updated**: 2026-02-16
 **Maintainer**: GitHub Copilot  
-**Status**: Phase 1 Documentation Complete - Awaiting Manual Implementation
+**Status**: Phase 2 (Conservative Brand CSS) Complete
