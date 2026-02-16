@@ -1,0 +1,149 @@
+/**
+ * Entretelas Theme - Custom Styles (Phase 1: Foundation)
+ *
+ * Conservative color and typography overrides for the Hummingbird base theme.
+ * Reference: PRESTASHOP_THEME_STYLE_GUIDE.md
+ */
+
+/* ============================================
+   1. CSS Custom Properties (Design Tokens)
+   ============================================ */
+:root {
+  /* Brand Colors */
+  --logo-brown: #542e26;
+  --logo-orange: #e87722;
+  --logo-red: #cb2c30;
+  --dark-brown: #3e221c;
+  --soft-tan: #f1e5d6;
+  --bg-light-cream: #f9f4ee;
+
+  /* Text Colors */
+  --text-main: #542e26;
+  --text-secondary: #555;
+  --text-muted: #777;
+
+  /* Typography */
+  --font-body: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ============================================
+   2. Body & Global Styles
+   ============================================ */
+body {
+  background-color: var(--soft-tan);
+  color: var(--text-main);
+}
+
+/* ============================================
+   3. Typography - Headings & Text
+   ============================================ */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  color: var(--logo-brown);
+}
+
+/* ============================================
+   4. Links
+   ============================================ */
+a {
+  color: var(--logo-orange);
+}
+
+a:hover,
+a:focus {
+  color: var(--logo-red);
+}
+
+/* ============================================
+   5. Primary Button Overrides
+   ============================================ */
+.btn-primary,
+.btn-primary:hover {
+  background-color: var(--logo-orange);
+  border-color: transparent;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: var(--logo-red);
+}
+
+.btn-primary:focus,
+.btn-primary.focus {
+  background-color: var(--logo-red);
+  border-color: transparent;
+  box-shadow: 0 0 0 0.2rem rgba(232, 119, 34, 0.4);
+}
+
+.btn-primary:active,
+.btn-primary.active {
+  background-color: var(--dark-brown);
+  border-color: transparent;
+}
+
+/* ============================================
+   6. Secondary & Tertiary Button Adjustments
+   ============================================ */
+.btn-secondary {
+  color: var(--logo-brown);
+  border-color: var(--logo-brown);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #fff;
+  background-color: var(--logo-brown);
+  border-color: var(--logo-brown);
+}
+
+/* ============================================
+   7. Content Areas - White Backgrounds
+   ============================================ */
+#wrapper .container,
+.page-content,
+.card {
+  background-color: #fff;
+}
+
+/* ============================================
+   8. Header & Navigation Color Accents
+   ============================================ */
+.header-top {
+  background-color: #fff;
+  border-bottom: 3px solid var(--logo-orange);
+}
+
+/* ============================================
+   9. Footer Color Accents
+   ============================================ */
+.footer-container {
+  background-color: var(--dark-brown);
+  color: #fff;
+}
+
+.footer-container a {
+  color: var(--soft-tan);
+}
+
+.footer-container a:hover {
+  color: var(--logo-orange);
+}
+
+/* ============================================
+   10. Breadcrumb Styling
+   ============================================ */
+.breadcrumb a {
+  color: var(--logo-orange);
+}
+
+.breadcrumb a:hover {
+  color: var(--logo-red);
+}
+
+/* ============================================
+   11. Selection / Highlight Colors
+   ============================================ */
+::selection {
+  background-color: var(--logo-orange);
+  color: #fff;
+}
