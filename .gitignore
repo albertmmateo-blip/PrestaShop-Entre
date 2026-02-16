@@ -160,6 +160,7 @@ themes/*/
 themes/classic
 !themes/_core
 !themes/_libraries
+!themes/entretelas
 
 # Vendors and dependencies
 
@@ -232,3 +233,11 @@ docker-compose.override.yml
 
 # config vscode
 .hintrc
+
+# Theme packaging artifacts
+dist/*.zip
+**/.DS_Store
+**/Thumbs.db
+*~
+*.swp
+*.swo
