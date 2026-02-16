@@ -160,6 +160,7 @@ themes/*/
 themes/classic
 !themes/_core
 !themes/_libraries
+!themes/entretelas
 
 # Vendors and dependencies
 
