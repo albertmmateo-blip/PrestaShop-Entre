@@ -26,11 +26,18 @@ HTTP ERROR 500
 
 The theme's `theme.yml` configuration file was referencing a custom CSS file (`assets/css/custom.css`) that in turn references Manrope font files that don't exist in the theme's assets directory. These missing font files cause PrestaShop to fail when trying to load the theme.
 
-### Solution (Current - Version 0.1.0)
+### Solution (Current - Version 0.1.1)
 
-**Status:** ✅ **FIXED** in version 0.1.0
+**Status:** ✅ **FIXED** in version 0.1.1
 
-The custom CSS asset loading has been commented out in `config/theme.yml` to allow the theme to load successfully. The theme now works as a basic foundation theme without custom styling.
+The theme now uses Google Fonts CDN to load the Manrope font family, eliminating the need for local font files. The custom CSS asset loading has been re-enabled in `config/theme.yml`. The local @font-face declarations in `theme.css` have been commented out to prevent attempts to load missing font files.
+
+**Changes made:**
+- Added Google Fonts CDN import to `custom.css` for Manrope font (weights 200-800)
+- Commented out local @font-face declarations in `theme.css`
+- Uncommented custom CSS asset loading in `config/theme.yml`
+
+The theme now loads successfully with full custom styling applied.
 
 ### Solution (Future - Adding Custom Styling)
 
@@ -155,7 +162,13 @@ Choose one of these approaches:
 
 ## Version History
 
-### Version 0.1.0 (Current)
+### Version 0.1.1 (Current)
+- **Status:** Full theme with custom styling enabled
+- **Known Issues:** None - theme loads successfully with custom branding
+- **Custom Styling:** Enabled using Google Fonts CDN for Manrope font
+- **Recommendation:** Ready for production use
+
+### Version 0.1.0
 - **Status:** Foundation theme (custom styling disabled)
 - **Known Issues:** None - theme loads successfully
 - **Custom Styling:** Disabled to prevent 500 errors
@@ -175,4 +188,4 @@ If you encounter issues not covered in this guide:
 ---
 
 **Last Updated:** 2026-02-16
-**Theme Version:** 0.1.0
+**Theme Version:** 0.1.1
